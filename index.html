@@ -15,19 +15,19 @@ nav a {color:white;margin:0 15px;text-decoration:none;}
 .logo {width:160px;}
 .hero {text-align:center;padding:40px;}
 
-.btn {background:gold;color:black;padding:10px;border:none;border-radius:5px;margin:5px;}
+.btn {background:gold;color:black;padding:10px;border:none;border-radius:5px;margin-top:5px;}
 
 .products {display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:20px;padding:20px;}
 .product {background:#111;padding:10px;border-radius:10px;text-align:center;}
+.product img {width:100%;border-radius:10px;}
 
 .input {width:90%;padding:10px;margin:5px;border:none;border-radius:5px;}
 
 .modal {display:none;position:fixed;width:100%;height:100%;background:rgba(0,0,0,0.8);}
-.modal-content {background:#111;margin:10% auto;padding:20px;width:80%;border-radius:10px;text-align:center;}
+.modal-content {background:#111;margin:15% auto;padding:20px;width:80%;border-radius:10px;text-align:center;}
 
 #cart {position:fixed;top:10px;right:10px;background:#111;padding:10px;border-radius:10px;}
 
-/* DASHBOARD */
 #dashboard {display:none;padding:20px;}
 .order {background:#111;padding:10px;margin:10px;border-radius:10px;}
 </style>
@@ -53,20 +53,35 @@ nav a {color:white;margin:0 15px;text-decoration:none;}
 
 <div id="cart">🛒 <span id="cartCount">0</span></div>
 
+<!-- PRODUCTS -->
 <section id="shop" class="products">
 
 <div class="product">
-<img src="niketech.jpg" width="100%">
+<img src="niketech.jpg">
 <h3>Nike Ski Mask</h3>
 <p>$120</p>
 <button class="btn" onclick="openModal('Nike Ski Mask',120)">Shop</button>
 </div>
 
 <div class="product">
-<img src="bape.jpg" width="100%">
+<img src="bape.jpg">
 <h3>Bape Hoodie</h3>
 <p>$250</p>
 <button class="btn" onclick="openModal('Bape Hoodie',250)">Shop</button>
+</div>
+
+<div class="product">
+<img src="chromeheartshirt.jpg">
+<h3>Chrome Hearts T-Shirt</h3>
+<p>$80</p>
+<button class="btn" onclick="openModal('Chrome Hearts T-Shirt',80)">Shop</button>
+</div>
+
+<div class="product">
+<img src="chromehearts.jpg">
+<h3>Chrome Hearts Socks</h3>
+<p>$40</p>
+<button class="btn" onclick="openModal('Chrome Hearts Socks',40)">Shop</button>
 </div>
 
 </section>
@@ -81,34 +96,31 @@ nav a {color:white;margin:0 15px;text-decoration:none;}
 
 <button class="btn" onclick="addToCart()">Add to Cart</button>
 
-<input id="offerInput" class="input" placeholder="Offer $">
+<input id="offerInput" class="input" placeholder="Enter offer $">
 <button class="btn" onclick="sendOffer()">Send Offer</button>
 
-<button class="btn" onclick="goToForm()">Buy</button>
+<button class="btn" onclick="goToForm()">Buy Now</button>
 </div>
 
 <div id="formView" style="display:none;">
 <h2>Shipping Info</h2>
-<input id="name" class="input" placeholder="Name">
+<input id="name" class="input" placeholder="Full Name">
 <input id="email" class="input" placeholder="Email">
 <input id="address" class="input" placeholder="Address">
-<button class="btn" onclick="confirmOrder()">Confirm</button>
+
+<button class="btn" onclick="confirmOrder()">Confirm Order</button>
 </div>
 
 <div id="confirmView" style="display:none;">
 <h2>Order Created</h2>
 <p id="orderNumber"></p>
-<a href="https://cash.app/$RicoAmos10" class="btn">Pay</a>
+
+<a href="https://cash.app/$RicoAmos10" class="btn">Pay Now</a>
 </div>
 
 <button class="btn" onclick="closeModal()">Close</button>
 
 </div>
-</div>
-
-<!-- TRACK -->
-<div style="text-align:center;">
-<button class="btn" onclick="trackOrder()">Track Order</button>
 </div>
 
 <!-- DASHBOARD -->
@@ -118,96 +130,90 @@ nav a {color:white;margin:0 15px;text-decoration:none;}
 </div>
 
 <script>
-let cart=0;
-let orders=[];
+let cart = 0;
+let orders = JSON.parse(localStorage.getItem("orders")) || [];
 
-function openModal(name,price){
-document.getElementById("modal").style.display="block";
-document.getElementById("productName").innerText=name;
-document.getElementById("productPrice").innerText="$"+price;
+function openModal(name, price) {
+document.getElementById("modal").style.display = "block";
 
-document.getElementById("productView").style.display="block";
-document.getElementById("formView").style.display="none";
-document.getElementById("confirmView").style.display="none";
+document.getElementById("productName").innerText = name;
+document.getElementById("productPrice").innerText = "$" + price;
+
+/* RESET */
+document.getElementById("productView").style.display = "block";
+document.getElementById("formView").style.display = "none";
+document.getElementById("confirmView").style.display = "none";
 }
 
-function closeModal(){
-document.getElementById("modal").style.display="none";
+function closeModal() {
+document.getElementById("modal").style.display = "none";
 }
 
-function addToCart(){
+function addToCart() {
 cart++;
-document.getElementById("cartCount").innerText=cart;
+document.getElementById("cartCount").innerText = cart;
 }
 
-function sendOffer(){
-let offer=document.getElementById("offerInput").value;
-alert("Offer sent: $"+offer);
+function sendOffer() {
+let offer = document.getElementById("offerInput").value;
+if (!offer) return alert("Enter an offer");
+alert("Offer sent: $" + offer);
 }
 
-function goToForm(){
-document.getElementById("productView").style.display="none";
-document.getElementById("formView").style.display="block";
+function goToForm() {
+document.getElementById("productView").style.display = "none";
+document.getElementById("formView").style.display = "block";
 }
 
-function confirmOrder(){
-let id="RJ"+Math.floor(Math.random()*100000);
-let name=document.getElementById("name").value;
+function confirmOrder() {
+let name = document.getElementById("name").value;
+if (!name) return alert("Enter name");
 
-let order={
-id:id,
-name:name,
-status:"Order Received"
-};
+let id = "RJ" + Math.floor(Math.random()*100000);
+
+let order = { id:id, name:name, status:"Order Received" };
 
 orders.push(order);
-localStorage.setItem("orders",JSON.stringify(orders));
+localStorage.setItem("orders", JSON.stringify(orders));
 
-document.getElementById("orderNumber").innerText=id;
+document.getElementById("orderNumber").innerText = "Order #: " + id;
 
-window.location.href="mailto:amosrico2@gmail.com?subject=Order "+id;
+window.location.href = "mailto:amosrico2@gmail.com?subject=Order " + id;
 
-document.getElementById("formView").style.display="none";
-document.getElementById("confirmView").style.display="block";
+document.getElementById("formView").style.display = "none";
+document.getElementById("confirmView").style.display = "block";
 
 loadOrders();
 }
 
-function loadOrders(){
-orders=JSON.parse(localStorage.getItem("orders"))||[];
-let html="";
-orders.forEach(o=>{
-html+=`
+function loadOrders() {
+let html = "";
+orders.forEach(o => {
+html += `
 <div class="order">
 <p>${o.id} - ${o.name}</p>
 <p>Status: ${o.status}</p>
-<input placeholder="Update status" id="s${o.id}">
+<input id="s${o.id}" placeholder="Update status">
 <button onclick="updateOrder('${o.id}')">Update</button>
 </div>`;
 });
-document.getElementById("orders").innerHTML=html;
+document.getElementById("orders").innerHTML = html;
 }
 
-function updateOrder(id){
-let val=document.getElementById("s"+id).value;
-if(!val) return alert("Enter status");
+function updateOrder(id) {
+let val = document.getElementById("s"+id).value;
+if (!val) return alert("Enter status");
 
-orders=orders.map(o=>o.id===id?{...o,status:val}:o);
-localStorage.setItem("orders",JSON.stringify(orders));
+orders = orders.map(o => o.id === id ? {...o, status: val} : o);
+localStorage.setItem("orders", JSON.stringify(orders));
+
 loadOrders();
 }
 
-function toggleDashboard(){
-let d=document.getElementById("dashboard");
-d.style.display=d.style.display==="none"?"block":"none";
+function toggleDashboard() {
+let d = document.getElementById("dashboard");
+d.style.display = d.style.display === "none" ? "block" : "none";
 loadOrders();
-}
-
-function trackOrder(){
-let id=prompt("Order ID?");
-orders=JSON.parse(localStorage.getItem("orders"))||[];
-let o=orders.find(x=>x.id===id);
-alert(o?o.status:"Not found");
 }
 </script>
 
