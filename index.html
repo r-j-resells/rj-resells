@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>R&J Resells</title>
 
+<!-- SUPABASE -->
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
 <style>
 body {
 margin:0;
@@ -122,22 +125,27 @@ text-align:center;
 
 <script>
 
+/* KEEP BUY FLOW EXACTLY SAME */
 let currentProduct = "";
 
-// OPEN FORM
 function openForm(product){
 currentProduct = product;
 document.getElementById("modal").style.display = "block";
 document.getElementById("title").innerText = product;
 }
 
-// CLOSE FORM
 function closeForm(){
 document.getElementById("modal").style.display = "none";
 }
 
-// SUBMIT FORM
-function submitOrder(){
+/* SUPABASE CLIENT */
+const client = window.supabase.createClient(
+"https://fyzguhksswalbwoqatym.supabase.co",
+"sb_publishable_bqSCrrSbaWZ0DgYPj3pCTg_732i9dzN"
+);
+
+/* UPDATED SUBMIT (BUY BUTTON STILL UNTOUCHED) */
+async function submitOrder(){
 
 let name = document.getElementById("name").value;
 let email = document.getElementById("email").value;
@@ -148,7 +156,22 @@ alert("Please fill out all fields");
 return;
 }
 
-// redirect to CashApp AFTER form
+let orderId = "RJ" + Math.floor(Math.random() * 100000);
+
+try {
+await client.from("orders").insert([{
+id: orderId,
+product: currentProduct,
+name: name,
+email: email,
+address: address,
+status: "Pending"
+}]);
+} catch (err) {
+console.log("Supabase error:", err);
+}
+
+/* KEEP ORIGINAL FLOW (DO NOT CHANGE BUY SYSTEM) */
 window.location.href = "https://cash.app/$RicoAmos10";
 }
 
