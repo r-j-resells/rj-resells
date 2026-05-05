@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Track Order</title>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+<style>
+body {background:black;color:white;font-family:Arial;text-align:center;padding:20px;}
+.box {background:#111;padding:20px;border-radius:10px;margin-top:20px;}
+.chat {margin-top:20px;background:#000;padding:10px;border-radius:10px;}
+</style>
+</head>
+
+<body>
+
+<h1>Track Your Order</h1>
+
+<input id="orderId" placeholder="Enter Order ID">
+<button onclick="loadOrder()">Track</button>
+
+<div id="result"></div>
+
+<script>
+const client = window.supabase.createClient(
+"https://fyzguhksswalbwoqatym.supabase.co",
+"sb_publishable_bqSCrrSbaWZ0DgYPj3pCTg_732i9dzN"
+);
+
+let currentId = "";
+
+async function loadOrder(){
+let id = document.getElementById("orderId").value;
+currentId = id;
+
+let {data} = await client.from("orders").select("*").eq("id",id);
+
+if(data.length == 0){
+document.getElementById("result").innerHTML = "Order not found";
+return;
+}
+
+let o = data[0];
+
+document.getElementById("result").innerHTML = `
+<div class="box">
+<p>Status: ${o.status}</p>
+
+<div id="chatBox"></div>
+</div>
+`;
+
+watchChat();
+}
+
+async function watchChat(){
+
+setInterval(async () => {
+
+let {data} = await client.from("orders").select("*").eq("id",currentId);
+let o = data[0];
+
+if(o.status === "Confirmed"){
+document.getElementById("chatBox").innerHTML = `
+<div class="chat">
+<p>Seller: ${o.message || "Waiting for message..."}</p>
+</div>
+`;
+}
+
+},2000);
+
+}
+</script>
+
+</body>
+</html>
