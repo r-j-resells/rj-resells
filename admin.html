@@ -1,22 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Admin</title>
+<title>Admin Dashboard</title>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <style>
-body {background:black;color:white;font-family:Arial;padding:20px;}
-.card {background:#111;padding:15px;margin:10px;border-radius:10px;}
-button {padding:8px;margin:5px;border:none;border-radius:5px;}
-.confirm {background:green;}
-.decline {background:red;}
+body{
+background:black;
+color:white;
+font-family:Arial;
+padding:20px;
+}
+
+.card{
+background:#111;
+padding:15px;
+margin:10px 0;
+border-radius:10px;
+}
+
+button{
+padding:8px;
+margin:5px;
+border:none;
+border-radius:5px;
+cursor:pointer;
+}
+
+.confirm{background:green;color:white;}
+.decline{background:red;color:white;}
+.send{background:gold;color:black;}
 </style>
 </head>
 
 <body>
 
 <h1>Admin Dashboard</h1>
+
 <div id="orders"></div>
 
 <script>
@@ -26,9 +47,11 @@ const client = window.supabase.createClient(
 );
 
 async function load(){
-let {data}=await client.from("orders").select("*");
+
+let {data}=await client.from("orders").select("*").order("id",{ascending:false});
 
 let html="";
+
 data.forEach(o=>{
 html+=`
 <div class="card">
@@ -39,8 +62,11 @@ html+=`
 <p>${o.address}</p>
 <p>Status: ${o.status}</p>
 
+<input id="msg-${o.id}" placeholder="Message / Snapchat link">
+
 <button class="confirm" onclick="confirmOrder('${o.id}')">Confirm</button>
 <button class="decline" onclick="declineOrder('${o.id}')">Decline</button>
+<button class="send" onclick="sendMsg('${o.id}')">Send Message</button>
 </div>
 `;
 });
@@ -50,12 +76,23 @@ document.getElementById("orders").innerHTML=html;
 
 async function confirmOrder(id){
 await client.from("orders").update({status:"Confirmed"}).eq("id",id);
-alert("Send this to customer:\nhttps://snapchat.com/t/p0bV0vxl");
 load();
 }
 
 async function declineOrder(id){
 await client.from("orders").update({status:"Declined"}).eq("id",id);
+load();
+}
+
+async function sendMsg(id){
+
+let msg=document.getElementById("msg-"+id).value;
+
+await client.from("orders").update({
+message:msg
+}).eq("id",id);
+
+alert("Message sent to customer!");
 load();
 }
 
