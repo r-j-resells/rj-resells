@@ -8,109 +8,28 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
 
 <style>
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: black;
-    color: white;
-}
+body {margin:0;font-family:Arial;background:black;color:white;}
+nav {padding:15px;text-align:center;border-bottom:1px solid #222;}
+nav a {color:white;margin:0 15px;text-decoration:none;}
 
-nav {
-    position: sticky;
-    top: 0;
-    background: black;
-    padding: 15px;
-    text-align: center;
-    border-bottom: 1px solid #222;
-}
+.logo {width:160px;}
+.hero {text-align:center;padding:40px;}
 
-nav a {
-    color: white;
-    margin: 0 15px;
-    text-decoration: none;
-    font-weight: bold;
-}
+.btn {background:gold;color:black;padding:10px;border:none;border-radius:5px;margin:5px;}
 
-header {
-    text-align: center;
-    padding: 20px;
-}
+.products {display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:20px;padding:20px;}
+.product {background:#111;padding:10px;border-radius:10px;text-align:center;}
 
-.logo {
-    width: 180px;
-}
+.input {width:90%;padding:10px;margin:5px;border:none;border-radius:5px;}
 
-.hero {
-    text-align: center;
-    padding: 50px 20px;
-}
+.modal {display:none;position:fixed;width:100%;height:100%;background:rgba(0,0,0,0.8);}
+.modal-content {background:#111;margin:10% auto;padding:20px;width:80%;border-radius:10px;text-align:center;}
 
-.hero h1 {
-    font-family: 'Playfair Display', serif;
-}
+#cart {position:fixed;top:10px;right:10px;background:#111;padding:10px;border-radius:10px;}
 
-.btn {
-    background: gold;
-    color: black;
-    padding: 10px 18px;
-    border-radius: 5px;
-    text-decoration: none;
-    border: none;
-    margin-top: 5px;
-}
-
-.products {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 20px;
-    padding: 20px;
-}
-
-.product {
-    background: #111;
-    padding: 15px;
-    border-radius: 10px;
-    text-align: center;
-}
-
-.product img {
-    width: 100%;
-    border-radius: 10px;
-}
-
-.input {
-    width: 90%;
-    padding: 10px;
-    margin: 8px 0;
-    border-radius: 5px;
-    border: none;
-}
-
-.modal {
-    display: none;
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.8);
-}
-
-.modal-content {
-    background: #111;
-    margin: 15% auto;
-    padding: 20px;
-    width: 80%;
-    border-radius: 10px;
-    text-align: center;
-}
-
-#cart {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    background: #111;
-    padding: 10px;
-    border-radius: 10px;
-}
+/* DASHBOARD */
+#dashboard {display:none;padding:20px;}
+.order {background:#111;padding:10px;margin:10px;border-radius:10px;}
 </style>
 </head>
 
@@ -120,9 +39,10 @@ header {
 <a href="#">Home</a>
 <a href="#shop">Shop</a>
 <a href="https://www.tiktok.com/@r_j_resells">TikTok</a>
+<a href="#" onclick="toggleDashboard()">Dashboard</a>
 </nav>
 
-<header>
+<header style="text-align:center;">
 <img src="logo.png" class="logo">
 </header>
 
@@ -131,38 +51,22 @@ header {
 <p>Authentic Designer. Exclusive Drops.</p>
 </section>
 
-<div id="cart">
-🛒 Cart: <span id="cartCount">0</span>
-</div>
+<div id="cart">🛒 <span id="cartCount">0</span></div>
 
 <section id="shop" class="products">
 
 <div class="product">
-<img src="niketech.jpg">
+<img src="niketech.jpg" width="100%">
 <h3>Nike Ski Mask</h3>
 <p>$120</p>
-<button onclick="openModal('Nike Ski Mask',120)" class="btn">Shop</button>
+<button class="btn" onclick="openModal('Nike Ski Mask',120)">Shop</button>
 </div>
 
 <div class="product">
-<img src="bape.jpg">
+<img src="bape.jpg" width="100%">
 <h3>Bape Hoodie</h3>
 <p>$250</p>
-<button onclick="openModal('Bape Hoodie',250)" class="btn">Shop</button>
-</div>
-
-<div class="product">
-<img src="chromeheartshirt.jpg">
-<h3>Chrome Hearts T-Shirt</h3>
-<p>$80</p>
-<button onclick="openModal('Chrome Hearts T-Shirt',80)" class="btn">Shop</button>
-</div>
-
-<div class="product">
-<img src="chromehearts.jpg">
-<h3>Chrome Hearts Socks</h3>
-<p>$40</p>
-<button onclick="openModal('Chrome Hearts Socks',40)" class="btn">Shop</button>
+<button class="btn" onclick="openModal('Bape Hoodie',250)">Shop</button>
 </div>
 
 </section>
@@ -175,132 +79,135 @@ header {
 <h2 id="productName"></h2>
 <p id="productPrice"></p>
 
-<button onclick="addToCart()" class="btn">Add to Cart</button><br>
+<button class="btn" onclick="addToCart()">Add to Cart</button>
 
-<input id="offerInput" placeholder="Enter your offer $" class="input">
-<button onclick="sendOffer()" class="btn">Send Offer</button>
+<input id="offerInput" class="input" placeholder="Offer $">
+<button class="btn" onclick="sendOffer()">Send Offer</button>
 
-<br>
-<button onclick="goToForm()" class="btn">Buy Now</button>
+<button class="btn" onclick="goToForm()">Buy</button>
 </div>
 
 <div id="formView" style="display:none;">
 <h2>Shipping Info</h2>
-
-<input id="name" placeholder="Full Name" class="input"><br>
-<input id="email" placeholder="Email" class="input"><br>
-<input id="address" placeholder="Address" class="input"><br>
-
-<button onclick="confirmOrder()" class="btn">Confirm Order</button>
+<input id="name" class="input" placeholder="Name">
+<input id="email" class="input" placeholder="Email">
+<input id="address" class="input" placeholder="Address">
+<button class="btn" onclick="confirmOrder()">Confirm</button>
 </div>
 
 <div id="confirmView" style="display:none;">
 <h2>Order Created</h2>
 <p id="orderNumber"></p>
-
-<p>Check your email & wait for confirmation, then pay.</p>
-
-<a href="https://cash.app/$RicoAmos10" class="btn">Pay Now</a>
+<a href="https://cash.app/$RicoAmos10" class="btn">Pay</a>
 </div>
 
-<div id="trackingView" style="display:none;">
-<h2>Tracking</h2>
-<p id="trackingStatus">Processing</p>
-</div>
-
-<br>
-<button onclick="closeModal()" class="btn">Close</button>
+<button class="btn" onclick="closeModal()">Close</button>
 
 </div>
 </div>
 
-<div style="text-align:center; padding:20px;">
-<button onclick="trackOrder(prompt('Enter Order Number'))" class="btn">
-Track Your Order
-</button>
-
-<br><br>
-
-<button onclick="adminUpdate()" class="btn">
-Admin Update (You Only)
-</button>
+<!-- TRACK -->
+<div style="text-align:center;">
+<button class="btn" onclick="trackOrder()">Track Order</button>
 </div>
 
-<footer style="text-align:center; padding:20px;">
-<p>© 2026 R&J Resells</p>
-</footer>
+<!-- DASHBOARD -->
+<div id="dashboard">
+<h2>Admin Dashboard</h2>
+<div id="orders"></div>
+</div>
 
 <script>
-let cart = 0;
+let cart=0;
+let orders=[];
 
-function openModal(name, price) {
-document.getElementById("modal").style.display = "block";
-document.getElementById("productName").innerText = name;
-document.getElementById("productPrice").innerText = "$" + price;
+function openModal(name,price){
+document.getElementById("modal").style.display="block";
+document.getElementById("productName").innerText=name;
+document.getElementById("productPrice").innerText="$"+price;
+
+document.getElementById("productView").style.display="block";
+document.getElementById("formView").style.display="none";
+document.getElementById("confirmView").style.display="none";
 }
 
-function closeModal() {
-document.getElementById("modal").style.display = "none";
+function closeModal(){
+document.getElementById("modal").style.display="none";
 }
 
-function addToCart() {
+function addToCart(){
 cart++;
-document.getElementById("cartCount").innerText = cart;
+document.getElementById("cartCount").innerText=cart;
 }
 
-function sendOffer() {
-let offer = document.getElementById("offerInput").value;
-alert("Offer sent: $" + offer);
+function sendOffer(){
+let offer=document.getElementById("offerInput").value;
+alert("Offer sent: $"+offer);
 }
 
-function goToForm() {
-document.getElementById("productView").style.display = "none";
-document.getElementById("formView").style.display = "block";
+function goToForm(){
+document.getElementById("productView").style.display="none";
+document.getElementById("formView").style.display="block";
 }
 
-function confirmOrder() {
-let name = document.getElementById("name").value;
-let email = document.getElementById("email").value;
-let address = document.getElementById("address").value;
+function confirmOrder(){
+let id="RJ"+Math.floor(Math.random()*100000);
+let name=document.getElementById("name").value;
 
-let orderId = "RJ" + Math.floor(Math.random()*100000);
+let order={
+id:id,
+name:name,
+status:"Order Received"
+};
 
-let subject = "New Order " + orderId;
+orders.push(order);
+localStorage.setItem("orders",JSON.stringify(orders));
 
-let body =
-"Order ID: " + orderId + "%0D%0A" +
-"Name: " + name + "%0D%0A" +
-"Email: " + email + "%0D%0A" +
-"Address: " + address;
+document.getElementById("orderNumber").innerText=id;
 
-window.location.href =
-"mailto:amosrico2@gmail.com?subject=" + subject + "&body=" + body;
+window.location.href="mailto:amosrico2@gmail.com?subject=Order "+id;
 
-document.getElementById("orderNumber").innerText = "Order #: " + orderId;
+document.getElementById("formView").style.display="none";
+document.getElementById("confirmView").style.display="block";
 
-document.getElementById("formView").style.display = "none";
-document.getElementById("confirmView").style.display = "block";
-
-localStorage.setItem(orderId, "Order Received");
+loadOrders();
 }
 
-function trackOrder(orderId) {
-let status = localStorage.getItem(orderId);
-document.getElementById("trackingStatus").innerText = status || "Not Found";
-
-document.getElementById("modal").style.display = "block";
-document.getElementById("productView").style.display = "none";
-document.getElementById("formView").style.display = "none";
-document.getElementById("confirmView").style.display = "none";
-document.getElementById("trackingView").style.display = "block";
+function loadOrders(){
+orders=JSON.parse(localStorage.getItem("orders"))||[];
+let html="";
+orders.forEach(o=>{
+html+=`
+<div class="order">
+<p>${o.id} - ${o.name}</p>
+<p>Status: ${o.status}</p>
+<input placeholder="Update status" id="s${o.id}">
+<button onclick="updateOrder('${o.id}')">Update</button>
+</div>`;
+});
+document.getElementById("orders").innerHTML=html;
 }
 
-function adminUpdate() {
-let orderId = prompt("Enter Order ID:");
-let status = prompt("Enter Status:");
+function updateOrder(id){
+let val=document.getElementById("s"+id).value;
+if(!val) return alert("Enter status");
 
-localStorage.setItem(orderId, status);
-alert("Updated!");
+orders=orders.map(o=>o.id===id?{...o,status:val}:o);
+localStorage.setItem("orders",JSON.stringify(orders));
+loadOrders();
+}
+
+function toggleDashboard(){
+let d=document.getElementById("dashboard");
+d.style.display=d.style.display==="none"?"block":"none";
+loadOrders();
+}
+
+function trackOrder(){
+let id=prompt("Order ID?");
+orders=JSON.parse(localStorage.getItem("orders"))||[];
+let o=orders.find(x=>x.id===id);
+alert(o?o.status:"Not found");
 }
 </script>
 
