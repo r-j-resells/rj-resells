@@ -7,15 +7,15 @@
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
-<!-- 🔥 STOCKX-STYLE FONT -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+<!-- 🔥 CHROME HEARTS STYLE FONT -->
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
 
 <style>
 
-/* GLOBAL FONT */
+/* BASE FONT */
 body{
 margin:0;
-font-family:'Inter', Arial, sans-serif;
+font-family:Arial, sans-serif;
 color:white;
 
 background:url('background.jpg') no-repeat center center fixed;
@@ -34,6 +34,13 @@ background:rgba(0,0,0,0.65);
 z-index:-1;
 }
 
+/* HEADER TITLE FONT (CHROME HEARTS STYLE) */
+h1{
+font-family:'UnifrakturCook', cursive;
+letter-spacing:2px;
+margin:5px 0;
+}
+
 /* HEADER */
 header{
 text-align:center;
@@ -45,13 +52,6 @@ padding:20px;
 width:120px;
 border-radius:10px;
 margin-bottom:10px;
-}
-
-/* TITLE */
-h1{
-font-weight:800;
-letter-spacing:2px;
-margin:5px 0;
 }
 
 /* PRODUCTS */
@@ -75,6 +75,7 @@ width:100%;
 border-radius:10px;
 }
 
+/* BUY BUTTON (UNCHANGED) */
 .btn{
 background:gold;
 color:black;
@@ -84,7 +85,7 @@ display:inline-block;
 margin-top:10px;
 cursor:pointer;
 border:none;
-font-weight:600;
+font-weight:bold;
 }
 
 /* SOLD OUT */
@@ -101,7 +102,7 @@ left:10px;
 background:red;
 padding:5px;
 font-size:12px;
-font-weight:600;
+font-weight:bold;
 }
 
 /* MODAL */
@@ -137,11 +138,12 @@ margin:5px 0;
 
 <header>
 
-<!-- 🔥 LOGO BACK -->
+<!-- LOGO BACK -->
 <img src="logo.png" class="logo">
 
 <h1>R&J Resells</h1>
 <p>Designer Resell Store</p>
+
 </header>
 
 <section class="products">
