@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>R&J Resells</title>
 
+<!-- FIXED SUPABASE LOAD -->
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <style>
@@ -41,7 +42,6 @@ nav {
 nav a {
     color: white;
     text-decoration: none;
-    font-size: 14px;
 }
 
 header {
@@ -61,12 +61,10 @@ header {
     padding: 15px;
     border-radius: 10px;
     text-align: center;
-    position: relative;
 }
 
 .product img {
     width: 100%;
-    border-radius: 10px;
 }
 
 .btn {
@@ -75,58 +73,28 @@ header {
     padding: 10px;
     border-radius: 5px;
     margin-top: 10px;
-    display: inline-block;
     cursor: pointer;
-}
-
-/* SOLD OUT STYLE */
-.product.sold-out {
-    opacity: 0.6;
-    filter: grayscale(100%);
-}
-
-.sold-tag {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    background: red;
-    color: white;
-    padding: 5px 10px;
-    font-size: 12px;
-    font-weight: bold;
-    border-radius: 5px;
-}
-
-.product.sold-out .btn {
-    background: #555;
-    color: #ccc;
-    pointer-events: none;
 }
 
 /* MODAL */
 .modal {
 display:none;
 position:fixed;
+top:0;
+left:0;
 width:100%;
 height:100%;
 background:rgba(0,0,0,0.85);
-z-index:100;
+z-index:999;
 }
 
 .modal-content {
 background:#111;
-margin:40% auto;
+margin:100px auto;
 padding:20px;
 width:80%;
 border-radius:10px;
 text-align:center;
-}
-
-.contact {
-    text-align: center;
-    padding: 20px;
-    font-size: 14px;
-    background: rgba(0,0,0,0.6);
 }
 </style>
 </head>
@@ -137,7 +105,6 @@ text-align:center;
 <a href="#">Home</a>
 <a href="#shop">Shop</a>
 <a href="https://www.tiktok.com/@r_j_resells">TikTok</a>
-<a href="#">Drops</a>
 </nav>
 
 <header>
@@ -147,12 +114,10 @@ text-align:center;
 
 <section id="shop" class="products">
 
-<!-- AVAILABLE -->
 <div class="product">
 <img src="niketech.jpg">
 <h3>Nike Ski Mask</h3>
 <p>$30</p>
-<p>25% Off</p>
 <button class="btn" onclick="openForm('Nike Ski Mask')">Buy</button>
 </div>
 
@@ -160,113 +125,73 @@ text-align:center;
 <img src="chromeheartshirt.jpg">
 <h3>Chrome Hearts T-Shirt</h3>
 <p>$65</p>
-<p>19% Off</p>
 <button class="btn" onclick="openForm('Chrome Hearts T-Shirt')">Buy</button>
-</div>
-
-<div class="product">
-<img src="chromehearts.jpg">
-<h3>Chrome Hearts Socks</h3>
-<p>$35</p>
-<p>12% Off</p>
-<button class="btn" onclick="openForm('Chrome Hearts Socks')">Buy</button>
-</div>
-
-<!-- SOLD OUT ITEMS -->
-
-<div class="product sold-out">
-<div class="sold-tag">SOLD OUT</div>
-<img src="bape.jpg">
-<h3>Bape Hoodie</h3>
-<p>$140</p>
-<p>30% Off</p>
-<button class="btn">Sold Out</button>
-</div>
-
-<div class="product sold-out">
-<div class="sold-tag">SOLD OUT</div>
-<img src="bapeshirt.jpg">
-<h3>Bape T-Shirt</h3>
-<p>$65</p>
-<button class="btn">Sold Out</button>
-</div>
-
-<div class="product sold-out">
-<div class="sold-tag">SOLD OUT</div>
-<img src="draco.jpg">
-<h3>Draco Slides</h3>
-<p>$70</p>
-<button class="btn">Sold Out</button>
-</div>
-
-<div class="product sold-out">
-<div class="sold-tag">SOLD OUT</div>
-<img src="lvbean.jpg">
-<h3>Louis Vuitton Beanie</h3>
-<p>$80</p>
-<button class="btn">Sold Out</button>
 </div>
 
 </section>
 
-<!-- CHECKOUT FORM -->
+<!-- MODAL -->
 <div id="modal" class="modal">
 <div class="modal-content">
 
 <h2 id="productTitle"></h2>
 
-<input id="name" placeholder="Contact Name"><br><br>
-<input id="email" placeholder="Contact Email"><br><br>
-<input id="address" placeholder="Billing Address"><br><br>
+<input id="name" placeholder="Name"><br><br>
+<input id="email" placeholder="Email"><br><br>
+<input id="address" placeholder="Address"><br><br>
 
-<button class="btn" onclick="submitOrder()">Continue to Payment</button>
+<button class="btn" onclick="submitOrder()">Continue</button>
+
+<br><br>
+<button class="btn" onclick="closeForm()">Close</button>
 
 </div>
-</div>
-
-<div class="contact">
-Contact Info: 
-<a href="https://www.snapchat.com/add/ricoamos22" target="_blank">@ricoamos22</a> |
-<a href="https://www.snapchat.com/add/jeffreylovej" target="_blank">@jeffreylovej</a>
 </div>
 
 <script>
+// 🔥 MAKE SURE SCRIPT RUNS AFTER LOAD
+window.onload = function(){
+
 const client = window.supabase.createClient(
 "https://fyzguhksswalbwoqatym.supabase.co",
 "sb_publishable_bqSCrrSbaWZ0DgYPj3pCTg_732i9dzN"
 );
 
-let currentProduct="";
-
-function openForm(product){
-currentProduct=product;
-document.getElementById("modal").style.display="block";
-document.getElementById("productTitle").innerText=product;
+window.openForm = function(product){
+    document.getElementById("modal").style.display="block";
+    document.getElementById("productTitle").innerText=product;
+    window.currentProduct = product;
 }
 
-async function submitOrder(){
-
-let name=document.getElementById("name").value;
-let email=document.getElementById("email").value;
-let address=document.getElementById("address").value;
-
-if(!name||!email||!address){
-alert("Please fill out all fields");
-return;
+window.closeForm = function(){
+    document.getElementById("modal").style.display="none";
 }
 
-let id="RJ"+Math.floor(Math.random()*100000);
+window.submitOrder = async function(){
 
-await client.from("orders").insert([{
-id:id,
-product:currentProduct,
-name:name,
-email:email,
-address:address,
-status:"Pending"
-}]);
+    let name=document.getElementById("name").value;
+    let email=document.getElementById("email").value;
+    let address=document.getElementById("address").value;
 
-window.location.href="https://cash.app/$RicoAmos10";
+    if(!name||!email||!address){
+        alert("Fill all fields");
+        return;
+    }
+
+    let id="RJ"+Math.floor(Math.random()*100000);
+
+    await client.from("orders").insert([{
+        id:id,
+        product:window.currentProduct,
+        name:name,
+        email:email,
+        address:address,
+        status:"Pending"
+    }]);
+
+    window.location.href="https://cash.app/$RicoAmos10";
+}
+
 }
 </script>
 
