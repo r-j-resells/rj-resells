@@ -8,7 +8,7 @@
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <style>
-body {
+body{
 margin:0;
 font-family:Arial;
 background:black;
@@ -44,14 +44,14 @@ border-radius:10px;
 background:gold;
 color:black;
 padding:10px;
-border:none;
 border-radius:5px;
 display:inline-block;
 margin-top:10px;
 cursor:pointer;
+border:none;
 }
 
-/* SOLD OUT STYLE */
+/* SOLD OUT */
 .sold{
 opacity:0.5;
 filter:grayscale(100%);
@@ -99,8 +99,7 @@ text-align:center;
 
 <section class="products">
 
-<!-- AVAILABLE PRODUCTS -->
-
+<!-- AVAILABLE -->
 <div class="product">
 <img src="niketech.jpg">
 <h3>Nike Ski Mask</h3>
@@ -122,8 +121,7 @@ text-align:center;
 <button class="btn" onclick="openForm('Chrome Socks')">Buy</button>
 </div>
 
-<!-- SOLD OUT PRODUCTS -->
-
+<!-- SOLD OUT -->
 <div class="product sold">
 <img src="bape.jpg">
 <h3>Bape Hoodie</h3>
@@ -169,7 +167,6 @@ text-align:center;
 
 <script>
 
-/* DO NOT TOUCH BUY FLOW */
 let currentProduct = "";
 
 function openForm(product){
@@ -182,41 +179,35 @@ function closeForm(){
 document.getElementById("modal").style.display = "none";
 }
 
-/* SUPABASE */
 const client = window.supabase.createClient(
 "https://fyzguhksswalbwoqatym.supabase.co",
 "sb_publishable_bqSCrrSbaWZ0DgYPj3pCTg_732i9dzN"
 );
 
-/* FORM SUBMIT */
 async function submitOrder(){
 
-let name = document.getElementById("name").value;
-let email = document.getElementById("email").value;
-let address = document.getElementById("address").value;
+let name=document.getElementById("name").value;
+let email=document.getElementById("email").value;
+let address=document.getElementById("address").value;
 
-if(!name || !email || !address){
-alert("Please fill out all fields");
+if(!name||!email||!address){
+alert("Please fill all fields");
 return;
 }
 
-let orderId = "RJ" + Math.floor(Math.random() * 100000);
+let id="RJ"+Math.floor(Math.random()*100000);
 
-try {
 await client.from("orders").insert([{
-id: orderId,
-product: currentProduct,
-name: name,
-email: email,
-address: address,
-status: "Pending"
+id:id,
+product:currentProduct,
+name:name,
+email:email,
+address:address,
+status:"Pending",
+message:"Waiting for confirmation"
 }]);
-} catch (err) {
-console.log("Supabase error:", err);
-}
 
-/* CASHAPP REDIRECT (UNCHANGED FLOW) */
-window.location.href = "https://cash.app/$RicoAmos10";
+window.location.href="https://cash.app/$RicoAmos10";
 }
 
 </script>
