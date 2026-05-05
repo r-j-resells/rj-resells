@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>R&J Resells</title>
 
-<!-- SUPABASE -->
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <style>
@@ -33,6 +32,7 @@ background:#111;
 padding:15px;
 border-radius:10px;
 text-align:center;
+position:relative;
 }
 
 .product img{
@@ -49,6 +49,22 @@ border-radius:5px;
 display:inline-block;
 margin-top:10px;
 cursor:pointer;
+}
+
+/* SOLD OUT STYLE */
+.sold{
+opacity:0.5;
+filter:grayscale(100%);
+}
+
+.sold::after{
+content:"SOLD OUT";
+position:absolute;
+top:10px;
+left:10px;
+background:red;
+padding:5px;
+font-size:12px;
 }
 
 /* MODAL */
@@ -83,6 +99,8 @@ text-align:center;
 
 <section class="products">
 
+<!-- AVAILABLE PRODUCTS -->
+
 <div class="product">
 <img src="niketech.jpg">
 <h3>Nike Ski Mask</h3>
@@ -102,6 +120,32 @@ text-align:center;
 <h3>Chrome Socks</h3>
 <p>$35</p>
 <button class="btn" onclick="openForm('Chrome Socks')">Buy</button>
+</div>
+
+<!-- SOLD OUT PRODUCTS -->
+
+<div class="product sold">
+<img src="bape.jpg">
+<h3>Bape Hoodie</h3>
+<p>$140</p>
+</div>
+
+<div class="product sold">
+<img src="bapeshirt.jpg">
+<h3>Bape T-Shirt</h3>
+<p>$65</p>
+</div>
+
+<div class="product sold">
+<img src="draco.jpg">
+<h3>Draco Slides</h3>
+<p>$70</p>
+</div>
+
+<div class="product sold">
+<img src="lvbean.jpg">
+<h3>Louis Vuitton Beanie</h3>
+<p>$80</p>
 </div>
 
 </section>
@@ -125,7 +169,7 @@ text-align:center;
 
 <script>
 
-/* KEEP BUY FLOW EXACTLY SAME */
+/* DO NOT TOUCH BUY FLOW */
 let currentProduct = "";
 
 function openForm(product){
@@ -138,13 +182,13 @@ function closeForm(){
 document.getElementById("modal").style.display = "none";
 }
 
-/* SUPABASE CLIENT */
+/* SUPABASE */
 const client = window.supabase.createClient(
 "https://fyzguhksswalbwoqatym.supabase.co",
 "sb_publishable_bqSCrrSbaWZ0DgYPj3pCTg_732i9dzN"
 );
 
-/* UPDATED SUBMIT (BUY BUTTON STILL UNTOUCHED) */
+/* FORM SUBMIT */
 async function submitOrder(){
 
 let name = document.getElementById("name").value;
@@ -171,7 +215,7 @@ status: "Pending"
 console.log("Supabase error:", err);
 }
 
-/* KEEP ORIGINAL FLOW (DO NOT CHANGE BUY SYSTEM) */
+/* CASHAPP REDIRECT (UNCHANGED FLOW) */
 window.location.href = "https://cash.app/$RicoAmos10";
 }
 
