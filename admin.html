@@ -41,6 +41,7 @@ cursor:pointer;
 <div id="orders"></div>
 
 <script>
+
 const client = window.supabase.createClient(
 "https://fyzguhksswalbwoqatym.supabase.co",
 "sb_publishable_bqSCrrSbaWZ0DgYPj3pCTg_732i9dzN"
@@ -56,11 +57,11 @@ data.forEach(o=>{
 html+=`
 <div class="card">
 <h3>${o.id}</h3>
-<p>${o.product}</p>
-<p>${o.name}</p>
-<p>${o.email}</p>
-<p>${o.address}</p>
-<p>Status: ${o.status}</p>
+<p><b>Product:</b> ${o.product}</p>
+<p><b>Name:</b> ${o.name}</p>
+<p><b>Email:</b> ${o.email}</p>
+<p><b>Address:</b> ${o.address}</p>
+<p><b>Status:</b> ${o.status}</p>
 
 <input id="msg-${o.id}" placeholder="Message / Snapchat link">
 
@@ -92,11 +93,12 @@ await client.from("orders").update({
 message:msg
 }).eq("id",id);
 
-alert("Message sent to customer!");
+alert("Message sent");
 load();
 }
 
 load();
+
 </script>
 
 </body>
