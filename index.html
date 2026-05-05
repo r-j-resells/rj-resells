@@ -256,10 +256,9 @@ Contact:
 </div>
 
 <script>
-const supabase = supabase.createClient(
+const client = supabase.createClient(
 "https://fyzguhksswalbwoqatym.supabase.co",
 "sb_publishable_bqSCrrSbaWZ0DgYPj3pCTg_732i9dzN"
-);
 
 let currentProduct="";
 
@@ -276,7 +275,7 @@ document.getElementById("modal").style.display="none";
 async function submitOrder(){
 let id="RJ"+Math.floor(Math.random()*100000);
 
-await supabase.from("orders").insert([{
+await client.from("orders").insert([
 id:id,
 product:currentProduct,
 name:document.getElementById("name").value,
