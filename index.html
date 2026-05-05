@@ -5,118 +5,89 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>R&J Resells</title>
 
+<!-- SUPABASE (WORKING VERSION) -->
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
 body {
-margin:0;
-font-family:'Inter', sans-serif;
-color:white;
-background:#0a0a0a;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    color: white;
+    background: url('background.jpg') no-repeat center center fixed;
+    background-size: cover;
 }
 
-/* NAV */
+body::before {
+    content: "";
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.65);
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
 nav {
-position:fixed;
-top:0;
-width:100%;
-background:#000;
-display:flex;
-justify-content:space-between;
-padding:15px 20px;
-border-bottom:1px solid #222;
-z-index:100;
-}
-
-nav .logo {
-font-weight:600;
-font-size:18px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: rgba(0,0,0,0.85);
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 12px;
+    z-index: 10;
 }
 
 nav a {
-color:#ccc;
-text-decoration:none;
-margin-left:15px;
-font-size:14px;
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
 }
 
-nav a:hover {
-color:white;
-}
-
-/* HEADER */
 header {
-padding-top:80px;
-text-align:center;
-padding-bottom:30px;
+    padding-top: 80px;
+    text-align: center;
 }
 
-header h1 {
-font-size:28px;
-margin:0;
-}
-
-header p {
-color:#888;
-}
-
-/* GRID */
 .products {
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-gap:20px;
-padding:20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 20px;
+    padding: 20px;
 }
 
-/* PRODUCT CARD */
 .product {
-background:#111;
-border-radius:12px;
-padding:15px;
-transition:0.2s;
-}
-
-.product:hover {
-transform:translateY(-5px);
-box-shadow:0 10px 25px rgba(0,0,0,0.5);
+    background: rgba(0,0,0,0.75);
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
 }
 
 .product img {
-width:100%;
-border-radius:10px;
+    width: 100%;
+    border-radius: 10px;
 }
 
-.product h3 {
-font-size:15px;
-margin:10px 0 5px;
-}
-
-.price {
-font-weight:600;
-}
-
-.discount {
-color:#4caf50;
-font-size:13px;
-}
-
-/* BUTTON */
 .btn {
-background:white;
-color:black;
-padding:10px;
-border:none;
-border-radius:6px;
-margin-top:10px;
-width:100%;
-font-weight:600;
-cursor:pointer;
+    background: gold;
+    color: black;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    display: inline-block;
+    margin-top: 10px;
+    text-decoration: none;
+    cursor: pointer;
 }
 
-.btn:hover {
-background:#ddd;
+.contact {
+    text-align: center;
+    padding: 20px;
+    font-size: 14px;
+    background: rgba(0,0,0,0.6);
+    margin-top: 30px;
 }
 
 /* MODAL */
@@ -125,34 +96,17 @@ display:none;
 position:fixed;
 width:100%;
 height:100%;
-background:rgba(0,0,0,0.85);
+background:rgba(0,0,0,0.8);
+z-index:100;
 }
 
 .modal-content {
 background:#111;
-margin:30% auto;
+margin:40% auto;
 padding:20px;
-width:85%;
-border-radius:12px;
+width:80%;
+border-radius:10px;
 text-align:center;
-}
-
-input {
-width:90%;
-padding:10px;
-margin:8px;
-border:none;
-border-radius:6px;
-background:#222;
-color:white;
-}
-
-/* CONTACT */
-.contact {
-text-align:center;
-padding:20px;
-font-size:14px;
-color:#aaa;
 }
 </style>
 </head>
@@ -160,17 +114,15 @@ color:#aaa;
 <body>
 
 <nav>
-<div class="logo">R&J Resells</div>
-<div>
 <a href="#">Home</a>
 <a href="#shop">Shop</a>
 <a href="https://www.tiktok.com/@r_j_resells">TikTok</a>
-</div>
+<a href="#">Drops</a>
 </nav>
 
 <header>
 <h1>R&J Resells</h1>
-<p>Verified Streetwear Marketplace</p>
+<p>Authentic Designer. Exclusive Drops.</p>
 </header>
 
 <section id="shop" class="products">
@@ -178,117 +130,141 @@ color:#aaa;
 <div class="product">
 <img src="niketech.jpg">
 <h3>Nike Ski Mask</h3>
-<p class="price">$30</p>
-<p class="discount">25% Off</p>
+<p>$30</p>
+<p>25% Off</p>
 <button class="btn" onclick="openForm('Nike Ski Mask')">Buy</button>
 </div>
 
 <div class="product">
 <img src="bape.jpg">
 <h3>Bape Hoodie</h3>
-<p class="price">$140</p>
-<p class="discount">30% Off</p>
+<p>$140</p>
+<p>30% Off</p>
 <button class="btn" onclick="openForm('Bape Hoodie')">Buy</button>
 </div>
 
 <div class="product">
 <img src="chromeheartshirt.jpg">
 <h3>Chrome Hearts T-Shirt</h3>
-<p class="price">$65</p>
-<p class="discount">19% Off</p>
+<p>$65</p>
+<p>19% Off</p>
 <button class="btn" onclick="openForm('Chrome Hearts T-Shirt')">Buy</button>
 </div>
 
 <div class="product">
 <img src="chromehearts.jpg">
 <h3>Chrome Hearts Socks</h3>
-<p class="price">$35</p>
-<p class="discount">12% Off</p>
+<p>$35</p>
+<p>12% Off</p>
 <button class="btn" onclick="openForm('Chrome Hearts Socks')">Buy</button>
 </div>
 
 <div class="product">
 <img src="bapeshirt.jpg">
 <h3>Bape T-Shirt</h3>
-<p class="price">$65</p>
+<p>$65</p>
 <button class="btn" onclick="openForm('Bape T-Shirt')">Buy</button>
 </div>
 
 <div class="product">
 <img src="draco.jpg">
 <h3>Draco Slides</h3>
-<p class="price">$70</p>
+<p>$70</p>
 <button class="btn" onclick="openForm('Draco Slides')">Buy</button>
 </div>
 
 <div class="product">
 <img src="lvbean.jpg">
 <h3>Louis Vuitton Beanie</h3>
-<p class="price">$80</p>
-<button class="btn" onclick="openForm('LV Beanie')">Buy</button>
+<p>$80</p>
+<button class="btn" onclick="openForm('Louis Vuitton Beanie')">Buy</button>
 </div>
 
 </section>
 
-<!-- MODAL -->
+<!-- ORDER FORM -->
 <div id="modal" class="modal">
 <div class="modal-content">
 
 <h2 id="productTitle"></h2>
 
-<input id="name" placeholder="Full Name">
-<input id="email" placeholder="Email">
-<input id="address" placeholder="Address">
+<input id="name" placeholder="Name"><br><br>
+<input id="email" placeholder="Email"><br><br>
+<input id="address" placeholder="Address"><br><br>
 
 <button class="btn" onclick="submitOrder()">Submit Order</button>
 
+<br><br>
 <a href="https://cash.app/$RicoAmos10" class="btn">Pay with CashApp</a>
 
+<br><br>
 <button class="btn" onclick="closeForm()">Close</button>
 
 </div>
 </div>
 
 <div class="contact">
-Contact: 
-<a href="https://www.snapchat.com/add/ricoamos22" target="_blank">@ricoamos22</a> |
+<p>
+Contact Info: 
+<a href="https://www.snapchat.com/add/ricoamos22" target="_blank">@ricoamos22</a>
+and 
 <a href="https://www.snapchat.com/add/jeffreylovej" target="_blank">@jeffreylovej</a>
+</p>
 </div>
 
+<p style="text-align:center;">DISCLAIMER ALL PRODUCTS IN THIS WEBSITE HAVE NO LOGO...</p>
+
 <script>
-const client = supabase.createClient(
+const client = window.supabase.createClient(
 "https://fyzguhksswalbwoqatym.supabase.co",
 "sb_publishable_bqSCrrSbaWZ0DgYPj3pCTg_732i9dzN"
+);
 
-let currentProduct="";
+let currentProduct = "";
 
-function openForm(p){
-currentProduct=p;
-document.getElementById("modal").style.display="block";
-document.getElementById("productTitle").innerText=p;
+function openForm(product){
+    currentProduct = product;
+    document.getElementById("modal").style.display = "block";
+    document.getElementById("productTitle").innerText = product;
 }
 
 function closeForm(){
-document.getElementById("modal").style.display="none";
+    document.getElementById("modal").style.display = "none";
 }
 
 async function submitOrder(){
-let id="RJ"+Math.floor(Math.random()*100000);
 
-await client.from("orders").insert([
-id:id,
-product:currentProduct,
-name:document.getElementById("name").value,
-email:document.getElementById("email").value,
-address:document.getElementById("address").value,
-status:"Pending",
-message:"Waiting for confirmation"
-}]);
+    let name = document.getElementById("name").value;
+    let email = document.getElementById("email").value;
+    let address = document.getElementById("address").value;
 
-alert("Order submitted. Complete payment.");
+    if(!name || !email || !address){
+        alert("Please fill out all fields");
+        return;
+    }
+
+    let id = "RJ" + Math.floor(Math.random()*100000);
+
+    const { error } = await client.from("orders").insert([{
+        id: id,
+        product: currentProduct,
+        name: name,
+        email: email,
+        address: address,
+        status: "Pending",
+        message: "Waiting for confirmation"
+    }]);
+
+    if(error){
+        alert("Error saving order");
+        console.log(error);
+        return;
+    }
+
+    alert("Order submitted! Now complete payment.");
+
 }
 </script>
 
 </body>
 </html>
-console.log("JS LOADED");
