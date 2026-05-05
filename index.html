@@ -10,90 +10,88 @@
 <style>
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: Arial;
     color: white;
     background: url('background.jpg') no-repeat center center fixed;
     background-size: cover;
 }
 
 body::before {
-    content: "";
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.65);
-    top: 0;
-    left: 0;
-    z-index: -1;
+    content:"";
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.65);
+    top:0;
+    left:0;
+    z-index:-1;
 }
 
 nav {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    background: rgba(0,0,0,0.85);
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    padding: 12px;
+    position:fixed;
+    top:0;
+    width:100%;
+    background:rgba(0,0,0,0.85);
+    display:flex;
+    justify-content:center;
+    gap:20px;
+    padding:12px;
 }
 
 nav a {
-    color: white;
-    text-decoration: none;
+    color:white;
+    text-decoration:none;
 }
 
 header {
-    padding-top: 80px;
-    text-align: center;
+    padding-top:80px;
+    text-align:center;
 }
 
 .products {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 20px;
-    padding: 20px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+gap:20px;
+padding:20px;
 }
 
 .product {
-    background: rgba(0,0,0,0.75);
-    padding: 15px;
-    border-radius: 10px;
-    text-align: center;
-    position: relative;
+background:rgba(0,0,0,0.75);
+padding:15px;
+border-radius:10px;
+text-align:center;
+position:relative;
 }
 
-.product img {
-    width: 100%;
-}
+.product img { width:100%; }
 
 .btn {
-    background: gold;
-    color: black;
-    padding: 10px;
-    border-radius: 5px;
-    margin-top: 10px;
-    cursor: pointer;
+background:gold;
+color:black;
+padding:10px;
+border-radius:5px;
+margin-top:10px;
+cursor:pointer;
 }
 
 /* SOLD OUT */
 .product.sold-out {
-    opacity: 0.6;
-    filter: grayscale(100%);
+opacity:0.6;
+filter:grayscale(100%);
 }
 
 .sold-tag {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    background: red;
-    padding: 5px;
-    font-size: 12px;
+position:absolute;
+top:10px;
+left:10px;
+background:red;
+padding:5px;
+font-size:12px;
 }
 
 .product.sold-out .btn {
-    background: #555;
-    pointer-events: none;
+background:#555;
+pointer-events:none;
 }
 
 /* MODAL */
@@ -202,11 +200,11 @@ padding:20px;
 
 <h2 id="productTitle"></h2>
 
-<input id="name" placeholder="Name"><br><br>
-<input id="email" placeholder="Email"><br><br>
-<input id="address" placeholder="Address"><br><br>
+<input id="name" placeholder="Contact Name"><br><br>
+<input id="email" placeholder="Contact Email"><br><br>
+<input id="address" placeholder="Billing Address"><br><br>
 
-<button class="btn" onclick="submitOrder()">Continue</button>
+<button class="btn" onclick="submitOrder()">Continue to Payment</button>
 
 <br><br>
 <button class="btn" onclick="closeForm()">Close</button>
@@ -251,16 +249,26 @@ return;
 
 let id="RJ"+Math.floor(Math.random()*100000);
 
-await client.from("orders").insert([{
+let { error } = await client.from("orders").insert([{
 id:id,
 product:window.currentProduct,
 name:name,
 email:email,
 address:address,
-status:"Pending"
+status:"Pending",
+message:"Waiting for payment"
 }]);
 
+if(error){
+alert("Error saving order");
+return;
+}
+
+// 🔥 IMPORTANT FIX
+setTimeout(()=>{
 window.location.href="https://cash.app/$RicoAmos10";
+},500);
+
 }
 
 }
