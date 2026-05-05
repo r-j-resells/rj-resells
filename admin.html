@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Admin Dashboard</title>
+<title>Admin</title>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <style>
 body {background:black;color:white;font-family:Arial;padding:20px;}
 .card {background:#111;padding:15px;margin:10px;border-radius:10px;}
-button {background:gold;border:none;padding:8px;border-radius:5px;margin:5px;}
+button {padding:8px;margin:5px;border:none;border-radius:5px;}
+.confirm {background:green;color:white;}
+.decline {background:red;color:white;}
 </style>
 </head>
 
@@ -18,14 +20,13 @@ button {background:gold;border:none;padding:8px;border-radius:5px;margin:5px;}
 <div id="orders"></div>
 
 <script>
-const supabase = supabase.createClient(
-"YOUR_URL",
-"YOUR_PUBLIC_KEY"
+const client = window.supabase.createClient(
+"https://fyzguhksswalbwoqatym.supabase.co",
+"sb_publishable_bqSCrrSbaWZ0DgYPj3pCTg_732i9dzN"
 );
 
 async function load(){
-
-let { data } = await supabase.from("orders").select("*");
+let {data}=await client.from("orders").select("*");
 
 let html="";
 
@@ -38,12 +39,8 @@ html+=`
 <p>${o.email}</p>
 <p>Status: ${o.status}</p>
 
-<button onclick="update('${o.id}','Shipped')">Shipped</button>
-<button onclick="update('${o.id}','Delivered')">Delivered</button>
-
-<br><br>
-<input id="m${o.id}" placeholder="Message">
-<button onclick="msg('${o.id}')">Send</button>
+<button class="confirm" onclick="confirmOrder('${o.id}')">Confirm</button>
+<button class="decline" onclick="declineOrder('${o.id}')">Decline</button>
 </div>
 `;
 });
@@ -51,14 +48,19 @@ html+=`
 document.getElementById("orders").innerHTML=html;
 }
 
-async function update(id,status){
-await supabase.from("orders").update({status}).eq("id",id);
+async function confirmOrder(id){
+await client.from("orders").update({
+status:"Confirmed"
+}).eq("id",id);
+
+alert("Send them this Snapchat link manually!");
 load();
 }
 
-async function msg(id){
-let m=document.getElementById("m"+id).value;
-await supabase.from("orders").update({message:m}).eq("id",id);
+async function declineOrder(id){
+await client.from("orders").update({
+status:"Declined"
+}).eq("id",id);
 load();
 }
 
