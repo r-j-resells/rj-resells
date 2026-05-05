@@ -1,22 +1,53 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Admin</title>
+<title>R&J Admin</title>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <style>
-body {background:black;color:white;font-family:Arial;padding:20px;}
-.card {background:#111;padding:15px;margin:10px;border-radius:10px;}
-button {padding:8px;margin:5px;border:none;border-radius:5px;}
-.confirm {background:green;color:white;}
-.decline {background:red;color:white;}
+body {
+    background: black;
+    color: white;
+    font-family: Arial;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+}
+
+.card {
+    background: #111;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 10px;
+}
+
+button {
+    padding: 8px 12px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.confirm { background: green; color: white; }
+.decline { background: red; color: white; }
+.update { background: gold; color: black; }
+
+input {
+    width: 100%;
+    padding: 6px;
+    margin-top: 5px;
+}
 </style>
 </head>
 
 <body>
 
 <h1>Admin Dashboard</h1>
+
 <div id="orders"></div>
 
 <script>
@@ -25,46 +56,62 @@ const client = window.supabase.createClient(
 "sb_publishable_bqSCrrSbaWZ0DgYPj3pCTg_732i9dzN"
 );
 
-async function load(){
-let {data}=await client.from("orders").select("*");
+async function loadOrders(){
+    let { data } = await client.from("orders").select("*").order("id",{ascending:false});
 
-let html="";
+    let html = "";
 
-data.forEach(o=>{
-html+=`
-<div class="card">
-<h3>${o.id}</h3>
-<p>${o.product}</p>
-<p>${o.name}</p>
-<p>${o.email}</p>
-<p>Status: ${o.status}</p>
+    data.forEach(o => {
+        html += `
+        <div class="card">
+            <h3>Order: ${o.id}</h3>
+            <p><b>Product:</b> ${o.product}</p>
+            <p><b>Name:</b> ${o.name}</p>
+            <p><b>Email:</b> ${o.email}</p>
+            <p><b>Address:</b> ${o.address}</p>
+            <p><b>Status:</b> ${o.status}</p>
 
-<button class="confirm" onclick="confirmOrder('${o.id}')">Confirm</button>
-<button class="decline" onclick="declineOrder('${o.id}')">Decline</button>
-</div>
-`;
-});
+            <input placeholder="Tracking Update..." id="msg-${o.id}">
 
-document.getElementById("orders").innerHTML=html;
+            <button class="confirm" onclick="confirmOrder('${o.id}')">Confirm</button>
+            <button class="decline" onclick="declineOrder('${o.id}')">Decline</button>
+            <button class="update" onclick="updateMsg('${o.id}')">Update Status</button>
+        </div>
+        `;
+    });
+
+    document.getElementById("orders").innerHTML = html;
 }
 
 async function confirmOrder(id){
-await client.from("orders").update({
-status:"Confirmed"
-}).eq("id",id);
+    await client.from("orders").update({
+        status: "Confirmed"
+    }).eq("id", id);
 
-alert("Send them this Snapchat link manually!");
-load();
+    alert("Send this Snapchat link to the buyer:\nhttps://snapchat.com/t/YOUR-GROUP-LINK");
+
+    loadOrders();
 }
 
 async function declineOrder(id){
-await client.from("orders").update({
-status:"Declined"
-}).eq("id",id);
-load();
+    await client.from("orders").update({
+        status: "Declined"
+    }).eq("id", id);
+
+    loadOrders();
 }
 
-load();
+async function updateMsg(id){
+    let msg = document.getElementById("msg-"+id).value;
+
+    await client.from("orders").update({
+        message: msg
+    }).eq("id", id);
+
+    alert("Updated!");
+}
+
+loadOrders();
 </script>
 
 </body>
