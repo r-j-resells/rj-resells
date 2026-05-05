@@ -50,7 +50,7 @@ document.getElementById("orders").innerHTML=html;
 
 async function confirmOrder(id){
 await client.from("orders").update({status:"Confirmed"}).eq("id",id);
-alert("Send Snapchat link to customer");
+alert("Send this to customer:\nhttps://snapchat.com/t/p0bV0vxl");
 load();
 }
 
