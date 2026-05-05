@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>R&J Resells</title>
 
-<!-- FIXED SUPABASE LOAD -->
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <style>
@@ -61,6 +60,7 @@ header {
     padding: 15px;
     border-radius: 10px;
     text-align: center;
+    position: relative;
 }
 
 .product img {
@@ -74,6 +74,26 @@ header {
     border-radius: 5px;
     margin-top: 10px;
     cursor: pointer;
+}
+
+/* SOLD OUT */
+.product.sold-out {
+    opacity: 0.6;
+    filter: grayscale(100%);
+}
+
+.sold-tag {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: red;
+    padding: 5px;
+    font-size: 12px;
+}
+
+.product.sold-out .btn {
+    background: #555;
+    pointer-events: none;
 }
 
 /* MODAL */
@@ -96,6 +116,11 @@ width:80%;
 border-radius:10px;
 text-align:center;
 }
+
+.contact {
+text-align:center;
+padding:20px;
+}
 </style>
 </head>
 
@@ -114,6 +139,7 @@ text-align:center;
 
 <section id="shop" class="products">
 
+<!-- AVAILABLE -->
 <div class="product">
 <img src="niketech.jpg">
 <h3>Nike Ski Mask</h3>
@@ -128,9 +154,49 @@ text-align:center;
 <button class="btn" onclick="openForm('Chrome Hearts T-Shirt')">Buy</button>
 </div>
 
+<div class="product">
+<img src="chromehearts.jpg">
+<h3>Chrome Hearts Socks</h3>
+<p>$35</p>
+<button class="btn" onclick="openForm('Chrome Hearts Socks')">Buy</button>
+</div>
+
+<!-- SOLD OUT -->
+<div class="product sold-out">
+<div class="sold-tag">SOLD OUT</div>
+<img src="bape.jpg">
+<h3>Bape Hoodie</h3>
+<p>$140</p>
+<button class="btn">Sold Out</button>
+</div>
+
+<div class="product sold-out">
+<div class="sold-tag">SOLD OUT</div>
+<img src="bapeshirt.jpg">
+<h3>Bape T-Shirt</h3>
+<p>$65</p>
+<button class="btn">Sold Out</button>
+</div>
+
+<div class="product sold-out">
+<div class="sold-tag">SOLD OUT</div>
+<img src="draco.jpg">
+<h3>Draco Slides</h3>
+<p>$70</p>
+<button class="btn">Sold Out</button>
+</div>
+
+<div class="product sold-out">
+<div class="sold-tag">SOLD OUT</div>
+<img src="lvbean.jpg">
+<h3>Louis Vuitton Beanie</h3>
+<p>$80</p>
+<button class="btn">Sold Out</button>
+</div>
+
 </section>
 
-<!-- MODAL -->
+<!-- FORM -->
 <div id="modal" class="modal">
 <div class="modal-content">
 
@@ -148,8 +214,13 @@ text-align:center;
 </div>
 </div>
 
+<div class="contact">
+Contact:
+<a href="https://www.snapchat.com/add/ricoamos22">@ricoamos22</a> |
+<a href="https://www.snapchat.com/add/jeffreylovej">@jeffreylovej</a>
+</div>
+
 <script>
-// 🔥 MAKE SURE SCRIPT RUNS AFTER LOAD
 window.onload = function(){
 
 const client = window.supabase.createClient(
@@ -158,38 +229,38 @@ const client = window.supabase.createClient(
 );
 
 window.openForm = function(product){
-    document.getElementById("modal").style.display="block";
-    document.getElementById("productTitle").innerText=product;
-    window.currentProduct = product;
+document.getElementById("modal").style.display="block";
+document.getElementById("productTitle").innerText=product;
+window.currentProduct = product;
 }
 
 window.closeForm = function(){
-    document.getElementById("modal").style.display="none";
+document.getElementById("modal").style.display="none";
 }
 
 window.submitOrder = async function(){
 
-    let name=document.getElementById("name").value;
-    let email=document.getElementById("email").value;
-    let address=document.getElementById("address").value;
+let name=document.getElementById("name").value;
+let email=document.getElementById("email").value;
+let address=document.getElementById("address").value;
 
-    if(!name||!email||!address){
-        alert("Fill all fields");
-        return;
-    }
+if(!name||!email||!address){
+alert("Fill all fields");
+return;
+}
 
-    let id="RJ"+Math.floor(Math.random()*100000);
+let id="RJ"+Math.floor(Math.random()*100000);
 
-    await client.from("orders").insert([{
-        id:id,
-        product:window.currentProduct,
-        name:name,
-        email:email,
-        address:address,
-        status:"Pending"
-    }]);
+await client.from("orders").insert([{
+id:id,
+product:window.currentProduct,
+name:name,
+email:email,
+address:address,
+status:"Pending"
+}]);
 
-    window.location.href="https://cash.app/$RicoAmos10";
+window.location.href="https://cash.app/$RicoAmos10";
 }
 
 }
