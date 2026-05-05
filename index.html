@@ -36,7 +36,6 @@ nav {
     justify-content: center;
     gap: 20px;
     padding: 12px;
-    z-index: 10;
 }
 
 nav a {
@@ -62,6 +61,7 @@ header {
     padding: 15px;
     border-radius: 10px;
     text-align: center;
+    position: relative;
 }
 
 .product img {
@@ -74,30 +74,12 @@ header {
     color: black;
     padding: 10px;
     border-radius: 5px;
-    text-decoration: none;
-    display: inline-block;
     margin-top: 10px;
+    display: inline-block;
+    cursor: pointer;
 }
 
-/* MODAL FORM */
-.modal {
-display:none;
-position:fixed;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.8);
-z-index:100;
-}
-
-.modal-content {
-background:#111;
-margin:40% auto;
-padding:20px;
-width:80%;
-border-radius:10px;
-text-align:center;
-}
-
+/* SOLD OUT STYLE */
 .product.sold-out {
     opacity: 0.6;
     filter: grayscale(100%);
@@ -115,16 +97,37 @@ text-align:center;
     border-radius: 5px;
 }
 
-.product {
-    position: relative;
-}
-
 .product.sold-out .btn {
     background: #555;
     color: #ccc;
     pointer-events: none;
 }
 
+/* MODAL */
+.modal {
+display:none;
+position:fixed;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.85);
+z-index:100;
+}
+
+.modal-content {
+background:#111;
+margin:40% auto;
+padding:20px;
+width:80%;
+border-radius:10px;
+text-align:center;
+}
+
+.contact {
+    text-align: center;
+    padding: 20px;
+    font-size: 14px;
+    background: rgba(0,0,0,0.6);
+}
 </style>
 </head>
 
@@ -144,23 +147,13 @@ text-align:center;
 
 <section id="shop" class="products">
 
-<!-- PRODUCTS -->
-
+<!-- AVAILABLE -->
 <div class="product">
 <img src="niketech.jpg">
 <h3>Nike Ski Mask</h3>
 <p>$30</p>
 <p>25% Off</p>
-<a class="btn" href="https://cash.app/$RicoAmos10" onclick="saveOrder('Nike Ski Mask')">Buy</a>
-</div>
-
-<div class="product sold-out">
-<div class="sold-tag">SOLD OUT</div>
-<img src="bape.jpg">
-<h3>Bape Hoodie</h3>
-<p>$140</p>
-<p>30% Off</p>
-<a class="btn">Sold Out</a>
+<button class="btn" onclick="openForm('Nike Ski Mask')">Buy</button>
 </div>
 
 <div class="product">
@@ -168,7 +161,7 @@ text-align:center;
 <h3>Chrome Hearts T-Shirt</h3>
 <p>$65</p>
 <p>19% Off</p>
-<a class="btn" href="https://cash.app/$RicoAmos10" onclick="saveOrder('Chrome Hearts T-Shirt')">Buy</a>
+<button class="btn" onclick="openForm('Chrome Hearts T-Shirt')">Buy</button>
 </div>
 
 <div class="product">
@@ -176,7 +169,18 @@ text-align:center;
 <h3>Chrome Hearts Socks</h3>
 <p>$35</p>
 <p>12% Off</p>
-<a class="btn" href="https://cash.app/$RicoAmos10" onclick="saveOrder('Chrome Hearts Socks')">Buy</a>
+<button class="btn" onclick="openForm('Chrome Hearts Socks')">Buy</button>
+</div>
+
+<!-- SOLD OUT ITEMS -->
+
+<div class="product sold-out">
+<div class="sold-tag">SOLD OUT</div>
+<img src="bape.jpg">
+<h3>Bape Hoodie</h3>
+<p>$140</p>
+<p>30% Off</p>
+<button class="btn">Sold Out</button>
 </div>
 
 <div class="product sold-out">
@@ -184,7 +188,7 @@ text-align:center;
 <img src="bapeshirt.jpg">
 <h3>Bape T-Shirt</h3>
 <p>$65</p>
-<a class="btn">Sold Out</a>
+<button class="btn">Sold Out</button>
 </div>
 
 <div class="product sold-out">
@@ -192,7 +196,7 @@ text-align:center;
 <img src="draco.jpg">
 <h3>Draco Slides</h3>
 <p>$70</p>
-<a class="btn">Sold Out</a>
+<button class="btn">Sold Out</button>
 </div>
 
 <div class="product sold-out">
@@ -200,13 +204,28 @@ text-align:center;
 <img src="lvbean.jpg">
 <h3>Louis Vuitton Beanie</h3>
 <p>$80</p>
-<a class="btn">Sold Out</a>
+<button class="btn">Sold Out</button>
 </div>
 
 </section>
 
-<div style="text-align:center;padding:20px;">
-Contact: 
+<!-- CHECKOUT FORM -->
+<div id="modal" class="modal">
+<div class="modal-content">
+
+<h2 id="productTitle"></h2>
+
+<input id="name" placeholder="Contact Name"><br><br>
+<input id="email" placeholder="Contact Email"><br><br>
+<input id="address" placeholder="Billing Address"><br><br>
+
+<button class="btn" onclick="submitOrder()">Continue to Payment</button>
+
+</div>
+</div>
+
+<div class="contact">
+Contact Info: 
 <a href="https://www.snapchat.com/add/ricoamos22" target="_blank">@ricoamos22</a> |
 <a href="https://www.snapchat.com/add/jeffreylovej" target="_blank">@jeffreylovej</a>
 </div>
@@ -217,20 +236,37 @@ const client = window.supabase.createClient(
 "sb_publishable_bqSCrrSbaWZ0DgYPj3pCTg_732i9dzN"
 );
 
-function saveOrder(product){
+let currentProduct="";
 
-let id = "RJ" + Math.floor(Math.random()*100000);
+function openForm(product){
+currentProduct=product;
+document.getElementById("modal").style.display="block";
+document.getElementById("productTitle").innerText=product;
+}
 
-client.from("orders").insert([{
-id: id,
-product: product,
-name: "Unknown",
-email: "Unknown",
-address: "Not provided",
-status: "Pending",
-message: "Customer clicked buy"
+async function submitOrder(){
+
+let name=document.getElementById("name").value;
+let email=document.getElementById("email").value;
+let address=document.getElementById("address").value;
+
+if(!name||!email||!address){
+alert("Please fill out all fields");
+return;
+}
+
+let id="RJ"+Math.floor(Math.random()*100000);
+
+await client.from("orders").insert([{
+id:id,
+product:currentProduct,
+name:name,
+email:email,
+address:address,
+status:"Pending"
 }]);
 
+window.location.href="https://cash.app/$RicoAmos10";
 }
 </script>
 
