@@ -126,6 +126,7 @@ header {
 <nav>
 <a href="#">Home</a>
 <a href="#shop">Shop</a>
+<a href="https://www.tiktok.com/@r_j_resells">TikTok</a>
 </nav>
 
 <header>
@@ -145,28 +146,32 @@ header {
 <!-- PRODUCTS -->
 <section id="shop" class="products">
 
-<div class="product" onclick="openModal('Nike Ski Mask',120)">
+<div class="product">
 <img src="niketech.jpg">
 <h3>Nike Ski Mask</h3>
 <p>$120</p>
+<button onclick="openModal('Nike Ski Mask',120)" class="btn">Shop</button>
 </div>
 
-<div class="product" onclick="openModal('Bape Hoodie',250)">
+<div class="product">
 <img src="bape.jpg">
 <h3>Bape Hoodie</h3>
 <p>$250</p>
+<button onclick="openModal('Bape Hoodie',250)" class="btn">Shop</button>
 </div>
 
-<div class="product" onclick="openModal('Chrome Hearts T-Shirt',80)">
+<div class="product">
 <img src="chromeheartshirt.jpg">
 <h3>Chrome Hearts T-Shirt</h3>
 <p>$80</p>
+<button onclick="openModal('Chrome Hearts T-Shirt',80)" class="btn">Shop</button>
 </div>
 
-<div class="product" onclick="openModal('Chrome Hearts Socks',40)">
+<div class="product">
 <img src="chromehearts.jpg">
 <h3>Chrome Hearts Socks</h3>
 <p>$40</p>
+<button onclick="openModal('Chrome Hearts Socks',40)" class="btn">Shop</button>
 </div>
 
 </section>
@@ -175,7 +180,6 @@ header {
 <div id="modal" class="modal">
 <div class="modal-content">
 
-<!-- PRODUCT -->
 <div id="productView">
 <h2 id="productName"></h2>
 <p id="productPrice"></p>
@@ -189,18 +193,16 @@ header {
 <button onclick="goToForm()" class="btn">Buy Now</button>
 </div>
 
-<!-- FORM -->
 <div id="formView" style="display:none;">
 <h2>Shipping Info</h2>
 
-<input id="name" placeholder="Full Name" class="input"><br>
-<input id="email" placeholder="Email" class="input"><br>
-<input id="address" placeholder="Address" class="input"><br>
+<input placeholder="Full Name" class="input"><br>
+<input placeholder="Email" class="input"><br>
+<input placeholder="Address" class="input"><br>
 
 <button onclick="confirmOrder()" class="btn">Confirm Order</button>
 </div>
 
-<!-- CONFIRM -->
 <div id="confirmView" style="display:none;">
 <h2>Order Created</h2>
 <p id="orderNumber"></p>
@@ -210,16 +212,18 @@ header {
 <a href="https://cash.app/$RicoAmos10" class="btn">Pay Now</a>
 </div>
 
-<!-- TRACK -->
 <div id="trackingView" style="display:none;">
 <h2>Tracking</h2>
 <p id="trackingStatus">Processing</p>
 </div>
 
+<br>
+<button onclick="closeModal()" class="btn">Close</button>
+
 </div>
 </div>
 
-<!-- TRACK BUTTON -->
+<!-- TRACK -->
 <div style="text-align:center; padding:20px;">
 <button onclick="trackOrder(prompt('Enter Order Number'))" class="btn">
 Track Your Order
@@ -232,13 +236,15 @@ Track Your Order
 
 <script>
 let cart = 0;
-let currentProduct = "";
 
 function openModal(name, price) {
 document.getElementById("modal").style.display = "block";
 document.getElementById("productName").innerText = name;
 document.getElementById("productPrice").innerText = "$" + price;
-currentProduct = name;
+}
+
+function closeModal() {
+document.getElementById("modal").style.display = "none";
 }
 
 function addToCart() {
@@ -269,6 +275,7 @@ localStorage.setItem(orderId, "Order Received");
 function trackOrder(orderId) {
 let status = localStorage.getItem(orderId);
 document.getElementById("trackingStatus").innerText = status || "Not Found";
+
 document.getElementById("modal").style.display = "block";
 document.getElementById("productView").style.display = "none";
 document.getElementById("formView").style.display = "none";
