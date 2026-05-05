@@ -98,24 +98,31 @@ border-radius:10px;
 text-align:center;
 }
 
-.x-overlay {
+.product.sold-out {
+    opacity: 0.6;
+    filter: grayscale(100%);
+}
+
+.sold-tag {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(255,0,0,0.2);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 80px;
-    color: red;
+    top: 10px;
+    left: 10px;
+    background: red;
+    color: white;
+    padding: 5px 10px;
+    font-size: 12px;
     font-weight: bold;
-    pointer-events: none;
+    border-radius: 5px;
 }
 
 .product {
-    position: relative; /* IMPORTANT for overlay */
+    position: relative;
+}
+
+.product.sold-out .btn {
+    background: #555;
+    color: #ccc;
+    pointer-events: none;
 }
 
 </style>
