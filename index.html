@@ -9,78 +9,61 @@
 
 <style>
 body {
-    margin: 0;
-    font-family: Arial;
-    color: white;
-    background: url('background.jpg') no-repeat center center fixed;
-    background-size: cover;
-}
-
-body::before {
-    content:"";
-    position:fixed;
-    width:100%;
-    height:100%;
-    background:rgba(0,0,0,0.65);
-    top:0;
-    left:0;
-    z-index:-1;
-}
-
-nav {
-    position:fixed;
-    top:0;
-    width:100%;
-    background:rgba(0,0,0,0.85);
-    display:flex;
-    justify-content:center;
-    gap:20px;
-    padding:12px;
-}
-
-nav a {
+    margin:0;
+    font-family:Arial;
     color:white;
-    text-decoration:none;
+    background:url('background.jpg') no-repeat center center fixed;
+    background-size:cover;
 }
 
-header {
-    padding-top:80px;
-    text-align:center;
+body::before{
+content:"";
+position:fixed;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.65);
+z-index:-1;
 }
 
-.products {
+header{
+text-align:center;
+padding-top:80px;
+}
+
+.products{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
 gap:20px;
 padding:20px;
 }
 
-.product {
+.product{
 background:rgba(0,0,0,0.75);
 padding:15px;
 border-radius:10px;
 text-align:center;
-position:relative;
 }
 
-.product img { width:100%; }
+.product img{width:100%;border-radius:10px;}
 
-.btn {
+.btn{
 background:gold;
 color:black;
 padding:10px;
 border-radius:5px;
+display:inline-block;
 margin-top:10px;
 cursor:pointer;
 }
 
-/* SOLD OUT */
-.product.sold-out {
-opacity:0.6;
+.sold{
+opacity:0.5;
 filter:grayscale(100%);
+position:relative;
 }
 
-.sold-tag {
+.sold::after{
+content:"SOLD OUT";
 position:absolute;
 top:10px;
 left:10px;
@@ -89,53 +72,33 @@ padding:5px;
 font-size:12px;
 }
 
-.product.sold-out .btn {
-background:#555;
-pointer-events:none;
-}
-
-/* MODAL */
-.modal {
+.modal{
 display:none;
 position:fixed;
-top:0;
-left:0;
 width:100%;
 height:100%;
 background:rgba(0,0,0,0.85);
-z-index:999;
 }
 
-.modal-content {
+.modal-content{
 background:#111;
 margin:100px auto;
 padding:20px;
 width:80%;
+text-align:center;
 border-radius:10px;
-text-align:center;
-}
-
-.contact {
-text-align:center;
-padding:20px;
 }
 </style>
 </head>
 
 <body>
 
-<nav>
-<a href="#">Home</a>
-<a href="#shop">Shop</a>
-<a href="https://www.tiktok.com/@r_j_resells">TikTok</a>
-</nav>
-
 <header>
 <h1>R&J Resells</h1>
-<p>Authentic Designer. Exclusive Drops.</p>
+<p>Designer Resell Store</p>
 </header>
 
-<section id="shop" class="products">
+<section class="products">
 
 <!-- AVAILABLE -->
 <div class="product">
@@ -147,49 +110,41 @@ padding:20px;
 
 <div class="product">
 <img src="chromeheartshirt.jpg">
-<h3>Chrome Hearts T-Shirt</h3>
+<h3>Chrome Hearts Tee</h3>
 <p>$65</p>
-<button class="btn" onclick="openForm('Chrome Hearts T-Shirt')">Buy</button>
+<button class="btn" onclick="openForm('Chrome Hearts Tee')">Buy</button>
 </div>
 
 <div class="product">
 <img src="chromehearts.jpg">
-<h3>Chrome Hearts Socks</h3>
+<h3>Chrome Socks</h3>
 <p>$35</p>
-<button class="btn" onclick="openForm('Chrome Hearts Socks')">Buy</button>
+<button class="btn" onclick="openForm('Chrome Socks')">Buy</button>
 </div>
 
 <!-- SOLD OUT -->
-<div class="product sold-out">
-<div class="sold-tag">SOLD OUT</div>
+<div class="product sold">
 <img src="bape.jpg">
 <h3>Bape Hoodie</h3>
 <p>$140</p>
-<button class="btn">Sold Out</button>
 </div>
 
-<div class="product sold-out">
-<div class="sold-tag">SOLD OUT</div>
+<div class="product sold">
 <img src="bapeshirt.jpg">
-<h3>Bape T-Shirt</h3>
+<h3>Bape Tee</h3>
 <p>$65</p>
-<button class="btn">Sold Out</button>
 </div>
 
-<div class="product sold-out">
-<div class="sold-tag">SOLD OUT</div>
+<div class="product sold">
 <img src="draco.jpg">
 <h3>Draco Slides</h3>
 <p>$70</p>
-<button class="btn">Sold Out</button>
 </div>
 
-<div class="product sold-out">
-<div class="sold-tag">SOLD OUT</div>
+<div class="product sold">
 <img src="lvbean.jpg">
-<h3>Louis Vuitton Beanie</h3>
+<h3>LV Beanie</h3>
 <p>$80</p>
-<button class="btn">Sold Out</button>
 </div>
 
 </section>
@@ -198,11 +153,11 @@ padding:20px;
 <div id="modal" class="modal">
 <div class="modal-content">
 
-<h2 id="productTitle"></h2>
+<h2 id="title"></h2>
 
-<input id="name" placeholder="Contact Name"><br><br>
-<input id="email" placeholder="Contact Email"><br><br>
-<input id="address" placeholder="Billing Address"><br><br>
+<input id="name" placeholder="Name"><br><br>
+<input id="email" placeholder="Email"><br><br>
+<input id="address" placeholder="Address"><br><br>
 
 <button class="btn" onclick="submitOrder()">Continue to Payment</button>
 
@@ -212,31 +167,25 @@ padding:20px;
 </div>
 </div>
 
-<div class="contact">
-Contact:
-<a href="https://www.snapchat.com/add/ricoamos22">@ricoamos22</a> |
-<a href="https://www.snapchat.com/add/jeffreylovej">@jeffreylovej</a>
-</div>
-
 <script>
-window.onload = function(){
-
 const client = window.supabase.createClient(
 "https://fyzguhksswalbwoqatym.supabase.co",
 "sb_publishable_bqSCrrSbaWZ0DgYPj3pCTg_732i9dzN"
 );
 
-window.openForm = function(product){
+let currentProduct="";
+
+function openForm(p){
+currentProduct=p;
 document.getElementById("modal").style.display="block";
-document.getElementById("productTitle").innerText=product;
-window.currentProduct = product;
+document.getElementById("title").innerText=p;
 }
 
-window.closeForm = function(){
+function closeForm(){
 document.getElementById("modal").style.display="none";
 }
 
-window.submitOrder = async function(){
+async function submitOrder(){
 
 let name=document.getElementById("name").value;
 let email=document.getElementById("email").value;
@@ -249,28 +198,17 @@ return;
 
 let id="RJ"+Math.floor(Math.random()*100000);
 
-let { error } = await client.from("orders").insert([{
+await client.from("orders").insert([{
 id:id,
-product:window.currentProduct,
+product:currentProduct,
 name:name,
 email:email,
 address:address,
 status:"Pending",
-message:"Waiting for payment"
+message:"Waiting for confirmation"
 }]);
 
-if(error){
-alert("Error saving order");
-return;
-}
-
-// 🔥 IMPORTANT FIX
-setTimeout(()=>{
 window.location.href="https://cash.app/$RicoAmos10";
-},500);
-
-}
-
 }
 </script>
 
