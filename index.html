@@ -128,6 +128,15 @@ footer {
     from {opacity: 0;}
     to {opacity: 1;}
 }
+
+.input {
+    width: 90%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 5px;
+    border: none;
+}
+
 </style>
 </head>
 
@@ -182,12 +191,40 @@ footer {
 <!-- POPUP -->
 <div id="modal" class="modal">
   <div class="modal-content">
-    <h2 id="productName"></h2>
-    <p id="productPrice"></p>
-    <p>Authentic ✔ | Limited Stock</p>
-    <a href="https://cash.app/$RicoAmos10" class="btn">Pay with Cash App</a>
-    <br><br>
-    <button onclick="closeModal()" class="btn">Close</button>
+
+    <div id="step1">
+        <h2 id="productName"></h2>
+        <p id="productPrice"></p>
+        <p>Authentic ✔ | Limited Stock</p>
+
+        <button onclick="goToCheckout()" class="btn">Checkout</button>
+        <br><br>
+        <button onclick="closeModal()" class="btn">Close</button>
+    </div>
+
+    <div id="step2" style="display:none;">
+        <h2>Checkout</h2>
+
+        <input placeholder="Full Name" class="input"><br>
+        <input placeholder="Email" class="input"><br>
+        <input placeholder="Address" class="input"><br>
+        <input placeholder="City" class="input"><br>
+        <input placeholder="Zip Code" class="input"><br>
+
+        <br>
+        <button onclick="goToPayment()" class="btn">Continue</button>
+    </div>
+
+    <div id="step3" style="display:none;">
+        <h2>Complete Payment</h2>
+        <p>Send payment via Cash App</p>
+        <p><strong>$RicoAmos10</strong></p>
+
+        <a href="https://cash.app/$RicoAmos10" class="btn">Pay Now</a>
+        <br><br>
+        <button onclick="closeModal()" class="btn">Done</button>
+    </div>
+
   </div>
 </div>
 
@@ -206,10 +243,24 @@ function openModal(name, price) {
     document.getElementById("modal").style.display = "block";
     document.getElementById("productName").innerText = name;
     document.getElementById("productPrice").innerText = "$" + price;
+
+    document.getElementById("step1").style.display = "block";
+    document.getElementById("step2").style.display = "none";
+    document.getElementById("step3").style.display = "none";
 }
 
 function closeModal() {
     document.getElementById("modal").style.display = "none";
+}
+
+function goToCheckout() {
+    document.getElementById("step1").style.display = "none";
+    document.getElementById("step2").style.display = "block";
+}
+
+function goToPayment() {
+    document.getElementById("step2").style.display = "none";
+    document.getElementById("step3").style.display = "block";
 }
 </script>
 
