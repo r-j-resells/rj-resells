@@ -15,7 +15,6 @@ body {
     color: white;
 }
 
-/* NAV */
 nav {
     position: sticky;
     top: 0;
@@ -32,7 +31,6 @@ nav a {
     font-weight: bold;
 }
 
-/* HEADER */
 header {
     text-align: center;
     padding: 20px;
@@ -42,7 +40,6 @@ header {
     width: 180px;
 }
 
-/* HERO */
 .hero {
     text-align: center;
     padding: 50px 20px;
@@ -52,7 +49,6 @@ header {
     font-family: 'Playfair Display', serif;
 }
 
-/* BUTTON */
 .btn {
     background: gold;
     color: black;
@@ -60,9 +56,9 @@ header {
     border-radius: 5px;
     text-decoration: none;
     border: none;
+    margin-top: 5px;
 }
 
-/* PRODUCTS */
 .products {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -82,7 +78,6 @@ header {
     border-radius: 10px;
 }
 
-/* INPUT */
 .input {
     width: 90%;
     padding: 10px;
@@ -91,7 +86,6 @@ header {
     border: none;
 }
 
-/* MODAL */
 .modal {
     display: none;
     position: fixed;
@@ -109,7 +103,6 @@ header {
     text-align: center;
 }
 
-/* CART */
 #cart {
     position: fixed;
     top: 10px;
@@ -138,12 +131,10 @@ header {
 <p>Authentic Designer. Exclusive Drops.</p>
 </section>
 
-<!-- CART -->
 <div id="cart">
 🛒 Cart: <span id="cartCount">0</span>
 </div>
 
-<!-- PRODUCTS -->
 <section id="shop" class="products">
 
 <div class="product">
@@ -184,21 +175,21 @@ header {
 <h2 id="productName"></h2>
 <p id="productPrice"></p>
 
-<button onclick="addToCart()" class="btn">Add to Cart</button><br><br>
+<button onclick="addToCart()" class="btn">Add to Cart</button><br>
 
 <input id="offerInput" placeholder="Enter your offer $" class="input">
 <button onclick="sendOffer()" class="btn">Send Offer</button>
 
-<br><br>
+<br>
 <button onclick="goToForm()" class="btn">Buy Now</button>
 </div>
 
 <div id="formView" style="display:none;">
 <h2>Shipping Info</h2>
 
-<input placeholder="Full Name" class="input"><br>
-<input placeholder="Email" class="input"><br>
-<input placeholder="Address" class="input"><br>
+<input id="name" placeholder="Full Name" class="input"><br>
+<input id="email" placeholder="Email" class="input"><br>
+<input id="address" placeholder="Address" class="input"><br>
 
 <button onclick="confirmOrder()" class="btn">Confirm Order</button>
 </div>
@@ -207,7 +198,7 @@ header {
 <h2>Order Created</h2>
 <p id="orderNumber"></p>
 
-<p>Wait for confirmation, then pay.</p>
+<p>Check your email & wait for confirmation, then pay.</p>
 
 <a href="https://cash.app/$RicoAmos10" class="btn">Pay Now</a>
 </div>
@@ -223,10 +214,15 @@ header {
 </div>
 </div>
 
-<!-- TRACK -->
 <div style="text-align:center; padding:20px;">
 <button onclick="trackOrder(prompt('Enter Order Number'))" class="btn">
 Track Your Order
+</button>
+
+<br><br>
+
+<button onclick="adminUpdate()" class="btn">
+Admin Update (You Only)
 </button>
 </div>
 
@@ -263,7 +259,23 @@ document.getElementById("formView").style.display = "block";
 }
 
 function confirmOrder() {
+let name = document.getElementById("name").value;
+let email = document.getElementById("email").value;
+let address = document.getElementById("address").value;
+
 let orderId = "RJ" + Math.floor(Math.random()*100000);
+
+let subject = "New Order " + orderId;
+
+let body =
+"Order ID: " + orderId + "%0D%0A" +
+"Name: " + name + "%0D%0A" +
+"Email: " + email + "%0D%0A" +
+"Address: " + address;
+
+window.location.href =
+"mailto:amosrico2@gmail.com?subject=" + subject + "&body=" + body;
+
 document.getElementById("orderNumber").innerText = "Order #: " + orderId;
 
 document.getElementById("formView").style.display = "none";
@@ -281,6 +293,14 @@ document.getElementById("productView").style.display = "none";
 document.getElementById("formView").style.display = "none";
 document.getElementById("confirmView").style.display = "none";
 document.getElementById("trackingView").style.display = "block";
+}
+
+function adminUpdate() {
+let orderId = prompt("Enter Order ID:");
+let status = prompt("Enter Status:");
+
+localStorage.setItem(orderId, status);
+alert("Updated!");
 }
 </script>
 
