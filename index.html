@@ -5,18 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>R&J Resells</title>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
 <style>
 body {
     margin: 0;
     font-family: Arial, sans-serif;
     color: white;
-
-    /* BACKGROUND */
     background: url('background.jpg') no-repeat center center fixed;
     background-size: cover;
 }
 
-/* DARK OVERLAY */
 body::before {
     content: "";
     position: fixed;
@@ -28,7 +27,6 @@ body::before {
     z-index: -1;
 }
 
-/* TOP NAVBAR */
 nav {
     position: fixed;
     top: 0;
@@ -47,13 +45,11 @@ nav a {
     font-size: 14px;
 }
 
-/* PUSH CONTENT DOWN */
 header {
     padding-top: 80px;
     text-align: center;
 }
 
-/* PRODUCTS */
 .products {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -73,7 +69,6 @@ header {
     border-radius: 10px;
 }
 
-/* BUTTON */
 .btn {
     background: gold;
     color: black;
@@ -83,9 +78,9 @@ header {
     display: inline-block;
     margin-top: 10px;
     text-decoration: none;
+    cursor: pointer;
 }
 
-/* CONTACT */
 .contact {
     text-align: center;
     padding: 20px;
@@ -93,12 +88,29 @@ header {
     background: rgba(0,0,0,0.6);
     margin-top: 30px;
 }
+
+/* MODAL */
+.modal {
+display:none;
+position:fixed;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.8);
+}
+
+.modal-content {
+background:#111;
+margin:40% auto;
+padding:20px;
+width:80%;
+border-radius:10px;
+text-align:center;
+}
 </style>
 </head>
 
 <body>
 
-<!-- NAVBAR -->
 <nav>
 <a href="#">Home</a>
 <a href="#shop">Shop</a>
@@ -111,16 +123,17 @@ header {
 <p>Authentic Designer. Exclusive Drops.</p>
 </header>
 
-<!-- PRODUCTS -->
 <section id="shop" class="products">
-    
+
+<!-- PRODUCT TEMPLATE (ALL YOUR ITEMS KEPT) -->
+
 <div class="product">
 <img src="niketech.jpg">
 <h3>Nike Ski Mask</h3>
 <p>$30</p>
 <p>Discount</p>
-<a href="#">25% Off</a>
-<a class="btn" href="https://cash.app/$RicoAmos10">Buy</a>
+<a>25% Off</a><br>
+<button class="btn" onclick="openForm('Nike Ski Mask')">Buy</button>
 </div>
 
 <div class="product">
@@ -128,8 +141,8 @@ header {
 <h3>Bape Hoodie</h3>
 <p>$140</p>
 <p>Discount</p>
-<a href="#">30% Off</a>
-<a class="btn" href="https://cash.app/$RicoAmos10">Buy</a>
+<a>30% Off</a><br>
+<button class="btn" onclick="openForm('Bape Hoodie')">Buy</button>
 </div>
 
 <div class="product">
@@ -137,8 +150,8 @@ header {
 <h3>Chrome Hearts T-Shirt</h3>
 <p>$65</p>
 <p>Discount</p>
-<a href="#">19% Off</a>
-<a class="btn" href="https://cash.app/$RicoAmos10">Buy</a>
+<a>19% Off</a><br>
+<button class="btn" onclick="openForm('Chrome Hearts T-Shirt')">Buy</button>
 </div>
 
 <div class="product">
@@ -146,45 +159,101 @@ header {
 <h3>Chrome Hearts Socks</h3>
 <p>$35</p>
 <p>Discount</p>
-<a href="#">12% Off</a>
-<a class="btn" href="https://cash.app/$RicoAmos10">Buy</a>
+<a>12% Off</a><br>
+<button class="btn" onclick="openForm('Chrome Hearts Socks')">Buy</button>
 </div>
 
 <div class="product">
 <img src="bapeshirt.jpg">
 <h3>Bape T-Shirt</h3>
 <p>$65</p>
-<a class="btn" href="https://cash.app/$RicoAmos10">Buy</a>
+<button class="btn" onclick="openForm('Bape T-Shirt')">Buy</button>
 </div>
 
 <div class="product">
 <img src="draco.jpg">
 <h3>Draco Slides</h3>
 <p>$70</p>
-<a class="btn" href="https://cash.app/$RicoAmos10">Buy</a>
+<button class="btn" onclick="openForm('Draco Slides')">Buy</button>
 </div>
 
 <div class="product">
 <img src="lvbean.jpg">
 <h3>Louis Vuitton Beanie</h3>
 <p>$80</p>
-<a class="btn" href="https://cash.app/$RicoAmos10">Buy</a>
+<button class="btn" onclick="openForm('LV Beanie')">Buy</button>
 </div>
 
 </section>
 
-<!-- CONTACT INFO (UPDATED SNAPCHAT LINKS) -->
+<!-- FORM MODAL -->
+<div id="modal" class="modal">
+<div class="modal-content">
+
+<h2 id="productTitle"></h2>
+
+<input id="name" placeholder="Name"><br><br>
+<input id="email" placeholder="Email"><br><br>
+<input id="address" placeholder="Address"><br><br>
+
+<button class="btn" onclick="submitOrder()">Submit Order</button>
+
+<br><br>
+<a href="https://cash.app/$RicoAmos10" class="btn">Pay with CashApp</a>
+
+<br><br>
+<button class="btn" onclick="closeForm()">Close</button>
+
+</div>
+</div>
+
 <div class="contact">
 <p>
 Contact Info: 
 <a href="https://www.snapchat.com/add/ricoamos22" target="_blank">@ricoamos22</a>
 and 
 <a href="https://www.snapchat.com/add/jeffreylovej" target="_blank">@jeffreylovej</a>
-on Snapchat
 </p>
 </div>
 
-<a href="#">DISCLAIMER ALL PRODUCTS IN THIS WEBSITE HAVE NO LOGO BECAUSE WE DO NOT WANT TO BE COPYRIGHTED.</a>
+<p style="text-align:center;">DISCLAIMER ALL PRODUCTS IN THIS WEBSITE HAVE NO LOGO...</p>
+
+<script>
+const supabase = supabase.createClient(
+"YOUR_URL",
+"YOUR_PUBLIC_KEY"
+);
+
+let currentProduct="";
+
+function openForm(product){
+currentProduct=product;
+document.getElementById("modal").style.display="block";
+document.getElementById("productTitle").innerText=product;
+}
+
+function closeForm(){
+document.getElementById("modal").style.display="none";
+}
+
+async function submitOrder(){
+
+let id="RJ"+Math.floor(Math.random()*100000);
+
+await supabase.from("orders").insert([{
+id:id,
+product:currentProduct,
+name:document.getElementById("name").value,
+email:document.getElementById("email").value,
+address:document.getElementById("address").value,
+status:"Pending",
+message:"Waiting for confirmation"
+}]);
+
+alert("Order submitted! Now complete payment.");
+
+}
+</script>
 
 </body>
 </html>
