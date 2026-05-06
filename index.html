@@ -48,6 +48,7 @@ display:flex;
 justify-content:center;
 gap:20px;
 padding:12px;
+z-index:10;
 }
 
 nav a{
@@ -81,6 +82,7 @@ width:100%;
 border-radius:10px;
 }
 
+/* BUTTON */
 .btn{
 background:gold;
 color:black;
@@ -91,7 +93,7 @@ margin-top:10px;
 cursor:pointer;
 }
 
-/* FORM MODAL */
+/* MODAL */
 .modal{
 display:none;
 position:fixed;
@@ -145,7 +147,7 @@ background:rgba(0,0,0,0.6);
 
 <section class="products">
 
-<!-- PRODUCTS -->
+<!-- ALL PRODUCTS -->
 
 <div class="product">
 <img src="niketech.jpg">
@@ -154,7 +156,7 @@ background:rgba(0,0,0,0.6);
 <button class="btn" onclick="openForm('Nike Ski Mask')">Buy</button>
 </div>
 
-<div class="product sold">
+<div class="product">
 <img src="bape.jpg">
 <h3>Bape Hoodie</h3>
 <p>$100</p>
@@ -175,21 +177,21 @@ background:rgba(0,0,0,0.6);
 <button class="btn" onclick="openForm('Chrome Hearts Socks')">Buy</button>
 </div>
 
-<div class="product sold">
+<div class="product">
 <img src="bapeshirt.jpg">
 <h3>Bape T-Shirt</h3>
 <p>$50</p>
 <button class="btn" onclick="openForm('Bape T-Shirt')">Buy</button>
 </div>
 
-<div class="product sold">
+<div class="product">
 <img src="draco.jpg">
 <h3>Draco Slides</h3>
 <p>$60</p>
 <button class="btn" onclick="openForm('Draco Slides')">Buy</button>
 </div>
 
-<div class="product sold">
+<div class="product">
 <img src="lvbean.jpg">
 <h3>Louis Vuitton Beanie</h3>
 <p>$50</p>
@@ -227,45 +229,51 @@ const client = window.supabase.createClient(
 "sb_publishable_bqSCrrSbaWZ0DgYPj3pCTg_732i9dzN"
 );
 
-let currentProduct="";
+let currentProduct = "";
 
 /* OPEN FORM */
 function openForm(product){
 currentProduct = product;
-document.getElementById("modal").style.display="block";
-document.getElementById("productTitle").innerText=product;
+document.getElementById("modal").style.display = "block";
+document.getElementById("productTitle").innerText = product;
 }
 
 /* CLOSE FORM */
 function closeForm(){
-document.getElementById("modal").style.display="none";
+document.getElementById("modal").style.display = "none";
 }
 
 /* SUBMIT ORDER */
 async function submitOrder(){
 
-let name=document.getElementById("name").value;
-let email=document.getElementById("email").value;
-let address=document.getElementById("address").value;
+let name = document.getElementById("name").value;
+let email = document.getElementById("email").value;
+let address = document.getElementById("address").value;
 
 if(!name || !email || !address){
 alert("Fill all fields");
 return;
 }
 
-let id="RJ"+Math.floor(Math.random()*100000);
+let id = "RJ" + Math.floor(Math.random()*100000);
 
-await client.from("orders").insert([{
-id:id,
-product:currentProduct,
-name:name,
-email:email,
-address:address,
-status:"Pending",
-message:""
+const { error } = await client.from("orders").insert([{
+id: id,
+product: currentProduct,
+name: name,
+email: email,
+address: address,
+status: "Pending",
+message: ""
 }]);
 
-window.location.href="https://cash.app/$RicoAmos10";
+if(error){
+alert("Error saving order");
+return;
+}
+
+/* REDIRECT TO CASHAPP */
+window.location.href = "https://cash.app/$RicoAmos10";
 }
 
 /* LOAD ADMIN MESSAGE */
@@ -277,13 +285,14 @@ let { data } = await client
 .order("id",{ascending:false})
 .limit(1);
 
-if(data && data.length>0){
-let msg=data[0].message;
+if(data && data.length > 0){
+
+let msg = data[0].message;
 
 if(msg && msg.includes("http")){
 document.getElementById("messageBar").style.display="block";
 document.getElementById("messageBar").innerHTML =
-`Your Order was Confirmed here is the link https://snapchat.com/t/p0bV0vxl 
+`Your Order was Confirmed here is the link 
 <a href="${msg}" target="_blank">Open</a>`;
 }
 }
