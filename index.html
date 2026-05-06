@@ -154,7 +154,7 @@ background:rgba(0,0,0,0.6);
 <button class="btn" onclick="openForm('Nike Ski Mask')">Buy</button>
 </div>
 
-<div class="product">
+<div class="product sold">
 <img src="bape.jpg">
 <h3>Bape Hoodie</h3>
 <p>$100</p>
@@ -175,21 +175,21 @@ background:rgba(0,0,0,0.6);
 <button class="btn" onclick="openForm('Chrome Hearts Socks')">Buy</button>
 </div>
 
-<div class="product">
+<div class="product sold">
 <img src="bapeshirt.jpg">
 <h3>Bape T-Shirt</h3>
 <p>$50</p>
 <button class="btn" onclick="openForm('Bape T-Shirt')">Buy</button>
 </div>
 
-<div class="product">
+<div class="product sold">
 <img src="draco.jpg">
 <h3>Draco Slides</h3>
 <p>$60</p>
 <button class="btn" onclick="openForm('Draco Slides')">Buy</button>
 </div>
 
-<div class="product">
+<div class="product sold">
 <img src="lvbean.jpg">
 <h3>Louis Vuitton Beanie</h3>
 <p>$50</p>
@@ -283,8 +283,8 @@ let msg=data[0].message;
 if(msg && msg.includes("http")){
 document.getElementById("messageBar").style.display="block";
 document.getElementById("messageBar").innerHTML =
-`✅ Your Order was Confirmed — 
-<a href="${msg}" target="_blank" style="color:black;font-weight:bold;">Track Here</a>`;
+`Your Order was Confirmed here is the link https://snapchat.com/t/p0bV0vxl 
+<a href="${msg}" target="_blank">Open</a>`;
 }
 }
 }
