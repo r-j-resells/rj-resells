@@ -7,17 +7,16 @@
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
-<!-- 🔥 CHROME HEARTS STYLE FONT -->
-<link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
+<!-- Chrome Hearts Style Font -->
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
 
-/* BASE FONT */
+/* BACKGROUND */
 body{
 margin:0;
-font-family:Arial, sans-serif;
+font-family:'Inter', sans-serif;
 color:white;
-
 background:url('background.jpg') no-repeat center center fixed;
 background-size:cover;
 }
@@ -26,72 +25,116 @@ background-size:cover;
 body::before{
 content:"";
 position:fixed;
-top:0;
-left:0;
 width:100%;
 height:100%;
-background:rgba(0,0,0,0.65);
+background:rgba(0,0,0,0.7);
 z-index:-1;
-}
-
-/* HEADER TITLE FONT (CHROME HEARTS STYLE) */
-h1{
-font-family:'UnifrakturCook', cursive;
-letter-spacing:2px;
-margin:5px 0;
 }
 
 /* HEADER */
 header{
 text-align:center;
-padding:20px;
+padding:30px 20px;
 }
 
 /* LOGO */
 .logo{
 width:120px;
-border-radius:10px;
 margin-bottom:10px;
+border-radius:10px;
 }
 
-/* PRODUCTS */
+/* TITLE */
+h1{
+font-family:'UnifrakturCook', cursive;
+font-size:42px;
+letter-spacing:3px;
+margin:10px 0;
+}
+
+/* SUBTEXT */
+header p{
+opacity:0.8;
+font-size:14px;
+}
+
+/* PRODUCTS GRID */
 .products{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
-gap:20px;
+grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+gap:25px;
 padding:20px;
 }
 
+/* PRODUCT CARD */
 .product{
-background:rgba(0,0,0,0.75);
+background:rgba(0,0,0,0.8);
 padding:15px;
-border-radius:10px;
+border-radius:12px;
 text-align:center;
 position:relative;
+transition:0.3s;
+box-shadow:0 0 10px rgba(0,0,0,0.5);
 }
 
+/* HOVER EFFECT */
+.product:hover{
+transform:translateY(-5px) scale(1.02);
+box-shadow:0 0 20px rgba(255,215,0,0.3);
+}
+
+/* PRODUCT IMAGE */
 .product img{
 width:100%;
 border-radius:10px;
 }
 
-/* BUY BUTTON (UNCHANGED) */
-.btn{
-background:gold;
-color:black;
-padding:10px;
-border-radius:5px;
-display:inline-block;
-margin-top:10px;
-cursor:pointer;
-border:none;
-font-weight:bold;
+/* PRODUCT TITLE */
+.product h3{
+margin:10px 0 5px;
+font-weight:600;
 }
 
-/* SOLD OUT */
+/* PRICE */
+.product p{
+opacity:0.8;
+}
+
+/* BUTTON */
+.btn{
+background:linear-gradient(45deg,gold,#ffcc00);
+color:black;
+padding:10px;
+border:none;
+border-radius:6px;
+margin-top:10px;
+cursor:pointer;
+font-weight:bold;
+transition:0.2s;
+}
+
+/* BUTTON HOVER */
+.btn:hover{
+transform:scale(1.05);
+box-shadow:0 0 10px gold;
+}
+
+/* SOLD OUT STYLE */
 .sold{
-opacity:0.5;
+opacity:0.4;
 filter:grayscale(100%);
+}
+
+/* BIG RED X */
+.sold::before{
+content:"✖";
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+font-size:60px;
+color:red;
+font-weight:bold;
 }
 
 .sold::after{
@@ -102,7 +145,6 @@ left:10px;
 background:red;
 padding:5px;
 font-size:12px;
-font-weight:bold;
 }
 
 /* MODAL */
@@ -113,22 +155,29 @@ top:0;
 left:0;
 width:100%;
 height:100%;
-background:rgba(0,0,0,0.85);
+background:rgba(0,0,0,0.9);
 }
 
+/* MODAL BOX */
 .modal-content{
 background:#111;
-margin:100px auto;
-padding:20px;
-width:80%;
-border-radius:10px;
+margin:80px auto;
+padding:25px;
+width:85%;
+border-radius:12px;
 text-align:center;
+box-shadow:0 0 20px rgba(255,255,255,0.1);
 }
 
+/* INPUTS */
 input{
 width:90%;
-padding:10px;
-margin:5px 0;
+padding:12px;
+margin:8px 0;
+border-radius:6px;
+border:none;
+background:#222;
+color:white;
 }
 
 </style>
@@ -137,13 +186,9 @@ margin:5px 0;
 <body>
 
 <header>
-
-<!-- LOGO BACK -->
 <img src="logo.png" class="logo">
-
 <h1>R&J Resells</h1>
-<p>Designer Resell Store</p>
-
+<p>Authentic Designer. Exclusive Drops.</p>
 </header>
 
 <section class="products">
@@ -166,6 +211,13 @@ margin:5px 0;
 <img src="chromehearts.jpg">
 <h3>Chrome Socks</h3>
 <p>$35</p>
+<button class="btn" onclick="openForm('Chrome Socks')">Buy</button>
+</div>
+
+<div class="product">
+<img src="uggs.jpg">
+<h3>Uggs Slippers</h3>
+<p>$50</p>
 <button class="btn" onclick="openForm('Chrome Socks')">Buy</button>
 </div>
 
@@ -197,20 +249,19 @@ margin:5px 0;
 <img src="uggs.jpg">
 <h3>Ugg Slippers</h3>
 <p>$50</p>
-<button class="btn" onclick="openForm('Nike Ski Mask')">Buy</button>
 </div>
 
 </section>
 
-<!-- FORM -->
+<!-- FORM (UNCHANGED FUNCTIONALLY) -->
 <div id="modal" class="modal">
 <div class="modal-content">
 
 <h2 id="title"></h2>
 
-<input id="name" placeholder="Full Name"><br>
-<input id="email" placeholder="Email"><br>
-<input id="address" placeholder="Address"><br>
+<input id="name" placeholder="Full Name">
+<input id="email" placeholder="Email">
+<input id="address" placeholder="Address">
 
 <button class="btn" onclick="submitOrder()">Continue to Payment</button>
 <br><br>
@@ -261,7 +312,7 @@ status:"Pending",
 message:"Waiting for confirmation"
 }]);
 
-window.location.href="https://cash.app/$Jeffreybhd";
+window.location.href="https://cash.app/$RicoAmos10";
 }
 
 </script>
