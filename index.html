@@ -10,28 +10,74 @@
 <style>
 body {
     margin: 0;
-    font-family: Arial;
-    background: black;
+    font-family: Arial, sans-serif;
     color: white;
+    background: url('background.jpg') no-repeat center center fixed;
+    background-size: cover;
 }
 
+/* DARK OVERLAY */
+body::before {
+    content:"";
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.7);
+    z-index:-1;
+}
+
+/* NAVBAR */
+nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: rgba(0,0,0,0.9);
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    padding: 14px;
+    z-index: 10;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+/* HEADER */
 header {
+    padding-top: 80px;
     text-align: center;
-    padding: 20px;
 }
 
+header h1 {
+    font-size: 40px;
+}
+
+header p {
+    opacity: 0.8;
+}
+
+/* PRODUCTS GRID */
 .products {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 20px;
-    padding: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 25px;
+    padding: 30px;
 }
 
+/* PRODUCT CARD */
 .product {
-    background: #111;
+    background: rgba(0,0,0,0.8);
     padding: 15px;
-    border-radius: 10px;
+    border-radius: 12px;
     text-align: center;
+    transition: 0.2s;
+}
+
+.product:hover {
+    transform: scale(1.03);
 }
 
 .product img {
@@ -39,101 +85,120 @@ header {
     border-radius: 10px;
 }
 
+/* BUTTON */
 .btn {
     background: gold;
     color: black;
     padding: 10px;
-    display: inline-block;
+    border-radius: 6px;
     margin-top: 10px;
-    border-radius: 5px;
     cursor: pointer;
+    display: inline-block;
+    font-weight: bold;
 }
 
-/* FORM */
+/* FORM MODAL */
 .modal {
 display:none;
 position:fixed;
 width:100%;
 height:100%;
-background:rgba(0,0,0,0.8);
+background:rgba(0,0,0,0.85);
+z-index:1000;
 }
 
 .modal-content {
 background:#111;
-margin:40% auto;
+margin:35% auto;
 padding:20px;
-width:80%;
-text-align:center;
+width:85%;
 border-radius:10px;
+text-align:center;
 }
 
 input {
 width:90%;
 padding:10px;
-margin:5px;
+margin:8px;
+border:none;
+border-radius:5px;
+}
+
+/* CONTACT */
+.contact {
+text-align:center;
+padding:20px;
+background:rgba(0,0,0,0.7);
 }
 </style>
 </head>
 
 <body>
 
+<!-- NAV -->
+<nav>
+<a href="#">Home</a>
+<a href="#shop">Shop</a>
+<a href="https://www.tiktok.com/@r_j_resells">TikTok</a>
+<a href="#">Drops</a>
+</nav>
+
 <header>
 <h1>R&J Resells</h1>
-<p>Authentic Designer</p>
+<p>Authentic Designer. Exclusive Drops.</p>
 </header>
 
-<section class="products">
+<!-- PRODUCTS -->
+<section id="shop" class="products">
 
 <div class="product">
 <img src="niketech.jpg">
 <h3>Nike Ski Mask</h3>
 <p>$30</p>
-<div class="btn" onclick="openForm('Nike Ski Mask')">Buy</div>
+<div class="btn" onclick="startOrder('Nike Ski Mask')">Buy</div>
 </div>
 
 <div class="product">
 <img src="bape.jpg">
 <h3>Bape Hoodie</h3>
 <p>$100</p>
-<div class="btn" onclick="openForm('Bape Hoodie')">Buy</div>
+<div class="btn" onclick="startOrder('Bape Hoodie')">Buy</div>
 </div>
 
 <div class="product">
 <img src="chromeheartshirt.jpg">
 <h3>Chrome Hearts T-Shirt</h3>
 <p>$50</p>
-<div class="btn" onclick="openForm('Chrome Hearts T-Shirt')">Buy</div>
+<div class="btn" onclick="startOrder('Chrome Hearts T-Shirt')">Buy</div>
 </div>
 
 <div class="product">
 <img src="chromehearts.jpg">
 <h3>Chrome Hearts Socks</h3>
 <p>$35</p>
-<div class="btn" onclick="openForm('Chrome Hearts Socks')">Buy</div>
+<div class="btn" onclick="startOrder('Chrome Hearts Socks')">Buy</div>
 </div>
 
 <div class="product">
 <img src="bapeshirt.jpg">
 <h3>Bape T-Shirt</h3>
 <p>$50</p>
-<div class="btn" onclick="openForm('Bape T-Shirt')">Buy</div>
+<div class="btn" onclick="startOrder('Bape T-Shirt')">Buy</div>
 </div>
 
 <div class="product">
 <img src="draco.jpg">
 <h3>Draco Slides</h3>
 <p>$60</p>
-<div class="btn" onclick="openForm('Draco Slides')">Buy</div>
+<div class="btn" onclick="startOrder('Draco Slides')">Buy</div>
 </div>
 
 <div class="product">
 <img src="lvbean.jpg">
 <h3>Louis Vuitton Beanie</h3>
 <p>$50</p>
-<div class="btn" onclick="openForm('Louis Vuitton Beanie')">Buy</div>
+<div class="btn" onclick="startOrder('Louis Vuitton Beanie')">Buy</div>
 </div>
-
-</section>
 
 </section>
 
@@ -143,14 +208,22 @@ margin:5px;
 
 <h2 id="productTitle"></h2>
 
-<input id="name" placeholder="Name"><br>
-<input id="email" placeholder="Email"><br>
-<input id="address" placeholder="Address"><br>
+<input id="name" placeholder="Full Name">
+<input id="email" placeholder="Email">
+<input id="address" placeholder="Shipping Address">
 
-<div class="btn" onclick="submitOrder()">Submit</div>
-<div class="btn" onclick="closeForm()">Close</div>
+<div class="btn" onclick="completeOrder()">Continue to Payment</div>
+<br><br>
+<div class="btn" onclick="closeForm()">Cancel</div>
 
 </div>
+</div>
+
+<!-- CONTACT -->
+<div class="contact">
+Contact: 
+<a href="https://www.snapchat.com/add/ricoamos22" target="_blank">@ricoamos22</a> |
+<a href="https://www.snapchat.com/add/jeffreylovej" target="_blank">@jeffreylovej</a>
 </div>
 
 <script>
@@ -159,38 +232,45 @@ const client = window.supabase.createClient(
 "sb_publishable_bqSCrrSbaWZ0DgYPj3pCTg_732i9dzN"
 );
 
-let currentProduct="";
+let selectedProduct = "";
 
-function openForm(product){
-currentProduct=product;
-document.getElementById("modal").style.display="block";
-document.getElementById("productTitle").innerText=product;
+/* OPEN FORM */
+function startOrder(product){
+selectedProduct = product;
+document.getElementById("modal").style.display = "block";
+document.getElementById("productTitle").innerText = product;
 }
 
+/* CLOSE FORM */
 function closeForm(){
-document.getElementById("modal").style.display="none";
+document.getElementById("modal").style.display = "none";
 }
 
-async function submitOrder(){
+/* COMPLETE ORDER */
+async function completeOrder(){
 
-let name=document.getElementById("name").value;
-let email=document.getElementById("email").value;
-let address=document.getElementById("address").value;
+let name = document.getElementById("name").value;
+let email = document.getElementById("email").value;
+let address = document.getElementById("address").value;
 
 if(!name || !email || !address){
-alert("Fill everything");
+alert("Fill all fields");
 return;
 }
 
+let id = "RJ" + Math.floor(Math.random()*100000);
+
 await client.from("orders").insert([{
-product:currentProduct,
-name:name,
-email:email,
-address:address
+id: id,
+product: selectedProduct,
+name: name,
+email: email,
+address: address,
+status: "Pending",
+message: "Order placed"
 }]);
 
-alert("Order submitted!");
-
+window.location.href = "https://cash.app/$RicoAmos10";
 }
 </script>
 
