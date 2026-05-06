@@ -7,191 +7,145 @@
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
-<!-- Chrome Hearts Style Font -->
-<link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-
 <style>
-
-/* BACKGROUND */
-body{
-margin:0;
-font-family:'Inter', sans-serif;
-color:white;
-background:url('background.jpg') no-repeat center center fixed;
-background-size:cover;
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    color: white;
+    background: url('background.jpg') no-repeat center center fixed;
+    background-size: cover;
 }
 
-/* DARK OVERLAY */
-body::before{
-content:"";
+body::before {
+    content:"";
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.65);
+    z-index:-1;
+}
+
+/* MESSAGE BAR */
+#messageBar{
 position:fixed;
+top:0;
 width:100%;
-height:100%;
-background:rgba(0,0,0,0.7);
-z-index:-1;
+background:gold;
+color:black;
+text-align:center;
+padding:10px;
+display:none;
+z-index:999;
+}
+
+/* NAV */
+nav{
+position:fixed;
+top:40px;
+width:100%;
+background:rgba(0,0,0,0.85);
+display:flex;
+justify-content:center;
+gap:20px;
+padding:12px;
+}
+
+nav a{
+color:white;
+text-decoration:none;
 }
 
 /* HEADER */
 header{
+padding-top:100px;
 text-align:center;
-padding:30px 20px;
 }
 
-/* LOGO */
-.logo{
-width:120px;
-margin-bottom:10px;
-border-radius:10px;
-}
-
-/* TITLE */
-h1{
-font-family:'UnifrakturCook', cursive;
-font-size:42px;
-letter-spacing:3px;
-margin:10px 0;
-}
-
-/* SUBTEXT */
-header p{
-opacity:0.8;
-font-size:14px;
-}
-
-/* PRODUCTS GRID */
+/* PRODUCTS */
 .products{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
-gap:25px;
+grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+gap:20px;
 padding:20px;
 }
 
-/* PRODUCT CARD */
 .product{
-background:rgba(0,0,0,0.8);
+background:rgba(0,0,0,0.75);
 padding:15px;
-border-radius:12px;
+border-radius:10px;
 text-align:center;
-position:relative;
-transition:0.3s;
-box-shadow:0 0 10px rgba(0,0,0,0.5);
 }
 
-/* HOVER EFFECT */
-.product:hover{
-transform:translateY(-5px) scale(1.02);
-box-shadow:0 0 20px rgba(255,215,0,0.3);
-}
-
-/* PRODUCT IMAGE */
 .product img{
 width:100%;
 border-radius:10px;
 }
 
-/* PRODUCT TITLE */
-.product h3{
-margin:10px 0 5px;
-font-weight:600;
-}
-
-/* PRICE */
-.product p{
-opacity:0.8;
-}
-
-/* BUTTON */
 .btn{
-background:linear-gradient(45deg,gold,#ffcc00);
+background:gold;
 color:black;
 padding:10px;
 border:none;
-border-radius:6px;
+border-radius:5px;
 margin-top:10px;
 cursor:pointer;
-font-weight:bold;
-transition:0.2s;
 }
 
-/* BUTTON HOVER */
-.btn:hover{
-transform:scale(1.05);
-box-shadow:0 0 10px gold;
-}
-
-/* SOLD OUT STYLE */
-.sold{
-opacity:0.4;
-filter:grayscale(100%);
-}
-
-/* BIG RED X */
-.sold::before{
-content:"✖";
-position:absolute;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-font-size:60px;
-color:red;
-font-weight:bold;
-}
-
-.sold::after{
-content:"SOLD OUT";
-position:absolute;
-top:10px;
-left:10px;
-background:red;
-padding:5px;
-font-size:12px;
-}
-
-/* MODAL */
+/* FORM MODAL */
 .modal{
 display:none;
 position:fixed;
-top:0;
-left:0;
 width:100%;
 height:100%;
-background:rgba(0,0,0,0.9);
+background:rgba(0,0,0,0.8);
+z-index:1000;
 }
 
-/* MODAL BOX */
 .modal-content{
 background:#111;
-margin:80px auto;
-padding:25px;
-width:85%;
-border-radius:12px;
+margin:40% auto;
+padding:20px;
+width:80%;
+border-radius:10px;
 text-align:center;
-box-shadow:0 0 20px rgba(255,255,255,0.1);
 }
 
-/* INPUTS */
 input{
 width:90%;
-padding:12px;
-margin:8px 0;
-border-radius:6px;
+padding:10px;
+margin:8px;
 border:none;
-background:#222;
-color:white;
+border-radius:5px;
 }
 
+/* CONTACT */
+.contact{
+text-align:center;
+padding:20px;
+background:rgba(0,0,0,0.6);
+}
 </style>
 </head>
 
 <body>
 
+<div id="messageBar"></div>
+
+<nav>
+<a href="#">Home</a>
+<a href="#shop">Shop</a>
+<a href="https://www.tiktok.com/@r_j_resells">TikTok</a>
+<a href="#">Drops</a>
+</nav>
+
 <header>
-<img src="logo.png" class="logo">
 <h1>R&J Resells</h1>
 <p>Authentic Designer. Exclusive Drops.</p>
 </header>
 
 <section class="products">
+
+<!-- PRODUCTS -->
 
 <div class="product">
 <img src="niketech.jpg">
@@ -201,57 +155,54 @@ color:white;
 </div>
 
 <div class="product">
+<img src="bape.jpg">
+<h3>Bape Hoodie</h3>
+<p>$100</p>
+<button class="btn" onclick="openForm('Bape Hoodie')">Buy</button>
+</div>
+
+<div class="product">
 <img src="chromeheartshirt.jpg">
-<h3>Chrome Hearts Tee</h3>
+<h3>Chrome Hearts T-Shirt</h3>
 <p>$50</p>
-<button class="btn" onclick="openForm('Chrome Hearts Tee')">Buy</button>
+<button class="btn" onclick="openForm('Chrome Hearts T-Shirt')">Buy</button>
 </div>
 
 <div class="product">
 <img src="chromehearts.jpg">
-<h3>Chrome Heart Socks</h3>
+<h3>Chrome Hearts Socks</h3>
 <p>$35</p>
-<button class="btn" onclick="openForm('Chrome Socks')">Buy</button>
+<button class="btn" onclick="openForm('Chrome Hearts Socks')">Buy</button>
 </div>
 
 <div class="product">
-<img src="uggs.jpg">
-<h3>Uggs Slippers</h3>
-<p>$50</p>
-<button class="btn" onclick="openForm('Chrome Socks')">Buy</button>
-</div>
-
-<div class="product sold">
-<img src="bape.jpg">
-<h3>Bape Hoodie</h3>
-<p>$100</p>
-</div>
-
-<div class="product sold">
 <img src="bapeshirt.jpg">
 <h3>Bape T-Shirt</h3>
 <p>$50</p>
+<button class="btn" onclick="openForm('Bape T-Shirt')">Buy</button>
 </div>
 
-<div class="product sold">
+<div class="product">
 <img src="draco.jpg">
 <h3>Draco Slides</h3>
 <p>$60</p>
+<button class="btn" onclick="openForm('Draco Slides')">Buy</button>
 </div>
 
-<div class="product sold">
+<div class="product">
 <img src="lvbean.jpg">
 <h3>Louis Vuitton Beanie</h3>
 <p>$50</p>
+<button class="btn" onclick="openForm('Louis Vuitton Beanie')">Buy</button>
 </div>
 
 </section>
 
-<!-- FORM (UNCHANGED FUNCTIONALLY) -->
+<!-- FORM -->
 <div id="modal" class="modal">
 <div class="modal-content">
 
-<h2 id="title"></h2>
+<h2 id="productTitle"></h2>
 
 <input id="name" placeholder="Full Name">
 <input id="email" placeholder="Email">
@@ -259,38 +210,46 @@ color:white;
 
 <button class="btn" onclick="submitOrder()">Continue to Payment</button>
 <br><br>
-<button class="btn" onclick="closeForm()">Close</button>
+<button class="btn" onclick="closeForm()">Cancel</button>
 
 </div>
+</div>
+
+<div class="contact">
+Contact:
+<a href="https://www.snapchat.com/add/ricoamos22">@ricoamos22</a> |
+<a href="https://www.snapchat.com/add/jeffreylovej">@jeffreylovej</a>
 </div>
 
 <script>
-
-let currentProduct = "";
-
-function openForm(product){
-currentProduct = product;
-document.getElementById("modal").style.display = "block";
-document.getElementById("title").innerText = product;
-}
-
-function closeForm(){
-document.getElementById("modal").style.display = "none";
-}
-
 const client = window.supabase.createClient(
 "https://fyzguhksswalbwoqatym.supabase.co",
 "sb_publishable_bqSCrrSbaWZ0DgYPj3pCTg_732i9dzN"
 );
 
+let currentProduct="";
+
+/* OPEN FORM */
+function openForm(product){
+currentProduct = product;
+document.getElementById("modal").style.display="block";
+document.getElementById("productTitle").innerText=product;
+}
+
+/* CLOSE FORM */
+function closeForm(){
+document.getElementById("modal").style.display="none";
+}
+
+/* SUBMIT ORDER */
 async function submitOrder(){
 
 let name=document.getElementById("name").value;
 let email=document.getElementById("email").value;
 let address=document.getElementById("address").value;
 
-if(!name||!email||!address){
-alert("Please fill all fields");
+if(!name || !email || !address){
+alert("Fill all fields");
 return;
 }
 
@@ -303,12 +262,34 @@ name:name,
 email:email,
 address:address,
 status:"Pending",
-message:"Waiting for confirmation"
+message:""
 }]);
 
 window.location.href="https://cash.app/$RicoAmos10";
 }
 
+/* LOAD ADMIN MESSAGE */
+async function loadMessage(){
+
+let { data } = await client
+.from("orders")
+.select("*")
+.order("id",{ascending:false})
+.limit(1);
+
+if(data && data.length>0){
+let msg=data[0].message;
+
+if(msg && msg.includes("http")){
+document.getElementById("messageBar").style.display="block";
+document.getElementById("messageBar").innerHTML =
+`✅ Your Order was Confirmed — 
+<a href="${msg}" target="_blank" style="color:black;font-weight:bold;">Track Here</a>`;
+}
+}
+}
+
+loadMessage();
 </script>
 
 </body>
