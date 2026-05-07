@@ -1,104 +1,188 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Admin Dashboard</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>R&J Admin Dashboard</title>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <style>
 body{
-background:black;
-color:white;
+margin:0;
 font-family:Arial;
+background:#0b0b0b;
+color:white;
 padding:20px;
 }
 
+h1{
+text-align:center;
+margin-bottom:10px;
+}
+
+.stats{
+display:flex;
+justify-content:space-around;
+margin-bottom:20px;
+}
+
 .card{
-background:#111;
+background:#161616;
 padding:15px;
-margin:10px 0;
 border-radius:10px;
+text-align:center;
+width:30%;
+}
+
+.order{
+background:#151515;
+padding:15px;
+margin-bottom:15px;
+border-radius:12px;
+border:1px solid #2a2a2a;
+}
+
+.badge{
+padding:5px 10px;
+border-radius:20px;
+font-size:12px;
+display:inline-block;
+}
+
+.Pending{background:gold;color:black;}
+.Confirmed{background:#2196f3;}
+.Shipped{background:orange;color:black;}
+.Delivered{background:#00c853;}
+
+input, textarea, select{
+width:100%;
+padding:8px;
+margin-top:5px;
+background:#0f0f0f;
+border:none;
+color:white;
+border-radius:6px;
 }
 
 button{
-padding:8px;
-margin:5px;
+margin-top:10px;
+padding:10px;
+background:gold;
 border:none;
-border-radius:5px;
 cursor:pointer;
+width:100%;
+border-radius:6px;
+font-weight:bold;
 }
 
-.confirm{background:green;color:white;}
-.decline{background:red;color:white;}
-.send{background:gold;color:black;}
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+gap:15px;
+}
 </style>
 </head>
 
 <body>
 
-<h1>Admin Dashboard</h1>
+<h1>R&J Admin Dashboard</h1>
 
-<div id="orders"></div>
+<div class="stats">
+<div class="card">
+<h3>Total Orders</h3>
+<p id="total">0</p>
+</div>
+
+<div class="card">
+<h3>Pending</h3>
+<p id="pending">0</p>
+</div>
+
+<div class="card">
+<h3>Shipped</h3>
+<p id="shipped">0</p>
+</div>
+</div>
+
+<div id="orders" class="grid"></div>
 
 <script>
-
 const client = window.supabase.createClient(
 "https://fyzguhksswalbwoqatym.supabase.co",
 "sb_publishable_bqSCrrSbaWZ0DgYPj3pCTg_732i9dzN"
 );
 
-async function load(){
+async function loadOrders(){
 
-let {data}=await client.from("orders").select("*").order("id",{ascending:false});
+const { data } = await client
+.from("orders")
+.select("*")
+.order("id", { ascending:false });
 
-let html="";
+let total = data.length;
+let pending = data.filter(o=>o.status==="Pending").length;
+let shipped = data.filter(o=>o.status==="Shipped").length;
 
-data.forEach(o=>{
-html+=`
-<div class="card">
-<h3>${o.id}</h3>
-<p><b>Product:</b> ${o.product}</p>
-<p><b>Name:</b> ${o.name}</p>
-<p><b>Email:</b> ${o.email}</p>
-<p><b>Address:</b> ${o.address}</p>
-<p><b>Status:</b> ${o.status}</p>
+document.getElementById("total").innerText = total;
+document.getElementById("pending").innerText = pending;
+document.getElementById("shipped").innerText = shipped;
 
-<input id="msg-${o.id}" placeholder="Message / Snapchat link">
+let container = document.getElementById("orders");
+container.innerHTML = "";
 
-<button class="confirm" onclick="confirmOrder('${o.id}')">Confirm</button>
-<button class="decline" onclick="declineOrder('${o.id}')">Decline</button>
-<button class="send" onclick="sendMsg('${o.id}')">Send Message</button>
+data.forEach(order=>{
+
+container.innerHTML += `
+<div class="order">
+
+<h3>${order.product}</h3>
+
+<p><b>Name:</b> ${order.name}</p>
+<p><b>Email:</b> ${order.email}</p>
+<p><b>Address:</b> ${order.address}</p>
+
+<span class="badge ${order.status}">${order.status}</span>
+
+<select id="status-${order.id}">
+<option>Pending</option>
+<option>Confirmed</option>
+<option>Shipped</option>
+<option>Delivered</option>
+</select>
+
+<textarea id="msg-${order.id}" placeholder="Admin message">${order.message || ""}</textarea>
+
+<button onclick="updateOrder(${order.id})">Update Order</button>
+
 </div>
 `;
+
 });
 
-document.getElementById("orders").innerHTML=html;
 }
 
-async function confirmOrder(id){
-await client.from("orders").update({status:"Confirmed"}).eq("id",id);
-load();
+async function updateOrder(id){
+
+let status = document.getElementById(`status-${id}`).value;
+let message = document.getElementById(`msg-${id}`).value;
+
+await client
+.from("orders")
+.update({
+status: status,
+message: message
+})
+.eq("id", id);
+
+loadOrders();
+
 }
 
-async function declineOrder(id){
-await client.from("orders").update({status:"Declined"}).eq("id",id);
-load();
-}
+loadOrders();
 
-async function sendMsg(id){
-
-let msg=document.getElementById("msg-"+id).value;
-
-await client.from("orders").update({
-message:msg
-}).eq("id",id);
-
-alert("Message sent");
-load();
-}
-
-load();
-
+/* LIVE REFRESH */
+setInterval(loadOrders, 5000);
 </script>
 
 </body>
