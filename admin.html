@@ -18,27 +18,33 @@ padding:20px;
 
 h1{
 text-align:center;
-margin-bottom:10px;
+margin-bottom:20px;
 }
 
 .stats{
 display:flex;
-justify-content:space-around;
+justify-content:space-between;
+gap:10px;
 margin-bottom:20px;
 }
 
 .card{
+flex:1;
 background:#161616;
 padding:15px;
 border-radius:10px;
 text-align:center;
-width:30%;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+gap:15px;
 }
 
 .order{
 background:#151515;
 padding:15px;
-margin-bottom:15px;
 border-radius:12px;
 border:1px solid #2a2a2a;
 }
@@ -48,6 +54,7 @@ padding:5px 10px;
 border-radius:20px;
 font-size:12px;
 display:inline-block;
+margin-top:5px;
 }
 
 .Pending{background:gold;color:black;}
@@ -58,28 +65,22 @@ display:inline-block;
 input, textarea, select{
 width:100%;
 padding:8px;
-margin-top:5px;
-background:#0f0f0f;
+margin-top:8px;
 border:none;
-color:white;
 border-radius:6px;
+background:#0f0f0f;
+color:white;
 }
 
 button{
 margin-top:10px;
 padding:10px;
-background:gold;
-border:none;
-cursor:pointer;
 width:100%;
+border:none;
 border-radius:6px;
+background:gold;
+cursor:pointer;
 font-weight:bold;
-}
-
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-gap:15px;
 }
 </style>
 </head>
@@ -90,7 +91,7 @@ gap:15px;
 
 <div class="stats">
 <div class="card">
-<h3>Total Orders</h3>
+<h3>Total</h3>
 <p id="total">0</p>
 </div>
 
@@ -115,14 +116,19 @@ const client = window.supabase.createClient(
 
 async function loadOrders(){
 
-const { data } = await client
+const { data, error } = await client
 .from("orders")
 .select("*")
 .order("id", { ascending:false });
 
+if(error){
+console.log("LOAD ERROR:", error);
+return;
+}
+
 let total = data.length;
-let pending = data.filter(o=>o.status==="Pending").length;
-let shipped = data.filter(o=>o.status==="Shipped").length;
+let pending = data.filter(o => o.status === "Pending").length;
+let shipped = data.filter(o => o.status === "Shipped").length;
 
 document.getElementById("total").innerText = total;
 document.getElementById("pending").innerText = pending;
@@ -131,7 +137,7 @@ document.getElementById("shipped").innerText = shipped;
 let container = document.getElementById("orders");
 container.innerHTML = "";
 
-data.forEach(order=>{
+data.forEach(order => {
 
 container.innerHTML += `
 <div class="order">
@@ -151,7 +157,7 @@ container.innerHTML += `
 <option>Delivered</option>
 </select>
 
-<textarea id="msg-${order.id}" placeholder="Admin message">${order.message || ""}</textarea>
+<textarea id="msg-${order.id}" placeholder="Message">${order.message || ""}</textarea>
 
 <button onclick="updateOrder(${order.id})">Update Order</button>
 
@@ -167,7 +173,7 @@ async function updateOrder(id){
 let status = document.getElementById(`status-${id}`).value;
 let message = document.getElementById(`msg-${id}`).value;
 
-await client
+const { error } = await client
 .from("orders")
 .update({
 status: status,
@@ -175,13 +181,18 @@ message: message
 })
 .eq("id", id);
 
+if(error){
+console.log("UPDATE ERROR:", error);
+return;
+}
+
 loadOrders();
 
 }
 
 loadOrders();
 
-/* LIVE REFRESH */
+/* auto refresh */
 setInterval(loadOrders, 5000);
 </script>
 
