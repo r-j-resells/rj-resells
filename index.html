@@ -197,39 +197,45 @@ Contact:
 </div>
 
 <script>
-/* SAFE GLOBAL VARIABLES */
+window.addEventListener("DOMContentLoaded", () => {
+
+/* SAFE GLOBAL STATE */
 let selectedProduct = "";
 
-/* GUARANTEED BUY FUNCTION (NO BREAKS) */
-window.startOrder = function(product) {
+/* BUY BUTTON */
+window.startOrder = function(product){
     selectedProduct = product;
 
-    let modal = document.getElementById("modal");
-    let title = document.getElementById("productTitle");
+    const modal = document.getElementById("modal");
+    const title = document.getElementById("productTitle");
 
-    if (modal) modal.style.display = "block";
-    if (title) title.innerText = product;
+    if (!modal || !title) {
+        alert("Form not loaded properly");
+        return;
+    }
+
+    modal.style.display = "block";
+    title.innerText = product;
 };
 
 /* CLOSE FORM */
-window.closeForm = function() {
-    let modal = document.getElementById("modal");
+window.closeForm = function(){
+    const modal = document.getElementById("modal");
     if (modal) modal.style.display = "none";
 };
 
-/* SUBMIT ORDER (SAFE + NON-BREAKING) */
-window.completeOrder = async function() {
+/* SUBMIT ORDER */
+window.completeOrder = async function(){
 
-    let name = document.getElementById("name")?.value;
-    let email = document.getElementById("email")?.value;
-    let address = document.getElementById("address")?.value;
+    const name = document.getElementById("name")?.value;
+    const email = document.getElementById("email")?.value;
+    const address = document.getElementById("address")?.value;
 
     if (!name || !email || !address) {
         alert("Fill all fields");
         return;
     }
 
-    /* SUPABASE SAFE CONNECT (won't break page if failed) */
     try {
         const client = window.supabase?.createClient(
             "https://fyzguhksswalbwoqatym.supabase.co",
@@ -239,22 +245,21 @@ window.completeOrder = async function() {
         if (client) {
             await client.from("orders").insert([{
                 product: selectedProduct,
-                name: name,
-                email: email,
-                address: address,
+                name,
+                email,
+                address,
                 status: "Pending"
             }]);
         }
-    } catch (err) {
-        console.log("Supabase error (ignored):", err);
+    } catch (e) {
+        console.log("Supabase failed but site continues");
     }
 
-    /* CLOSE FORM */
     closeForm();
-
-    /* CASHAPP REDIRECT (ALWAYS WORKS) */
     window.location.href = "https://cash.app/$RicoAmos10";
 };
+
+});
 </script>
 
 </body>
