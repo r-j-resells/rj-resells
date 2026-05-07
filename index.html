@@ -202,32 +202,37 @@ Contact:
 <script>
 let selectedProduct = "";
 
-/* OPEN CHECKOUT */
-function openCheckout(product){
+function openCheckout(product) {
+
     selectedProduct = product;
 
-    document.getElementById("modal").style.display = "block";
-    document.getElementById("productTitle").innerText = product;
+    const modal = document.getElementById("modal");
+    const title = document.getElementById("productTitle");
+
+    if (!modal || !title) {
+        alert("Checkout form missing");
+        return;
+    }
+
+    modal.style.display = "block";
+    title.innerText = product;
 }
 
-/* CLOSE CHECKOUT */
-function closeCheckout(){
+function closeCheckout() {
     document.getElementById("modal").style.display = "none";
 }
 
-/* SUBMIT ORDER */
-function submitOrder(){
+function submitOrder() {
 
     let name = document.getElementById("name").value;
     let email = document.getElementById("email").value;
     let address = document.getElementById("address").value;
 
-    if(!name || !email || !address){
+    if (!name || !email || !address) {
         alert("Fill all fields");
         return;
     }
 
-    /* SAVE (optional safe fallback - no crash) */
     console.log({
         product: selectedProduct,
         name,
@@ -237,7 +242,6 @@ function submitOrder(){
 
     closeCheckout();
 
-    /* CASHAPP FINAL STEP */
     window.location.href = "https://cash.app/$RicoAmos10";
 }
 </script>
