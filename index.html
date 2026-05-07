@@ -5,24 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>R&J Resells</title>
 
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-
 <style>
 body {
     margin: 0;
     font-family: Arial, sans-serif;
     color: white;
+
     background: url('background.jpg') no-repeat center center fixed;
     background-size: cover;
 }
 
 body::before {
-    content:"";
-    position:fixed;
-    width:100%;
-    height:100%;
-    background:rgba(0,0,0,0.65);
-    z-index:-1;
+    content: "";
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.65);
+    top: 0;
+    left: 0;
+    z-index: -1;
 }
 
 nav {
@@ -72,9 +73,9 @@ header {
     color: black;
     padding: 10px;
     border-radius: 5px;
+    text-decoration: none;
     display: inline-block;
     margin-top: 10px;
-    cursor: pointer;
 }
 
 /* MODAL */
@@ -94,14 +95,6 @@ padding:20px;
 width:80%;
 border-radius:10px;
 text-align:center;
-}
-
-input {
-width:90%;
-padding:10px;
-margin:5px;
-border-radius:5px;
-border:none;
 }
 </style>
 </head>
@@ -126,110 +119,101 @@ border:none;
 <img src="niketech.jpg">
 <h3>Nike Ski Mask</h3>
 <p>$30</p>
-<div class="btn" onclick="startOrder('Nike Ski Mask')">Buy</div>
+<a class="btn" href="https://cash.app/$RicoAmos10" onclick="startOrder('Nike Ski Mask')">Buy</a>
 </div>
 
 <div class="product">
 <img src="bape.jpg">
 <h3>Bape Hoodie</h3>
-<p>$100</p>
-<div class="btn" onclick="startOrder('Bape Hoodie')">Buy</div>
+<p>$140</p>
+<a class="btn" href="https://cash.app/$RicoAmos10" onclick="startOrder('Bape Hoodie')">Buy</a>
 </div>
 
 <div class="product">
 <img src="chromeheartshirt.jpg">
 <h3>Chrome Hearts T-Shirt</h3>
-<p>$50</p>
-<div class="btn" onclick="startOrder('Chrome Hearts T-Shirt')">Buy</div>
+<p>$65</p>
+<a class="btn" href="https://cash.app/$RicoAmos10" onclick="startOrder('Chrome Hearts T-Shirt')">Buy</a>
 </div>
 
 <div class="product">
 <img src="chromehearts.jpg">
 <h3>Chrome Hearts Socks</h3>
 <p>$35</p>
-<div class="btn" onclick="startOrder('Chrome Hearts Socks')">Buy</div>
+<a class="btn" href="https://cash.app/$RicoAmos10" onclick="startOrder('Chrome Hearts Socks')">Buy</a>
 </div>
 
 <div class="product">
 <img src="bapeshirt.jpg">
 <h3>Bape T-Shirt</h3>
-<p>$50</p>
-<div class="btn" onclick="startOrder('Bape T-Shirt')">Buy</div>
+<p>$65</p>
+<a class="btn" href="https://cash.app/$RicoAmos10" onclick="startOrder('Bape T-Shirt')">Buy</a>
 </div>
 
 <div class="product">
 <img src="draco.jpg">
 <h3>Draco Slides</h3>
-<p>$60</p>
-<div class="btn" onclick="startOrder('Draco Slides')">Buy</div>
+<p>$70</p>
+<a class="btn" href="https://cash.app/$RicoAmos10" onclick="startOrder('Draco Slides')">Buy</a>
 </div>
 
 <div class="product">
 <img src="lvbean.jpg">
 <h3>Louis Vuitton Beanie</h3>
-<p>$50</p>
-<div class="btn" onclick="startOrder('Louis Vuitton Beanie')">Buy</div>
+<p>$80</p>
+<a class="btn" href="https://cash.app/$RicoAmos10" onclick="startOrder('Louis Vuitton Beanie')">Buy</a>
 </div>
 
 </section>
 
-<!-- FORM -->
+<!-- MODAL FORM -->
 <div id="modal" class="modal">
 <div class="modal-content">
 
 <h2 id="productTitle"></h2>
 
-<input id="name" placeholder="Full Name">
-<input id="email" placeholder="Email">
-<input id="address" placeholder="Address">
+<input id="name" placeholder="Full Name"><br><br>
+<input id="email" placeholder="Email"><br><br>
+<input id="address" placeholder="Address"><br><br>
 
-<div class="btn" onclick="completeOrder()">Continue to Payment</div>
+<button class="btn" onclick="completeOrder()">Continue</button>
 <br><br>
-<div class="btn" onclick="closeForm()">Close</div>
+<button class="btn" onclick="closeForm()">Close</button>
 
 </div>
 </div>
 
 <div style="text-align:center;padding:20px;">
-Contact: 
-<a href="https://www.snapchat.com/add/ricoamos22" target="_blank">@ricoamos22</a> |
-<a href="https://www.snapchat.com/add/jeffreylovej" target="_blank">@jeffreylovej</a>
+Contact:
+<a href="https://www.snapchat.com/add/ricoamos22">@ricoamos22</a> |
+<a href="https://www.snapchat.com/add/jeffreylovej">@jeffreylovej</a>
 </div>
 
 <script>
-window.addEventListener("DOMContentLoaded", () => {
-
-/* SAFE GLOBAL STATE */
 let selectedProduct = "";
 
-/* BUY BUTTON */
-window.startOrder = function(product){
+/* OPEN FORM */
+function startOrder(product){
     selectedProduct = product;
 
     const modal = document.getElementById("modal");
     const title = document.getElementById("productTitle");
 
-    if (!modal || !title) {
-        alert("Form not loaded properly");
-        return;
-    }
-
     modal.style.display = "block";
     title.innerText = product;
-};
+}
 
 /* CLOSE FORM */
-window.closeForm = function(){
-    const modal = document.getElementById("modal");
-    if (modal) modal.style.display = "none";
-};
+function closeForm(){
+    document.getElementById("modal").style.display = "none";
+}
 
 /* SUBMIT ORDER */
-window.completeOrder = async function(){
+async function completeOrder(){
 
-    const name = document.getElementById("name")?.value;
-    const email = document.getElementById("email")?.value;
-    const address = document.getElementById("address")?.value;
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const address = document.getElementById("address").value;
 
     if (!name || !email || !address) {
         alert("Fill all fields");
@@ -237,30 +221,30 @@ window.completeOrder = async function(){
     }
 
     try {
-        const client = window.supabase?.createClient(
+        const client = supabase.createClient(
             "https://fyzguhksswalbwoqatym.supabase.co",
             "sb_publishable_bqSCrrSbaWZ0DgYPj3pCTg_732i9dzN"
         );
 
-        if (client) {
-            await client.from("orders").insert([{
-                product: selectedProduct,
-                name,
-                email,
-                address,
-                status: "Pending"
-            }]);
-        }
+        await client.from("orders").insert([{
+            product: selectedProduct,
+            name,
+            email,
+            address,
+            status: "Pending"
+        }]);
+
     } catch (e) {
-        console.log("Supabase failed but site continues");
+        console.log("Supabase error ignored");
     }
 
     closeForm();
     window.location.href = "https://cash.app/$RicoAmos10";
-};
-
-});
+}
 </script>
+
+<!-- SUPABASE -->
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 </body>
 </html>
