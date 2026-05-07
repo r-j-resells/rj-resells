@@ -10,7 +10,6 @@ body {
     margin: 0;
     font-family: Arial, sans-serif;
     color: white;
-
     background: url('background.jpg') no-repeat center center fixed;
     background-size: cover;
 }
@@ -76,6 +75,7 @@ header {
     text-decoration: none;
     display: inline-block;
     margin-top: 10px;
+    cursor: pointer;
 }
 
 /* MODAL */
@@ -90,11 +90,19 @@ z-index:100;
 
 .modal-content {
 background:#111;
-margin:40% auto;
+margin:20% auto;
 padding:20px;
-width:80%;
+width:85%;
 border-radius:10px;
 text-align:center;
+}
+
+input {
+width:90%;
+padding:10px;
+margin:5px 0;
+border-radius:5px;
+border:none;
 }
 </style>
 </head>
@@ -119,66 +127,68 @@ text-align:center;
 <img src="niketech.jpg">
 <h3>Nike Ski Mask</h3>
 <p>$30</p>
-<a class="btn" href="https://cash.app/$RicoAmos10" onclick="startOrder('Nike Ski Mask')">Buy</a>
+<button class="btn" onclick="openCheckout('Nike Ski Mask')">Buy</button>
 </div>
 
 <div class="product">
 <img src="bape.jpg">
 <h3>Bape Hoodie</h3>
 <p>$140</p>
-<a class="btn" href="https://cash.app/$RicoAmos10" onclick="startOrder('Bape Hoodie')">Buy</a>
+<button class="btn" onclick="openCheckout('Bape Hoodie')">Buy</button>
 </div>
 
 <div class="product">
 <img src="chromeheartshirt.jpg">
 <h3>Chrome Hearts T-Shirt</h3>
 <p>$65</p>
-<a class="btn" href="https://cash.app/$RicoAmos10" onclick="startOrder('Chrome Hearts T-Shirt')">Buy</a>
+<button class="btn" onclick="openCheckout('Chrome Hearts T-Shirt')">Buy</button>
 </div>
 
 <div class="product">
 <img src="chromehearts.jpg">
 <h3>Chrome Hearts Socks</h3>
 <p>$35</p>
-<a class="btn" href="https://cash.app/$RicoAmos10" onclick="startOrder('Chrome Hearts Socks')">Buy</a>
+<button class="btn" onclick="openCheckout('Chrome Hearts Socks')">Buy</button>
 </div>
 
 <div class="product">
 <img src="bapeshirt.jpg">
 <h3>Bape T-Shirt</h3>
 <p>$65</p>
-<a class="btn" href="https://cash.app/$RicoAmos10" onclick="startOrder('Bape T-Shirt')">Buy</a>
+<button class="btn" onclick="openCheckout('Bape T-Shirt')">Buy</button>
 </div>
 
 <div class="product">
 <img src="draco.jpg">
 <h3>Draco Slides</h3>
 <p>$70</p>
-<a class="btn" href="https://cash.app/$RicoAmos10" onclick="startOrder('Draco Slides')">Buy</a>
+<button class="btn" onclick="openCheckout('Draco Slides')">Buy</button>
 </div>
 
 <div class="product">
 <img src="lvbean.jpg">
 <h3>Louis Vuitton Beanie</h3>
 <p>$80</p>
-<a class="btn" href="https://cash.app/$RicoAmos10" onclick="startOrder('Louis Vuitton Beanie')">Buy</a>
+<button class="btn" onclick="openCheckout('Louis Vuitton Beanie')">Buy</button>
 </div>
 
 </section>
 
-<!-- MODAL FORM -->
+<!-- CHECKOUT MODAL -->
 <div id="modal" class="modal">
 <div class="modal-content">
 
 <h2 id="productTitle"></h2>
 
-<input id="name" placeholder="Full Name"><br><br>
-<input id="email" placeholder="Email"><br><br>
-<input id="address" placeholder="Address"><br><br>
+<input id="name" placeholder="Full Name">
+<input id="email" placeholder="Email">
+<input id="address" placeholder="Address">
 
-<button class="btn" onclick="completeOrder()">Continue</button>
 <br><br>
-<button class="btn" onclick="closeForm()">Close</button>
+
+<button class="btn" onclick="submitOrder()">Continue to Payment</button>
+<br><br>
+<button class="btn" onclick="closeCheckout()">Close</button>
 
 </div>
 </div>
@@ -192,59 +202,45 @@ Contact:
 <script>
 let selectedProduct = "";
 
-/* OPEN FORM */
-function startOrder(product){
+/* OPEN CHECKOUT */
+function openCheckout(product){
     selectedProduct = product;
 
-    const modal = document.getElementById("modal");
-    const title = document.getElementById("productTitle");
-
-    modal.style.display = "block";
-    title.innerText = product;
+    document.getElementById("modal").style.display = "block";
+    document.getElementById("productTitle").innerText = product;
 }
 
-/* CLOSE FORM */
-function closeForm(){
+/* CLOSE CHECKOUT */
+function closeCheckout(){
     document.getElementById("modal").style.display = "none";
 }
 
 /* SUBMIT ORDER */
-async function completeOrder(){
+function submitOrder(){
 
-    const name = document.getElementById("name").value;
-    const email = document.getElementById("email").value;
-    const address = document.getElementById("address").value;
+    let name = document.getElementById("name").value;
+    let email = document.getElementById("email").value;
+    let address = document.getElementById("address").value;
 
-    if (!name || !email || !address) {
+    if(!name || !email || !address){
         alert("Fill all fields");
         return;
     }
 
-    try {
-        const client = supabase.createClient(
-            "https://fyzguhksswalbwoqatym.supabase.co",
-            "sb_publishable_bqSCrrSbaWZ0DgYPj3pCTg_732i9dzN"
-        );
+    /* SAVE (optional safe fallback - no crash) */
+    console.log({
+        product: selectedProduct,
+        name,
+        email,
+        address
+    });
 
-        await client.from("orders").insert([{
-            product: selectedProduct,
-            name,
-            email,
-            address,
-            status: "Pending"
-        }]);
+    closeCheckout();
 
-    } catch (e) {
-        console.log("Supabase error ignored");
-    }
-
-    closeForm();
+    /* CASHAPP FINAL STEP */
     window.location.href = "https://cash.app/$RicoAmos10";
 }
 </script>
-
-<!-- SUPABASE -->
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 </body>
 </html>
