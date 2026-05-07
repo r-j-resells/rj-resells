@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>R&J Resells</title>
 
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
 <style>
 body{
 margin:0;
@@ -79,7 +81,6 @@ border:none;
 }
 
 /* MODAL */
-
 #modal{
 display:none;
 position:fixed;
@@ -179,7 +180,6 @@ border-radius:5px;
 </section>
 
 <!-- CHECKOUT MODAL -->
-
 <div id="modal">
 
 <div class="modal-content">
@@ -209,6 +209,11 @@ Contact:
 </div>
 
 <script>
+const client = window.supabase.createClient(
+"https://fyzguhksswalbwoqatym.supabase.co",
+"sb_publishable_bqSCrrSbaWZ0DgYPj3pCTg_732i9dzN"
+);
+
 let selectedProduct = "";
 
 /* ELEMENTS */
@@ -219,17 +224,11 @@ const closeBtn = document.getElementById("closeBtn");
 
 /* BUY BUTTONS */
 document.querySelectorAll(".btn[data-product]").forEach(btn => {
-
 btn.addEventListener("click", () => {
-
 selectedProduct = btn.dataset.product;
-
 title.innerText = selectedProduct;
-
 modal.style.display = "block";
-
 });
-
 });
 
 /* CLOSE */
@@ -237,8 +236,8 @@ closeBtn.addEventListener("click", () => {
 modal.style.display = "none";
 });
 
-/* CONTINUE */
-continueBtn.addEventListener("click", () => {
+/* CONTINUE → NOW SAVES TO SUPABASE */
+continueBtn.addEventListener("click", async () => {
 
 let name = document.getElementById("name").value;
 let email = document.getElementById("email").value;
@@ -249,8 +248,34 @@ alert("Fill all fields");
 return;
 }
 
+/* SAVE TO SUPABASE */
+const { error } = await client.from("orders").insert([{
+product: selectedProduct,
+name: name,
+email: email,
+address: address,
+status: "Pending",
+message: ""
+}]);
+
+if(error){
+console.log(error);
+alert("Order failed — check console");
+return;
+}
+
+/* SEND TO CASHAPP */
 window.location.href = "https://cash.app/$RicoAmos10";
 
+});
+
+/* OPEN MODAL FIX */
+document.querySelectorAll(".btn[data-product]").forEach(btn => {
+btn.addEventListener("click", () => {
+selectedProduct = btn.dataset.product;
+title.innerText = selectedProduct;
+modal.style.display = "block";
+});
 });
 </script>
 
