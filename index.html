@@ -16,26 +16,24 @@ body {
     background-size: cover;
 }
 
-/* DARK OVERLAY */
 body::before {
     content:"";
     position:fixed;
     width:100%;
     height:100%;
-    background:rgba(0,0,0,0.7);
+    background:rgba(0,0,0,0.65);
     z-index:-1;
 }
 
-/* NAVBAR */
 nav {
     position: fixed;
     top: 0;
     width: 100%;
-    background: rgba(0,0,0,0.9);
+    background: rgba(0,0,0,0.85);
     display: flex;
     justify-content: center;
-    gap: 25px;
-    padding: 14px;
+    gap: 20px;
+    padding: 12px;
     z-index: 10;
 }
 
@@ -45,39 +43,23 @@ nav a {
     font-size: 14px;
 }
 
-/* HEADER */
 header {
     padding-top: 80px;
     text-align: center;
 }
 
-header h1 {
-    font-size: 40px;
-}
-
-header p {
-    opacity: 0.8;
-}
-
-/* PRODUCTS GRID */
 .products {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-    gap: 25px;
-    padding: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 20px;
+    padding: 20px;
 }
 
-/* PRODUCT CARD */
 .product {
-    background: rgba(0,0,0,0.8);
+    background: rgba(0,0,0,0.75);
     padding: 15px;
-    border-radius: 12px;
+    border-radius: 10px;
     text-align: center;
-    transition: 0.2s;
-}
-
-.product:hover {
-    transform: scale(1.03);
 }
 
 .product img {
@@ -85,33 +67,31 @@ header p {
     border-radius: 10px;
 }
 
-/* BUTTON */
 .btn {
     background: gold;
     color: black;
     padding: 10px;
-    border-radius: 6px;
+    border-radius: 5px;
+    display: inline-block;
     margin-top: 10px;
     cursor: pointer;
-    display: inline-block;
-    font-weight: bold;
 }
 
-/* FORM MODAL */
+/* MODAL */
 .modal {
 display:none;
 position:fixed;
 width:100%;
 height:100%;
-background:rgba(0,0,0,0.85);
-z-index:1000;
+background:rgba(0,0,0,0.8);
+z-index:100;
 }
 
 .modal-content {
 background:#111;
-margin:35% auto;
+margin:40% auto;
 padding:20px;
-width:85%;
+width:80%;
 border-radius:10px;
 text-align:center;
 }
@@ -119,23 +99,15 @@ text-align:center;
 input {
 width:90%;
 padding:10px;
-margin:8px;
-border:none;
+margin:5px;
 border-radius:5px;
-}
-
-/* CONTACT */
-.contact {
-text-align:center;
-padding:20px;
-background:rgba(0,0,0,0.7);
+border:none;
 }
 </style>
 </head>
 
 <body>
 
-<!-- NAV -->
 <nav>
 <a href="#">Home</a>
 <a href="#shop">Shop</a>
@@ -148,7 +120,6 @@ background:rgba(0,0,0,0.7);
 <p>Authentic Designer. Exclusive Drops.</p>
 </header>
 
-<!-- PRODUCTS -->
 <section id="shop" class="products">
 
 <div class="product">
@@ -210,17 +181,16 @@ background:rgba(0,0,0,0.7);
 
 <input id="name" placeholder="Full Name">
 <input id="email" placeholder="Email">
-<input id="address" placeholder="Shipping Address">
+<input id="address" placeholder="Address">
 
 <div class="btn" onclick="completeOrder()">Continue to Payment</div>
 <br><br>
-<div class="btn" onclick="closeForm()">Cancel</div>
+<div class="btn" onclick="closeForm()">Close</div>
 
 </div>
 </div>
 
-<!-- CONTACT -->
-<div class="contact">
+<div style="text-align:center;padding:20px;">
 Contact: 
 <a href="https://www.snapchat.com/add/ricoamos22" target="_blank">@ricoamos22</a> |
 <a href="https://www.snapchat.com/add/jeffreylovej" target="_blank">@jeffreylovej</a>
@@ -246,7 +216,7 @@ function closeForm(){
 document.getElementById("modal").style.display = "none";
 }
 
-/* COMPLETE ORDER */
+/* FIXED BUY FLOW */
 async function completeOrder(){
 
 let name = document.getElementById("name").value;
@@ -260,6 +230,7 @@ return;
 
 let id = "RJ" + Math.floor(Math.random()*100000);
 
+/* SAVE ORDER */
 await client.from("orders").insert([{
 id: id,
 product: selectedProduct,
@@ -270,6 +241,10 @@ status: "Pending",
 message: "Order placed"
 }]);
 
+/* CLOSE FORM */
+closeForm();
+
+/* THEN REDIRECT */
 window.location.href = "https://cash.app/$RicoAmos10";
 }
 </script>
