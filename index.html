@@ -8,12 +8,23 @@
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <style>
-body{
+*{
 margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+html{
+scroll-behavior:smooth;
+}
+
+body{
 font-family:Arial,sans-serif;
-color:white;
 background:url('background.jpg') no-repeat center center fixed;
 background-size:cover;
+color:white;
+min-height:100vh;
+overflow-x:hidden;
 }
 
 body::before{
@@ -23,61 +34,170 @@ top:0;
 left:0;
 width:100%;
 height:100%;
-background:rgba(0,0,0,0.65);
+background:linear-gradient(
+to bottom,
+rgba(0,0,0,.75),
+rgba(0,0,0,.85)
+);
 z-index:-1;
 }
 
+/* NAVBAR */
 nav{
 position:fixed;
 top:0;
+left:0;
 width:100%;
-background:rgba(0,0,0,0.85);
 display:flex;
-justify-content:center;
-gap:20px;
-padding:12px;
-z-index:10;
+justify-content:space-between;
+align-items:center;
+padding:18px 40px;
+background:rgba(0,0,0,0.75);
+backdrop-filter:blur(10px);
+z-index:1000;
+border-bottom:1px solid rgba(255,255,255,0.08);
+}
+
+.logo{
+font-size:24px;
+font-weight:bold;
+letter-spacing:2px;
+color:gold;
+}
+
+.nav-links{
+display:flex;
+gap:25px;
 }
 
 nav a{
 color:white;
 text-decoration:none;
 font-size:14px;
+transition:.3s;
 }
 
-header{
-padding-top:80px;
+nav a:hover{
+color:gold;
+}
+
+/* HERO */
+.hero{
+height:90vh;
+display:flex;
+justify-content:center;
+align-items:center;
 text-align:center;
+padding:20px;
+}
+
+.hero-content{
+max-width:700px;
+}
+
+.hero h1{
+font-size:65px;
+margin-bottom:15px;
+letter-spacing:3px;
+}
+
+.hero p{
+font-size:18px;
+color:#d4d4d4;
+margin-bottom:30px;
+line-height:1.6;
+}
+
+.hero-btn{
+display:inline-block;
+padding:14px 30px;
+background:gold;
+color:black;
+font-weight:bold;
+border-radius:8px;
+text-decoration:none;
+transition:.3s;
+}
+
+.hero-btn:hover{
+transform:translateY(-3px);
+}
+
+/* SECTION TITLE */
+.section-title{
+text-align:center;
+font-size:40px;
+margin-bottom:40px;
+letter-spacing:2px;
+}
+
+/* PRODUCTS */
+.products-section{
+padding:80px 30px;
 }
 
 .products{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
-gap:20px;
-padding:20px;
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+gap:25px;
+max-width:1400px;
+margin:auto;
 }
 
 .product{
-background:rgba(0,0,0,0.75);
-padding:15px;
-border-radius:10px;
-text-align:center;
+background:rgba(20,20,20,0.85);
+border-radius:18px;
+overflow:hidden;
+transition:.35s;
+border:1px solid rgba(255,255,255,0.08);
+backdrop-filter:blur(8px);
+}
+
+.product:hover{
+transform:translateY(-8px);
+box-shadow:0 10px 30px rgba(0,0,0,.4);
 }
 
 .product img{
 width:100%;
-border-radius:10px;
+height:260px;
+object-fit:cover;
+display:block;
+}
+
+.product-info{
+padding:18px;
+text-align:center;
+}
+
+.product h3{
+font-size:20px;
+margin-bottom:10px;
+}
+
+.price{
+font-size:18px;
+color:gold;
+margin-bottom:15px;
+font-weight:bold;
 }
 
 .btn{
 background:gold;
 color:black;
-padding:10px;
-border-radius:5px;
-display:inline-block;
-margin-top:10px;
-cursor:pointer;
+padding:12px;
 border:none;
+border-radius:8px;
+font-weight:bold;
+cursor:pointer;
+width:100%;
+transition:.3s;
+font-size:15px;
+}
+
+.btn:hover{
+opacity:.9;
+transform:scale(1.02);
 }
 
 /* MODAL */
@@ -88,93 +208,222 @@ top:0;
 left:0;
 width:100%;
 height:100%;
-background:rgba(0,0,0,0.85);
-z-index:999;
+background:rgba(0,0,0,0.88);
+z-index:9999;
 }
 
 .modal-content{
-background:#111;
-width:85%;
-max-width:400px;
-margin:120px auto;
-padding:20px;
-border-radius:10px;
+background:#121212;
+width:90%;
+max-width:420px;
+margin:100px auto;
+padding:30px;
+border-radius:18px;
 text-align:center;
+border:1px solid rgba(255,255,255,0.08);
+animation:fadeIn .25s ease;
+}
+
+@keyframes fadeIn{
+from{
+opacity:0;
+transform:translateY(15px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+.modal-content h2{
+margin-bottom:20px;
+font-size:28px;
 }
 
 .modal-content input{
-width:90%;
-padding:10px;
-margin:8px 0;
+width:100%;
+padding:14px;
+margin:10px 0;
 border:none;
-border-radius:5px;
+border-radius:8px;
+background:#1e1e1e;
+color:white;
+font-size:15px;
+outline:none;
+}
+
+.modal-content input:focus{
+border:1px solid gold;
+}
+
+.modal-buttons{
+display:flex;
+gap:10px;
+margin-top:15px;
+}
+
+.modal-buttons button{
+flex:1;
+}
+
+/* FOOTER */
+footer{
+margin-top:60px;
+padding:35px 20px;
+text-align:center;
+background:rgba(0,0,0,0.65);
+border-top:1px solid rgba(255,255,255,0.06);
+}
+
+footer a{
+color:gold;
+text-decoration:none;
+}
+
+footer p{
+margin-top:10px;
+color:#aaa;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+
+nav{
+padding:16px 20px;
+}
+
+.logo{
+font-size:20px;
+}
+
+.nav-links{
+gap:15px;
+}
+
+.hero h1{
+font-size:42px;
+}
+
+.hero p{
+font-size:16px;
+}
+
+.section-title{
+font-size:30px;
+}
+
+.product img{
+height:220px;
+}
+
 }
 </style>
 </head>
 
 <body>
 
+<!-- NAVBAR -->
 <nav>
+
+<div class="logo">R&J RESELLS</div>
+
+<div class="nav-links">
 <a href="#">Home</a>
 <a href="#shop">Shop</a>
 <a href="https://www.tiktok.com/@r_j_resells">TikTok</a>
 <a href="#">Drops</a>
+</div>
+
 </nav>
 
-<header>
-<h1>R&J Resells</h1>
-<p>Authentic Designer. Exclusive Drops.</p>
-</header>
+<!-- HERO -->
+<section class="hero">
 
-<section id="shop" class="products">
+<div class="hero-content">
+
+<h1>R&J RESELLS</h1>
+
+<p>
+Authentic designer pieces, exclusive drops, and premium streetwear.
+Secure your next fit before it sells out.
+</p>
+
+<a href="#shop" class="hero-btn">SHOP NOW</a>
+
+</div>
+
+</section>
+
+<!-- PRODUCTS -->
+<section id="shop" class="products-section">
+
+<h2 class="section-title">LATEST DROPS</h2>
+
+<div class="products">
 
 <div class="product">
 <img src="niketech.jpg">
+<div class="product-info">
 <h3>Nike Ski Mask</h3>
-<p>$30</p>
-<div class="btn" data-product="Nike Ski Mask">Buy</div>
+<p class="price">$30</p>
+<div class="btn" data-product="Nike Ski Mask">Buy Now</div>
+</div>
 </div>
 
 <div class="product">
 <img src="bape.jpg">
+<div class="product-info">
 <h3>Bape Hoodie</h3>
-<p>$100</p>
-<div class="btn" data-product="Bape Hoodie">Buy</div>
+<p class="price">$100</p>
+<div class="btn" data-product="Bape Hoodie">Buy Now</div>
+</div>
 </div>
 
 <div class="product">
 <img src="chromeheartshirt.jpg">
+<div class="product-info">
 <h3>Chrome Hearts T-Shirt</h3>
-<p>$70</p>
-<div class="btn" data-product="Chrome Hearts T-Shirt">Buy</div>
+<p class="price">$50</p>
+<div class="btn" data-product="Chrome Hearts T-Shirt">Buy Now</div>
+</div>
 </div>
 
 <div class="product">
 <img src="chromehearts.jpg">
+<div class="product-info">
 <h3>Chrome Hearts Socks</h3>
-<p>$35</p>
-<div class="btn" data-product="Chrome Hearts Socks">Buy</div>
+<p class="price">$35</p>
+<div class="btn" data-product="Chrome Hearts Socks">Buy Now</div>
+</div>
 </div>
 
 <div class="product">
 <img src="bapeshirt.jpg">
+<div class="product-info">
 <h3>Bape T-Shirt</h3>
-<p>$60</p>
-<div class="btn" data-product="Bape T-Shirt">Buy</div>
+<p class="price">$50</p>
+<div class="btn" data-product="Bape T-Shirt">Buy Now</div>
+</div>
 </div>
 
 <div class="product">
 <img src="draco.jpg">
+<div class="product-info">
 <h3>Draco Slides</h3>
-<p>$60</p>
-<div class="btn" data-product="Draco Slides">Buy</div>
+<p class="price">$60</p>
+<div class="btn" data-product="Draco Slides">Buy Now</div>
+</div>
 </div>
 
 <div class="product">
 <img src="lvbean.jpg">
+<div class="product-info">
 <h3>Louis Vuitton Beanie</h3>
-<p>$50</p>
-<div class="btn" data-product="Louis Vuitton Beanie">Buy</div>
+<p class="price">$50</p>
+<div class="btn" data-product="Louis Vuitton Beanie">Buy Now</div>
+</div>
+</div>
+
 </div>
 
 </section>
@@ -190,23 +439,39 @@ border-radius:5px;
 <input id="email" placeholder="Email">
 <input id="address" placeholder="Address">
 
-<br><br>
+<div class="modal-buttons">
 
-<button class="btn" id="continueBtn">Continue to Payment</button>
+<button class="btn" id="continueBtn">
+Continue to Payment
+</button>
 
-<br><br>
-
-<button class="btn" id="closeBtn">Close</button>
+<button class="btn" id="closeBtn">
+Close
+</button>
 
 </div>
 
 </div>
 
-<div style="text-align:center;padding:20px;">
+</div>
+
+<!-- FOOTER -->
+<footer>
+
+<div>
 Contact:
-<a href="https://www.snapchat.com/add/ricoamos22">@ricoamos22</a> |
-<a href="https://www.snapchat.com/add/jeffreylovej">@jeffreylovej</a>
+<a href="https://www.snapchat.com/add/ricoamos22">
+@ricoamos22
+</a>
+|
+<a href="https://www.snapchat.com/add/jeffreylovej">
+@jeffreylovej
+</a>
 </div>
+
+<p>© 2026 R&J Resells. All Rights Reserved.</p>
+
+</footer>
 
 <script>
 const client = window.supabase.createClient(
@@ -224,19 +489,27 @@ const closeBtn = document.getElementById("closeBtn");
 
 /* BUY BUTTONS */
 document.querySelectorAll(".btn[data-product]").forEach(btn => {
+
 btn.addEventListener("click", () => {
+
 selectedProduct = btn.dataset.product;
+
 title.innerText = selectedProduct;
+
 modal.style.display = "block";
+
 });
+
 });
 
 /* CLOSE */
 closeBtn.addEventListener("click", () => {
+
 modal.style.display = "none";
+
 });
 
-/* CONTINUE → NOW SAVES TO SUPABASE */
+/* CONTINUE */
 continueBtn.addEventListener("click", async () => {
 
 let name = document.getElementById("name").value;
@@ -244,38 +517,38 @@ let email = document.getElementById("email").value;
 let address = document.getElementById("address").value;
 
 if(!name || !email || !address){
+
 alert("Fill all fields");
+
 return;
+
 }
 
 /* SAVE TO SUPABASE */
 const { error } = await client.from("orders").insert([{
+
 product: selectedProduct,
 name: name,
 email: email,
 address: address,
 status: "Pending",
 message: ""
+
 }]);
 
 if(error){
-console.log(error);
-alert("Order failed — check console");
+
+console.log("SUPABASE ERROR:", error);
+
+alert(error.message);
+
 return;
+
 }
 
 /* SEND TO CASHAPP */
 window.location.href = "https://cash.app/$RicoAmos10";
 
-});
-
-/* OPEN MODAL FIX */
-document.querySelectorAll(".btn[data-product]").forEach(btn => {
-btn.addEventListener("click", () => {
-selectedProduct = btn.dataset.product;
-title.innerText = selectedProduct;
-modal.style.display = "block";
-});
 });
 </script>
 
