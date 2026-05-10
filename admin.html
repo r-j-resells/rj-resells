@@ -196,7 +196,17 @@ loadOrders();
 loadOrders();
 
 /* auto refresh */
-setInterval(loadOrders, 5000);
+setInterval(() => {
+
+if(
+document.activeElement.tagName !== "TEXTAREA" &&
+document.activeElement.tagName !== "SELECT"
+){
+loadOrders();
+}
+
+}, 5000);
+
 </script>
 
 </body>
