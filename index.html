@@ -426,7 +426,13 @@ password
 if(error){
 
 document.getElementById("authMsg").innerText = error.message;
+
 return;
+
+}
+
+document.getElementById("authMsg").innerText =
+"Check your email to confirm your account.";
 
 }
 
