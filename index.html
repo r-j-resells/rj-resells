@@ -28,21 +28,20 @@ overflow-x:hidden;
 min-height:100vh;
 }
 
-/* DARK OVERLAY */
+/* OVERLAY */
 body::before{
 content:"";
 position:fixed;
 inset:0;
-background:
-linear-gradient(
+background:linear-gradient(
 to bottom,
 rgba(0,0,0,.72),
-rgba(0,0,0,.86)
+rgba(0,0,0,.88)
 );
 z-index:-2;
 }
 
-/* EXTRA GLOW */
+/* GLOW */
 body::after{
 content:"";
 position:fixed;
@@ -112,20 +111,24 @@ nav a:hover::after{
 width:100%;
 }
 
-/* TOP NOTICE */
+/* NOTICE BANNER */
 .notice-banner{
 position:fixed;
-top:110px !important;
-left:0;
-width:100%;
-padding:14px 15px;
-background:rgba(255,215,0,0.14);
-border-bottom:1px solid rgba(255,215,0,0.3);
+top:105px;
+left:50%;
+transform:translateX(-50%);
+width:92%;
+max-width:1000px;
+padding:14px 20px;
+background:rgba(255,215,0,0.12);
+border:1px solid rgba(255,215,0,0.18);
+border-radius:14px;
 text-align:center;
 font-size:13px;
 color:#f5d76e;
-backdrop-filter:blur(8px);
-z-index:9999;
+backdrop-filter:blur(10px);
+z-index:999;
+box-shadow:0 10px 30px rgba(0,0,0,.25);
 }
 
 /* HERO */
@@ -190,7 +193,7 @@ box-shadow:0 10px 30px rgba(255,215,0,.18);
 transform:translateY(-4px) scale(1.02);
 }
 
-/* SHOP SECTION */
+/* PRODUCTS */
 .products-section{
 padding:110px 35px;
 position:relative;
@@ -211,7 +214,6 @@ margin-bottom:55px;
 font-size:15px;
 }
 
-/* PRODUCT GRID */
 .products{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
@@ -220,7 +222,6 @@ max-width:1450px;
 margin:auto;
 }
 
-/* PRODUCT CARD */
 .product{
 background:rgba(20,20,20,.78);
 border:1px solid rgba(255,255,255,0.06);
@@ -229,18 +230,6 @@ overflow:hidden;
 backdrop-filter:blur(12px);
 transition:.4s;
 position:relative;
-}
-
-.product::before{
-content:"";
-position:absolute;
-inset:0;
-background:linear-gradient(
-180deg,
-rgba(255,255,255,.03),
-transparent
-);
-pointer-events:none;
 }
 
 .product:hover{
@@ -280,7 +269,6 @@ color:gold;
 margin-bottom:18px;
 }
 
-/* BUTTONS */
 .btn{
 width:100%;
 padding:14px;
@@ -323,9 +311,6 @@ border-radius:24px;
 text-align:center;
 border:1px solid rgba(255,255,255,0.08);
 animation:modalFade .25s ease;
-box-shadow:
-0 25px 60px rgba(0,0,0,.55),
-0 0 20px rgba(255,215,0,.08);
 }
 
 @keyframes modalFade{
@@ -354,12 +339,10 @@ border-radius:12px;
 color:white;
 font-size:15px;
 outline:none;
-transition:.3s;
 }
 
 .modal-content input:focus{
 border-color:gold;
-box-shadow:0 0 0 3px rgba(255,215,0,.08);
 }
 
 .modal-buttons{
@@ -368,7 +351,7 @@ gap:12px;
 margin-top:18px;
 }
 
-/* TRACKING SECTION */
+/* TRACK ORDER */
 .track-section{
 padding:90px 20px;
 text-align:center;
@@ -445,18 +428,14 @@ font-size:52px;
 font-size:16px;
 }
 
-.section-title{
-font-size:34px;
+.notice-banner{
+top:115px;
+width:94%;
+font-size:12px;
 }
 
 .product img{
 height:240px;
-}
-
-.notice-banner{
-top:70px;
-font-size:12px;
-padding:10px;
 }
 
 }
@@ -480,24 +459,10 @@ padding:10px;
 
 </nav>
 
-<div style="
-position:fixed;
-top:70px;
-left:0;
-width:100%;
-background:rgba(255,215,0,0.14);
-border-bottom:1px solid rgba(255,215,0,0.3);
-text-align:center;
-padding:10px 15px;
-font-size:13px;
-color:#f5d76e;
-backdrop-filter:blur(8px);
-z-index:999;
-">
-
+<!-- NOTICE -->
+<div class="notice-banner">
 When you buy an order, come back to the website and scroll down to
 <b>Track Order</b> and type in the email used in the order.
-
 </div>
 
 <!-- HERO -->
@@ -512,7 +477,9 @@ Authentic designer pieces, exclusive drops, and premium streetwear.
 Secure your next fit before it sells out.
 </p>
 
-<a href="#shop" class="hero-btn">SHOP NOW</a>
+<a href="#shop" class="hero-btn">
+SHOP NOW
+</a>
 
 </div>
 
@@ -522,6 +489,10 @@ Secure your next fit before it sells out.
 <section id="shop" class="products-section">
 
 <h2 class="section-title">LATEST DROPS</h2>
+
+<p class="section-sub">
+Luxury streetwear curated for exclusive buyers.
+</p>
 
 <div class="products">
 
@@ -619,24 +590,21 @@ Close
 
 </div>
 
-<section style="padding:60px 20px;text-align:center;">
+<!-- TRACK ORDER -->
+<section class="track-section">
 
-<h2 style="margin-bottom:20px;">Track Your Order</h2>
+<div class="track-box">
+
+<h2>Track Your Order</h2>
+
+<p>
+Enter the email used during checkout.
+</p>
 
 <input
 id="trackEmail"
 placeholder="Enter your email"
-style="
-padding:12px;
-width:300px;
-max-width:90%;
-border:none;
-border-radius:8px;
-margin-bottom:15px;
-"
 >
-
-<br>
 
 <button class="btn" onclick="trackOrder()">
 Track Order
@@ -646,11 +614,10 @@ Track Order
 id="trackingResult"
 style="
 margin-top:25px;
-max-width:500px;
-margin-left:auto;
-margin-right:auto;
 "
 ></div>
+
+</div>
 
 </section>
 
@@ -668,11 +635,14 @@ Contact:
 </a>
 </div>
 
-<p>© 2026 R&J Resells. All Rights Reserved.</p>
+<p>
+© 2026 R&J Resells. All Rights Reserved.
+</p>
 
 </footer>
 
 <script>
+
 const client = window.supabase.createClient(
 "https://fyzguhksswalbwoqatym.supabase.co",
 "sb_publishable_bqSCrrSbaWZ0DgYPj3pCTg_732i9dzN"
@@ -723,7 +693,6 @@ return;
 
 }
 
-/* SAVE TO SUPABASE */
 const { error } = await client.from("orders").insert([{
 
 product: selectedProduct,
@@ -745,11 +714,11 @@ return;
 
 }
 
-/* SEND TO CASHAPP */
 window.location.href = "https://cash.app/$RicoAmos10";
 
 });
 
+/* TRACK ORDER */
 async function trackOrder(){
 
 let email = document.getElementById("trackEmail").value;
@@ -791,15 +760,9 @@ border:1px solid rgba(255,255,255,.08);
 
 <h3>${order.product}</h3>
 
-<p>
-<b>Status:</b>
-${order.status}
-</p>
+<p><b>Status:</b> ${order.status}</p>
 
-<p>
-<b>Message:</b>
-${order.message || "No updates yet"}
-</p>
+<p><b>Message:</b> ${order.message || "No updates yet"}</p>
 
 </div>
 
