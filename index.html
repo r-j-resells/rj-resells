@@ -455,6 +455,41 @@ Close
 
 </div>
 
+<section style="padding:60px 20px;text-align:center;">
+
+<h2 style="margin-bottom:20px;">Track Your Order</h2>
+
+<input
+id="trackEmail"
+placeholder="Enter your email"
+style="
+padding:12px;
+width:300px;
+max-width:90%;
+border:none;
+border-radius:8px;
+margin-bottom:15px;
+"
+>
+
+<br>
+
+<button class="btn" onclick="trackOrder()">
+Track Order
+</button>
+
+<div
+id="trackingResult"
+style="
+margin-top:25px;
+max-width:500px;
+margin-left:auto;
+margin-right:auto;
+"
+></div>
+
+</section>
+
 <!-- FOOTER -->
 <footer>
 
@@ -550,6 +585,64 @@ return;
 window.location.href = "https://cash.app/$RicoAmos10";
 
 });
+
+async function trackOrder(){
+
+let email = document.getElementById("trackEmail").value;
+
+if(!email){
+
+alert("Enter your email");
+
+return;
+
+}
+
+const { data, error } = await client
+.from("orders")
+.select("*")
+.eq("email", email)
+.order("id", { ascending:false })
+.limit(1);
+
+if(error || !data.length){
+
+document.getElementById("trackingResult").innerHTML =
+"No order found.";
+
+return;
+
+}
+
+let order = data[0];
+
+document.getElementById("trackingResult").innerHTML = `
+
+<div style="
+background:rgba(20,20,20,.9);
+padding:20px;
+border-radius:15px;
+border:1px solid rgba(255,255,255,.08);
+">
+
+<h3>${order.product}</h3>
+
+<p>
+<b>Status:</b>
+${order.status}
+</p>
+
+<p>
+<b>Message:</b>
+${order.message || "No updates yet"}
+</p>
+
+</div>
+
+`;
+
+}
+
 </script>
 
 </body>
