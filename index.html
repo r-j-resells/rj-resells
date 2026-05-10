@@ -8,12 +8,19 @@
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <style>
-body{
+
+*{
 margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
 font-family:Arial,sans-serif;
 color:white;
 background:url('background.jpg') no-repeat center center fixed;
 background-size:cover;
+overflow-x:hidden;
 }
 
 body::before{
@@ -23,61 +30,112 @@ top:0;
 left:0;
 width:100%;
 height:100%;
-background:rgba(0,0,0,0.65);
+background:rgba(0,0,0,0.7);
 z-index:-1;
 }
 
+/* NAVBAR */
 nav{
 position:fixed;
 top:0;
+left:0;
 width:100%;
-background:rgba(0,0,0,0.85);
+background:rgba(0,0,0,0.88);
 display:flex;
 justify-content:center;
 gap:20px;
-padding:12px;
-z-index:10;
+padding:15px;
+z-index:1000;
+backdrop-filter:blur(10px);
 }
 
 nav a{
 color:white;
 text-decoration:none;
 font-size:14px;
+transition:.3s;
 }
 
+nav a:hover{
+color:gold;
+}
+
+/* HEADER */
 header{
-padding-top:80px;
+padding-top:120px;
 text-align:center;
+padding-bottom:40px;
 }
 
+header h1{
+font-size:60px;
+margin-bottom:10px;
+color:gold;
+}
+
+header p{
+color:#ccc;
+}
+
+/* PRODUCTS */
 .products{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
-gap:20px;
-padding:20px;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:25px;
+padding:30px;
+max-width:1400px;
+margin:auto;
 }
 
 .product{
-background:rgba(0,0,0,0.75);
+background:rgba(0,0,0,0.78);
 padding:15px;
-border-radius:10px;
+border-radius:18px;
 text-align:center;
+transition:.3s;
+border:1px solid rgba(255,255,255,0.06);
+}
+
+.product:hover{
+transform:translateY(-6px);
 }
 
 .product img{
 width:100%;
-border-radius:10px;
+height:260px;
+object-fit:cover;
+border-radius:14px;
 }
 
+.product h3{
+margin-top:15px;
+margin-bottom:10px;
+}
+
+.product p{
+color:gold;
+font-weight:bold;
+margin-bottom:10px;
+}
+
+/* BUTTON */
 .btn{
 background:gold;
 color:black;
-padding:10px;
-border-radius:5px;
+padding:12px;
+border-radius:8px;
 display:inline-block;
 margin-top:10px;
 cursor:pointer;
 border:none;
+font-weight:bold;
+width:100%;
+transition:.3s;
+}
+
+.btn:hover{
+opacity:.9;
+transform:scale(1.02);
 }
 
 /* MODAL */
@@ -88,44 +146,138 @@ top:0;
 left:0;
 width:100%;
 height:100%;
-background:rgba(0,0,0,0.85);
-z-index:999;
+background:rgba(0,0,0,0.88);
+z-index:9999;
 }
 
 .modal-content{
 background:#111;
-width:85%;
-max-width:400px;
-margin:120px auto;
-padding:20px;
-border-radius:10px;
+width:90%;
+max-width:420px;
+margin:100px auto;
+padding:25px;
+border-radius:18px;
 text-align:center;
 }
 
 .modal-content input{
-width:90%;
-padding:10px;
+width:100%;
+padding:12px;
 margin:8px 0;
 border:none;
-border-radius:5px;
+border-radius:8px;
+background:#1d1d1d;
+color:white;
 }
+
+/* LOGIN OVERLAY */
+#authGate{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.95);
+z-index:99999;
+display:flex;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+}
+
+.auth-box{
+background:#111;
+padding:30px;
+border-radius:18px;
+width:90%;
+max-width:400px;
+text-align:center;
+}
+
+.auth-box h1{
+color:gold;
+margin-bottom:20px;
+}
+
+.auth-box input{
+width:100%;
+padding:12px;
+margin:8px 0;
+border:none;
+border-radius:8px;
+background:#1d1d1d;
+color:white;
+}
+
+/* ORDERS */
+#orders{
+padding:80px 20px;
+}
+
+#orders h2{
+text-align:center;
+margin-bottom:20px;
+}
+
+.order-card{
+background:#111;
+padding:20px;
+border-radius:14px;
+margin:15px auto;
+max-width:500px;
+border:1px solid rgba(255,255,255,0.06);
+}
+
+footer{
+text-align:center;
+padding:40px 20px;
+color:#aaa;
+}
+
+footer a{
+color:gold;
+text-decoration:none;
+}
+
 </style>
 </head>
 
 <body>
 
+<!-- LOGIN SYSTEM -->
+<div id="authGate">
+
+<div class="auth-box">
+
+<h1>R&J Resells</h1>
+
+<input id="authEmail" placeholder="Email">
+
+<input id="authPassword" type="password" placeholder="Password">
+
+<button class="btn" onclick="signUp()">Sign Up</button>
+
+<button class="btn" onclick="signIn()">Login</button>
+
+<p id="authMsg" style="margin-top:15px;color:#aaa;font-size:13px;"></p>
+
+</div>
+
+</div>
+
+<!-- NAVBAR -->
 <nav>
 <a href="#">Home</a>
 <a href="#shop">Shop</a>
+<a href="#orders">Orders</a>
 <a href="https://www.tiktok.com/@r_j_resells">TikTok</a>
-<a href="#">Drops</a>
+<a href="#" onclick="logout()">Logout</a>
 </nav>
 
+<!-- HEADER -->
 <header>
 <h1>R&J Resells</h1>
 <p>Authentic Designer. Exclusive Drops.</p>
 </header>
 
+<!-- PRODUCTS -->
 <section id="shop" class="products">
 
 <div class="product">
@@ -187,17 +339,48 @@ border-radius:5px;
 <h2 id="productTitle"></h2>
 
 <input id="name" placeholder="Full Name">
+
 <input id="email" placeholder="Email">
+
 <input id="cashapp" placeholder="CashApp Name">
+
 <input id="address" placeholder="Address">
 
-<br><br>
+<button class="btn" id="continueBtn">
+Continue to Payment
+</button>
 
-<button class="btn" id="continueBtn">Continue to Payment</button>
-<button class="btn" id="closeBtn">Close</button>
+<button class="btn" id="closeBtn">
+Close
+</button>
 
 </div>
+
 </div>
+
+<!-- ORDERS -->
+<section id="orders">
+
+<h2>Your Orders</h2>
+
+<div id="ordersBox"></div>
+
+</section>
+
+<footer>
+
+Contact:
+<a href="https://www.snapchat.com/add/ricoamos22">
+@ricoamos22
+</a>
+
+|
+
+<a href="https://www.snapchat.com/add/jeffreylovej">
+@jeffreylovej
+</a>
+
+</footer>
 
 <script>
 
@@ -208,50 +391,197 @@ const client = window.supabase.createClient(
 
 let selectedProduct = "";
 
-/* OPEN MODAL */
-document.querySelectorAll(".btn[data-product]").forEach(btn=>{
-btn.onclick=()=>{
-selectedProduct=btn.dataset.product;
-document.getElementById("productTitle").innerText=selectedProduct;
-document.getElementById("modal").style.display="block";
+/* AUTH */
+async function checkAuth(){
+
+const { data } = await client.auth.getUser();
+
+if(data.user){
+
+document.getElementById("authGate").style.display = "none";
+
+loadOrders();
+
+}else{
+
+document.getElementById("authGate").style.display = "flex";
+
 }
+
+}
+
+checkAuth();
+
+async function signUp(){
+
+let email = document.getElementById("authEmail").value;
+
+let password = document.getElementById("authPassword").value;
+
+const { error } = await client.auth.signUp({
+email,
+password
+});
+
+if(error){
+
+document.getElementById("authMsg").innerText = error.message;
+return;
+
+}
+
+/* AUTO LOGIN */
+await client.auth.signInWithPassword({
+email,
+password
+});
+
+checkAuth();
+
+}
+
+async function signIn(){
+
+let email = document.getElementById("authEmail").value;
+
+let password = document.getElementById("authPassword").value;
+
+const { error } = await client.auth.signInWithPassword({
+email,
+password
+});
+
+if(error){
+
+document.getElementById("authMsg").innerText = error.message;
+return;
+
+}
+
+checkAuth();
+
+}
+
+async function logout(){
+
+await client.auth.signOut();
+
+location.reload();
+
+}
+
+/* BUY BUTTONS */
+document.querySelectorAll(".btn[data-product]").forEach(btn=>{
+
+btn.onclick=()=>{
+
+selectedProduct = btn.dataset.product;
+
+document.getElementById("productTitle").innerText = selectedProduct;
+
+document.getElementById("modal").style.display = "block";
+
+}
+
 });
 
 /* CLOSE */
 document.getElementById("closeBtn").onclick=()=>{
+
 document.getElementById("modal").style.display="none";
+
 };
 
 /* CONTINUE */
 document.getElementById("continueBtn").onclick=async()=>{
 
 let name=document.getElementById("name").value;
+
 let email=document.getElementById("email").value;
+
 let cashapp=document.getElementById("cashapp").value;
+
 let address=document.getElementById("address").value;
 
-if(!name||!email||!cashapp||!address){
+if(!name || !email || !cashapp || !address){
+
 alert("Fill all fields");
+
 return;
+
 }
 
-/* SAVE ORDER */
-const { data: userData } = await client.auth.getUser();
+const { data:userData } = await client.auth.getUser();
 
-await client.from("orders").insert([{
+const { error } = await client.from("orders").insert([{
+
 product:selectedProduct,
-name,
-email,
-cashapp,
-address,
+name:name,
+email:email,
+cashapp:cashapp,
+address:address,
 status:"Pending",
 message:"",
-user_id:userData.user?.id || null
+user_id:userData.user.id
+
 }]);
 
-window.location.href="https://cash.app/$RicoAmos10";
+if(error){
+
+alert(error.message);
+
+return;
+
+}
+
+window.location.href = "https://cash.app/$RicoAmos10";
 
 };
+
+/* LOAD ORDERS */
+async function loadOrders(){
+
+const { data:userData } = await client.auth.getUser();
+
+if(!userData.user) return;
+
+const { data } = await client
+.from("orders")
+.select("*")
+.eq("user_id", userData.user.id)
+.order("id",{ascending:false});
+
+let box = document.getElementById("ordersBox");
+
+box.innerHTML = "";
+
+data.forEach(order=>{
+
+box.innerHTML += `
+
+<div class="order-card">
+
+<h3>${order.product}</h3>
+
+<p><b>Status:</b> ${order.status}</p>
+
+<p><b>Message:</b> ${order.message || "No updates yet"}</p>
+
+<p><b>Name:</b> ${order.name}</p>
+
+<p><b>Email:</b> ${order.email}</p>
+
+<p><b>CashApp:</b> ${order.cashapp}</p>
+
+<p><b>Address:</b> ${order.address}</p>
+
+</div>
+
+`;
+
+});
+
+}
 
 </script>
 
