@@ -151,10 +151,13 @@ container.innerHTML += `
 <span class="badge ${order.status}">${order.status}</span>
 
 <select id="status-${order.id}">
-<option>Pending</option>
-<option>Confirmed</option>
-<option>Shipped</option>
-<option>Delivered</option>
+<option value="Pending" ${order.status==="Pending"?"selected":""}>Pending</option>
+
+<option value="Confirmed" ${order.status==="Confirmed"?"selected":""}>Confirmed</option>
+
+<option value="Shipped" ${order.status==="Shipped"?"selected":""}>Shipped</option>
+
+<option value="Delivered" ${order.status==="Delivered"?"selected":""}>Delivered</option>
 </select>
 
 <textarea id="msg-${order.id}" placeholder="Message">${order.message || ""}</textarea>
