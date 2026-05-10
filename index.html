@@ -8,7 +8,6 @@
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <style>
-/* ===== YOUR ORIGINAL STYLE (UNCHANGED) ===== */
 body{
 margin:0;
 font-family:Arial,sans-serif;
@@ -115,13 +114,11 @@ border-radius:5px;
 
 <body>
 
-<!-- NAVBAR (ADDED LOGIN + ORDERS) -->
 <nav>
 <a href="#">Home</a>
 <a href="#shop">Shop</a>
-<a href="#orders">Orders</a>
-<a href="#" id="loginBtn">Login</a>
-<a href="#" id="logoutBtn" style="display:none;">Logout</a>
+<a href="https://www.tiktok.com/@r_j_resells">TikTok</a>
+<a href="#">Drops</a>
 </nav>
 
 <header>
@@ -182,8 +179,9 @@ border-radius:5px;
 
 </section>
 
-<!-- CHECKOUT MODAL (ADDED CASHAPP FIELD) -->
+<!-- CHECKOUT MODAL -->
 <div id="modal">
+
 <div class="modal-content">
 
 <h2 id="productTitle"></h2>
@@ -201,30 +199,6 @@ border-radius:5px;
 </div>
 </div>
 
-<!-- LOGIN MODAL -->
-<div id="loginModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;">
-<div style="background:#111;width:90%;max-width:400px;margin:120px auto;padding:20px;border-radius:10px;text-align:center;">
-
-<h2>Login / Signup</h2>
-
-<input id="authEmail" placeholder="Email">
-<input id="authPassword" type="password" placeholder="Password">
-
-<br><br>
-
-<button class="btn" id="signupBtn">Sign Up</button>
-<button class="btn" id="signinBtn">Login</button>
-<button class="btn" id="closeLogin">Close</button>
-
-</div>
-</div>
-
-<!-- ORDERS -->
-<section id="orders" style="padding:50px;">
-<h2>Your Orders</h2>
-<div id="ordersBox"></div>
-</section>
-
 <script>
 
 const client = window.supabase.createClient(
@@ -234,67 +208,21 @@ const client = window.supabase.createClient(
 
 let selectedProduct = "";
 
-/* MODAL */
-const modal = document.getElementById("modal");
-const title = document.getElementById("productTitle");
-
+/* OPEN MODAL */
 document.querySelectorAll(".btn[data-product]").forEach(btn=>{
 btn.onclick=()=>{
 selectedProduct=btn.dataset.product;
-title.innerText=selectedProduct;
-modal.style.display="block";
+document.getElementById("productTitle").innerText=selectedProduct;
+document.getElementById("modal").style.display="block";
 }
 });
 
+/* CLOSE */
 document.getElementById("closeBtn").onclick=()=>{
-modal.style.display="none";
-}
-
-/* LOGIN SYSTEM */
-const loginModal=document.getElementById("loginModal");
-
-document.getElementById("loginBtn").onclick=()=>loginModal.style.display="block";
-document.getElementById("closeLogin").onclick=()=>loginModal.style.display="none";
-
-document.getElementById("signupBtn").onclick=async()=>{
-let email=document.getElementById("authEmail").value;
-let password=document.getElementById("authPassword").value;
-await client.auth.signUp({email,password});
-alert("Check email to confirm");
+document.getElementById("modal").style.display="none";
 };
 
-document.getElementById("signinBtn").onclick=async()=>{
-let email=document.getElementById("authEmail").value;
-let password=document.getElementById("authPassword").value;
-
-const {data,error}=await client.auth.signInWithPassword({email,password});
-if(error)return alert(error.message);
-
-loginModal.style.display="none";
-checkUser();
-loadOrders();
-};
-
-document.getElementById("logoutBtn").onclick=async()=>{
-await client.auth.signOut();
-checkUser();
-};
-
-/* CHECK USER */
-async function checkUser(){
-const {data}=await client.auth.getUser();
-
-if(data.user){
-document.getElementById("loginBtn").style.display="none";
-document.getElementById("logoutBtn").style.display="inline";
-}else{
-document.getElementById("loginBtn").style.display="inline";
-document.getElementById("logoutBtn").style.display="none";
-}
-}
-checkUser();
-
-/* CONTINUE TO PAYMENT (NOW SAVES USER ID) */
+/* CONTINUE */
 document.getElementById("continueBtn").onclick=async()=>{
 
 let name=document.getElementById("name").value;
@@ -302,12 +230,13 @@ let email=document.getElementById("email").value;
 let cashapp=document.getElementById("cashapp").value;
 let address=document.getElementById("address").value;
 
-const {data:userData}=await client.auth.getUser();
-
-if(!userData.user){
-alert("You must login first");
+if(!name||!email||!cashapp||!address){
+alert("Fill all fields");
 return;
 }
+
+/* SAVE ORDER */
+const { data: userData } = await client.auth.getUser();
 
 await client.from("orders").insert([{
 product:selectedProduct,
@@ -317,39 +246,12 @@ cashapp,
 address,
 status:"Pending",
 message:"",
-user_id:userData.user.id
+user_id:userData.user?.id || null
 }]);
 
 window.location.href="https://cash.app/$RicoAmos10";
+
 };
-
-/* LOAD ORDERS */
-async function loadOrders(){
-
-const {data:userData}=await client.auth.getUser();
-
-if(!userData.user)return;
-
-const {data}=await client
-.from("orders")
-.select("*")
-.eq("user_id",userData.user.id);
-
-let box=document.getElementById("ordersBox");
-box.innerHTML="";
-
-data.forEach(o=>{
-box.innerHTML+=`
-<div style="background:#111;padding:15px;margin:10px;border-radius:10px;">
-<h3>${o.product}</h3>
-<p>Status: ${o.status}</p>
-<p>Message: ${o.message||"None"}</p>
-</div>
-`;
-});
-}
-
-loadOrders();
 
 </script>
 
