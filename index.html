@@ -8,12 +8,17 @@
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <style>
+*{
+box-sizing:border-box;
+}
+
 body{
 margin:0;
 font-family:Arial,sans-serif;
 color:white;
 background:url('background.jpg') no-repeat center center fixed;
 background-size:cover;
+overflow-x:hidden;
 }
 
 body::before{
@@ -23,37 +28,49 @@ top:0;
 left:0;
 width:100%;
 height:100%;
-background:rgba(0,0,0,0.65);
+background:linear-gradient(rgba(0,0,0,0.72),rgba(0,0,0,0.82));
 z-index:-1;
 }
 
 nav{
 position:fixed;
 top:0;
+left:0;
 width:100%;
-background:rgba(0,0,0,0.85);
+background:rgba(0,0,0,0.82);
 display:flex;
 justify-content:center;
-gap:20px;
-padding:12px;
-z-index:10;
+gap:24px;
+padding:16px;
+z-index:1000;
+backdrop-filter:blur(12px);
+border-bottom:1px solid rgba(255,255,255,0.05);
 }
 
 nav a{
 color:white;
 text-decoration:none;
 font-size:14px;
+font-weight:bold;
+transition:.25s;
+}
+
+nav a:hover{
+color:gold;
 }
 
 header{
-padding-top:120px;
+padding-top:140px;
 text-align:center;
+padding-bottom:30px;
 }
 
 header h1{
-font-size:52px;
+font-size:64px;
 color:gold;
-margin-bottom:10px;
+margin-bottom:12px;
+letter-spacing:1px;
+text-shadow:0 0 20px rgba(255,215,0,0.25);
 }
 
 header p{
@@ -61,41 +78,93 @@ font-size:18px;
 color:#ddd;
 }
 
+.notice{
+background:linear-gradient(90deg,gold,#ffcc00);
+color:black;
+text-align:center;
+padding:12px;
+font-size:13px;
+font-weight:bold;
+position:sticky;
+top:60px;
+z-index:9;
+box-shadow:0 4px 14px rgba(0,0,0,0.25);
+}
+
 .products{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
-gap:20px;
-padding:20px;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:24px;
+padding:30px;
+max-width:1400px;
+margin:auto;
 }
 
 .product{
-background:rgba(0,0,0,0.75);
-padding:15px;
-border-radius:14px;
+background:rgba(15,15,15,0.88);
+padding:16px;
+border-radius:22px;
 text-align:center;
 transition:.3s;
+border:1px solid rgba(255,255,255,0.05);
+backdrop-filter:blur(8px);
+position:relative;
+overflow:hidden;
+}
+
+.product::before{
+content:"";
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:4px;
+background:linear-gradient(90deg,gold,#ff9900);
 }
 
 .product:hover{
-transform:translateY(-5px);
+transform:translateY(-8px);
+box-shadow:0 12px 28px rgba(0,0,0,0.35);
 }
 
 .product img{
 width:100%;
-border-radius:10px;
+height:250px;
+object-fit:cover;
+border-radius:16px;
+}
+
+.product h3{
+margin-top:16px;
+margin-bottom:10px;
+font-size:22px;
+}
+
+.product p{
+color:gold;
+font-weight:bold;
+font-size:18px;
+margin-bottom:10px;
 }
 
 .btn{
-background:gold;
+background:linear-gradient(135deg,gold,#ffcc00);
 color:black;
-padding:12px;
-border-radius:5px;
+padding:14px;
+border-radius:12px;
 display:block;
 width:100%;
 margin-top:10px;
 cursor:pointer;
 border:none;
 font-weight:bold;
+font-size:15px;
+transition:.25s;
+}
+
+.btn:hover{
+transform:translateY(-2px);
+box-shadow:0 10px 20px rgba(255,215,0,0.22);
 }
 
 #modal{
@@ -105,78 +174,151 @@ top:0;
 left:0;
 width:100%;
 height:100%;
-background:rgba(0,0,0,0.85);
-z-index:999;
+background:rgba(0,0,0,0.9);
+z-index:9999;
+backdrop-filter:blur(6px);
 }
 
 .modal-content{
 background:#111;
-width:85%;
-max-width:400px;
-margin:120px auto;
-padding:20px;
-border-radius:10px;
+width:90%;
+max-width:430px;
+margin:90px auto;
+padding:28px;
+border-radius:24px;
 text-align:center;
+border:1px solid rgba(255,255,255,0.06);
+}
+
+.modal-content h2{
+margin-bottom:18px;
+color:gold;
 }
 
 .modal-content input{
-width:90%;
-padding:10px;
-margin:8px 0;
+width:100%;
+padding:14px;
+margin:10px 0;
 border:none;
-border-radius:5px;
+border-radius:12px;
 background:#1b1b1b;
 color:white;
+font-size:14px;
+outline:none;
+border:1px solid rgba(255,255,255,0.05);
+}
+
+.modal-content input:focus{
+border:1px solid gold;
 }
 
 #ordersSection{
-padding:40px 20px;
+padding:50px 20px;
+max-width:900px;
+margin:auto;
+}
+
+#ordersSection h2{
+text-align:center;
+font-size:36px;
+margin-bottom:25px;
+color:gold;
 }
 
 .orderCard{
 background:#111;
-padding:15px;
-border-radius:10px;
-margin-bottom:15px;
+padding:22px;
+border-radius:18px;
+margin-bottom:18px;
+border:1px solid rgba(255,255,255,0.05);
+box-shadow:0 8px 20px rgba(0,0,0,0.2);
+}
+
+.orderCard h3{
+color:gold;
+margin-bottom:12px;
+}
+
+.orderCard p{
+line-height:1.5;
+color:#ddd;
 }
 
 .authScreen{
 position:fixed;
 inset:0;
-background:#000;
+background:rgba(0,0,0,0.95);
 display:flex;
 align-items:center;
 justify-content:center;
 z-index:99999;
+backdrop-filter:blur(10px);
 }
 
 .authBox{
 background:#111;
-padding:30px;
-border-radius:12px;
+padding:34px;
+border-radius:24px;
 width:90%;
-max-width:350px;
+max-width:390px;
 text-align:center;
+border:1px solid rgba(255,255,255,0.05);
+box-shadow:0 15px 40px rgba(0,0,0,0.45);
+}
+
+.authBox h1{
+font-size:42px;
+margin-bottom:18px;
 }
 
 .authBox input{
 width:100%;
-padding:12px;
-margin:8px 0;
+padding:14px;
+margin:10px 0;
 border:none;
-border-radius:6px;
+border-radius:12px;
 background:#1b1b1b;
 color:white;
+font-size:14px;
+outline:none;
+}
+
+.authBox input:focus{
+border:1px solid gold;
 }
 
 footer{
 text-align:center;
-padding:20px;
+padding:30px;
+color:#ccc;
 }
 
 footer a{
 color:gold;
 text-decoration:none;
+font-weight:bold;
+}
+
+@media(max-width:700px){
+
+header h1{
+font-size:46px;
+}
+
+.products{
+padding:20px;
+gap:18px;
+}
+
+.product img{
+height:220px;
+}
+
+nav{
+gap:14px;
+font-size:12px;
+}
+
 }
 </style>
 </head>
@@ -205,7 +347,7 @@ text-decoration:none;
 </nav>
 
 <div class="notice">
-When you buy an order come back to the website and scroll down to Orders.
+When you buy an order come back to the website and scroll down to Track Orders.
 </div>
 
 <header>
@@ -288,7 +430,7 @@ When you buy an order come back to the website and scroll down to Orders.
 </div>
 
 <section id="ordersSection">
-<h2 style="text-align:center;">Orders</h2>
+<h2 style="text-align:center;">Track Orders</h2>
 <div id="orders"></div>
 </section>
 
@@ -408,7 +550,7 @@ alert("Order failed — check console");
 return;
 }
 
-window.location.href = "https://cash.app/$Jeffreybhd";
+window.location.href = "https://cash.app/$RicoAmos10";
 
 });
 
