@@ -8,6 +8,16 @@
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <style>
+
+body{
+margin:0;
+font-family:Arial;
+background:#0b0b0b;
+color:white;
+padding:20px;
+}
+
+/* ADMIN LOGIN OVERLAY */
 #adminLock{
 position:fixed;
 inset:0;
@@ -27,6 +37,8 @@ margin:10px;
 width:250px;
 border:none;
 border-radius:8px;
+background:#111;
+color:white;
 }
 
 #adminLock button{
@@ -36,91 +48,7 @@ border:none;
 border-radius:8px;
 cursor:pointer;
 font-weight:bold;
-}
-</style>
-
-<div id="adminLock">
-
-<h1 style="color:gold;">Admin Login</h1>
-
-<input id="adminEmail" placeholder="Email">
-
-<input id="adminPassword" type="password" placeholder="Password">
-
-<button onclick="adminLogin()">Login</button>
-
-<p id="adminMsg"></p>
-
-</div>
-
-const client = window.supabase.createClient(
-
-const ADMIN_UID = "dce7c480-6575-4f3e-a554-097c180ba0be";
-
-/* CHECK ADMIN */
-async function checkAdmin(){
-
-const { data } = await client.auth.getUser();
-
-if(!data.user){
-
-document.getElementById("adminLock").style.display = "flex";
-
-return;
-
-}
-
-if(data.user.id !== ADMIN_UID){
-
-document.body.innerHTML = `
-<h1 style="color:red;text-align:center;margin-top:100px;">
-Access Denied
-</h1>
-`;
-
-return;
-
-}
-
-document.getElementById("adminLock").style.display = "none";
-
-loadOrders();
-
-}
-
-/* LOGIN */
-async function adminLogin(){
-
-let email = document.getElementById("adminEmail").value;
-
-let password = document.getElementById("adminPassword").value;
-
-const { error } = await client.auth.signInWithPassword({
-email,
-password
-});
-
-if(error){
-
-document.getElementById("adminMsg").innerText = error.message;
-
-return;
-
-}
-
-checkAdmin();
-
-}
-
-checkAdmin();
-
-<style>
-body{
-margin:0;
-font-family:Arial;
-background:#0b0b0b;
-color:white;
-padding:20px;
+width:250px;
 }
 
 h1{
@@ -164,10 +92,23 @@ display:inline-block;
 margin-top:5px;
 }
 
-.Pending{background:gold;color:black;}
-.Confirmed{background:#2196f3;}
-.Shipped{background:orange;color:black;}
-.Delivered{background:#00c853;}
+.Pending{
+background:gold;
+color:black;
+}
+
+.Confirmed{
+background:#2196f3;
+}
+
+.Shipped{
+background:orange;
+color:black;
+}
+
+.Delivered{
+background:#00c853;
+}
 
 input, textarea, select{
 width:100%;
@@ -189,14 +130,31 @@ background:gold;
 cursor:pointer;
 font-weight:bold;
 }
+
 </style>
 </head>
 
 <body>
 
+<!-- ADMIN LOGIN -->
+<div id="adminLock">
+
+<h1 style="color:gold;">Admin Login</h1>
+
+<input id="adminEmail" placeholder="Email">
+
+<input id="adminPassword" type="password" placeholder="Password">
+
+<button id="adminLoginBtn">Login</button>
+
+<p id="adminMsg"></p>
+
+</div>
+
 <h1>R&J Admin Dashboard</h1>
 
 <div class="stats">
+
 <div class="card">
 <h3>Total</h3>
 <p id="total">0</p>
@@ -211,16 +169,79 @@ font-weight:bold;
 <h3>Shipped</h3>
 <p id="shipped">0</p>
 </div>
+
 </div>
 
 <div id="orders" class="grid"></div>
 
 <script>
+
 const client = window.supabase.createClient(
 "https://fyzguhksswalbwoqatym.supabase.co",
 "sb_publishable_bqSCrrSbaWZ0DgYPj3pCTg_732i9dzN"
 );
 
+/* YOUR ADMIN USER ID */
+const ADMIN_UID = "dce7c480-6575-4f3e-a554-097c180ba0be";
+
+/* LOGIN BUTTON */
+document.getElementById("adminLoginBtn").onclick = async () => {
+
+let email = document.getElementById("adminEmail").value;
+
+let password = document.getElementById("adminPassword").value;
+
+const { error } = await client.auth.signInWithPassword({
+email,
+password
+});
+
+if(error){
+
+document.getElementById("adminMsg").innerText = error.message;
+
+return;
+
+}
+
+checkAdmin();
+
+};
+
+/* CHECK ADMIN */
+async function checkAdmin(){
+
+const { data } = await client.auth.getUser();
+
+if(!data.user){
+
+document.getElementById("adminLock").style.display = "flex";
+
+return;
+
+}
+
+/* NOT ADMIN */
+if(data.user.id !== ADMIN_UID){
+
+document.body.innerHTML = `
+<h1 style="color:red;text-align:center;margin-top:100px;">
+Access Denied
+</h1>
+`;
+
+return;
+
+}
+
+/* ADMIN SUCCESS */
+document.getElementById("adminLock").style.display = "none";
+
+loadOrders();
+
+}
+
+/* LOAD ORDERS */
 async function loadOrders(){
 
 const { data, error } = await client
@@ -234,7 +255,9 @@ return;
 }
 
 let total = data.length;
+
 let pending = data.filter(o => o.status === "Pending").length;
+
 let shipped = data.filter(o => o.status === "Shipped").length;
 
 document.getElementById("total").innerText = total;
@@ -242,6 +265,7 @@ document.getElementById("pending").innerText = pending;
 document.getElementById("shipped").innerText = shipped;
 
 let container = document.getElementById("orders");
+
 container.innerHTML = "";
 
 data.forEach(order => {
@@ -252,24 +276,47 @@ container.innerHTML += `
 <h3>${order.product}</h3>
 
 <p><b>Name:</b> ${order.name}</p>
+
 <p><b>Email:</b> ${order.email}</p>
+
+<p><b>CashApp:</b> ${order.cashapp || "N/A"}</p>
+
 <p><b>Address:</b> ${order.address}</p>
 
-<span class="badge ${order.status}">${order.status}</span>
+<span class="badge ${order.status}">
+${order.status}
+</span>
 
 <select id="status-${order.id}">
-<option value="Pending" ${order.status==="Pending"?"selected":""}>Pending</option>
 
-<option value="Confirmed" ${order.status==="Confirmed"?"selected":""}>Confirmed</option>
+<option value="Pending"
+${order.status==="Pending"?"selected":""}>
+Pending
+</option>
 
-<option value="Shipped" ${order.status==="Shipped"?"selected":""}>Shipped</option>
+<option value="Confirmed"
+${order.status==="Confirmed"?"selected":""}>
+Confirmed
+</option>
 
-<option value="Delivered" ${order.status==="Delivered"?"selected":""}>Delivered</option>
+<option value="Shipped"
+${order.status==="Shipped"?"selected":""}>
+Shipped
+</option>
+
+<option value="Delivered"
+${order.status==="Delivered"?"selected":""}>
+Delivered
+</option>
+
 </select>
 
-<textarea id="msg-${order.id}" placeholder="Message">${order.message || ""}</textarea>
+<textarea id="msg-${order.id}"
+placeholder="Message">${order.message || ""}</textarea>
 
-<button onclick="updateOrder(${order.id})">Update Order</button>
+<button onclick="updateOrder(${order.id})">
+Update Order
+</button>
 
 </div>
 `;
@@ -278,9 +325,11 @@ container.innerHTML += `
 
 }
 
+/* UPDATE ORDER */
 async function updateOrder(id){
 
 let status = document.getElementById(`status-${id}`).value;
+
 let message = document.getElementById(`msg-${id}`).value;
 
 const { error } = await client
@@ -292,15 +341,18 @@ message: message
 .eq("id", id);
 
 if(error){
+
 console.log("UPDATE ERROR:", error);
+
 return;
-}
-
 
 }
 
+loadOrders();
 
-/* auto refresh */
+}
+
+/* AUTO REFRESH */
 setInterval(() => {
 
 if(
@@ -311,6 +363,9 @@ loadOrders();
 }
 
 }, 5000);
+
+/* START */
+checkAdmin();
 
 </script>
 
