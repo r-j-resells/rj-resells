@@ -8,6 +8,113 @@
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <style>
+#adminLock{
+position:fixed;
+inset:0;
+background:#000;
+z-index:999999;
+display:flex;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+color:white;
+font-family:Arial;
+}
+
+#adminLock input{
+padding:12px;
+margin:10px;
+width:250px;
+border:none;
+border-radius:8px;
+}
+
+#adminLock button{
+padding:12px 20px;
+background:gold;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-weight:bold;
+}
+</style>
+
+<div id="adminLock">
+
+<h1 style="color:gold;">Admin Login</h1>
+
+<input id="adminEmail" placeholder="Email">
+
+<input id="adminPassword" type="password" placeholder="Password">
+
+<button onclick="adminLogin()">Login</button>
+
+<p id="adminMsg"></p>
+
+</div>
+
+const client = window.supabase.createClient(
+
+const ADMIN_UID = "dce7c480-6575-4f3e-a554-097c180ba0be";
+
+/* CHECK ADMIN */
+async function checkAdmin(){
+
+const { data } = await client.auth.getUser();
+
+if(!data.user){
+
+document.getElementById("adminLock").style.display = "flex";
+
+return;
+
+}
+
+if(data.user.id !== ADMIN_UID){
+
+document.body.innerHTML = `
+<h1 style="color:red;text-align:center;margin-top:100px;">
+Access Denied
+</h1>
+`;
+
+return;
+
+}
+
+document.getElementById("adminLock").style.display = "none";
+
+loadOrders();
+
+}
+
+/* LOGIN */
+async function adminLogin(){
+
+let email = document.getElementById("adminEmail").value;
+
+let password = document.getElementById("adminPassword").value;
+
+const { error } = await client.auth.signInWithPassword({
+email,
+password
+});
+
+if(error){
+
+document.getElementById("adminMsg").innerText = error.message;
+
+return;
+
+}
+
+checkAdmin();
+
+}
+
+checkAdmin();
+
+<style>
 body{
 margin:0;
 font-family:Arial;
