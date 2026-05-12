@@ -307,6 +307,57 @@ transition:.25s;
 footer a:hover{
 color:var(--gold);
 }
+
+@media(max-width:900px){
+
+header h1{
+font-size:58px;
+}
+
+.products{
+grid-template-columns:1fr 1fr;
+padding:20px;
+}
+
+.product img{
+height:280px;
+}
+
+}
+
+@media(max-width:600px){
+
+nav{
+gap:18px;
+padding:16px;
+}
+
+nav a{
+font-size:11px;
+}
+
+.products{
+grid-template-columns:1fr;
+}
+
+header{
+padding-top:140px;
+}
+
+header h1{
+font-size:44px;
+}
+
+header p{
+font-size:15px;
+padding:0 20px;
+}
+
+.product img{
+height:320px;
+}
+
+}
 </style>
 </head>
 
@@ -333,18 +384,250 @@ color:var(--gold);
 <a href="https://www.tiktok.com/@r_j_resells">TikTok</a>
 </nav>
 
-<header>
-
-<!-- ONLY CHANGE: YOUR LOGO INSERTED -->
-<div class="logoWrap">
-<img src="/mnt/data/FB54707B-7488-4479-94C5-5BF688BE337E.jpeg"
-alt="R&J Resells Logo"
-style="width:160px;display:block;margin:0 auto 18px;border-radius:14px;">
+<div class="notice">
+When you buy an order come back to the website and scroll down to Track Orders.
 </div>
 
+<header>
+<div class="logoWrap">
+
+<!-- ONLY CHANGE: FIXED LOGO PATH -->
+<img src="logo.png" alt="R&J Resells Logo" style="width:160px;display:block;margin:0 auto 18px;border-radius:14px;">
+
+</div>
 <h1>R&J Resells</h1>
 <p>Authentic Designer. Exclusive Drops.</p>
 </header>
+
+<section id="shop" class="products">
+
+<div class="product">
+<img src="niketech.jpg">
+<h3>Nike Ski Mask</h3>
+<p>$30</p>
+<div class="btn" data-product="Nike Ski Mask">Buy</div>
+</div>
+
+<div class="product">
+<img src="bape.jpg">
+<h3>Bape Hoodie</h3>
+<p>$100</p>
+<div class="btn" data-product="Bape Hoodie">Buy</div>
+</div>
+
+<div class="product">
+<img src="chromeheartshirt.jpg">
+<h3>Chrome Hearts T-Shirt</h3>
+<p>$50</p>
+<div class="btn" data-product="Chrome Hearts T-Shirt">Buy</div>
+</div>
+
+<div class="product">
+<img src="chromehearts.jpg">
+<h3>Chrome Hearts Socks</h3>
+<p>$35</p>
+<div class="btn" data-product="Chrome Hearts Socks">Buy</div>
+</div>
+
+<div class="product">
+<img src="bapeshirt.jpg">
+<h3>Bape T-Shirt</h3>
+<p>$50</p>
+<div class="btn" data-product="Bape T-Shirt">Buy</div>
+</div>
+
+<div class="product">
+<img src="draco.jpg">
+<h3>Draco Slides</h3>
+<p>$60</p>
+<div class="btn" data-product="Draco Slides">Buy</div>
+</div>
+
+<div class="product">
+<img src="lvbean.jpg">
+<h3>Louis Vuitton Beanie</h3>
+<p>$50</p>
+<div class="btn" data-product="Louis Vuitton Beanie">Buy</div>
+</div>
+
+</section>
+
+<div id="modal">
+<div class="modal-content">
+
+<h2 id="productTitle"></h2>
+
+<input id="name" placeholder="Full Name">
+<input id="email" placeholder="Email">
+<input id="cashapp" placeholder="CashApp Name">
+<input id="address" placeholder="Address">
+
+<br><br>
+
+<button class="btn" id="continueBtn">Continue to Payment</button>
+
+<br><br>
+
+<button class="btn" id="closeBtn">Close</button>
+
+</div>
+</div>
+
+<section id="ordersSection">
+<h2 style="text-align:center;">Track Orders</h2>
+<div id="orders"></div>
+</section>
+
+<footer>
+Contact:
+<a href="https://www.snapchat.com/add/ricoamos22">@ricoamos22</a> |
+<a href="https://www.snapchat.com/add/jeffreylovej">@jeffreylovej</a>
+</footer>
+
+<script>
+const client = window.supabase.createClient(
+"https://fyzguhksswalbwoqatym.supabase.co",
+"sb_publishable_bqSCrrSbaWZ0DgYPj3pCTg_732i9dzN"
+);
+
+let selectedProduct = "";
+
+async function checkAuth(){
+const { data } = await client.auth.getUser();
+
+if(data.user){
+document.getElementById("authGate").style.display = "none";
+loadOrders();
+}else{
+document.getElementById("authGate").style.display = "flex";
+}
+}
+
+checkAuth();
+
+async function signUp(){
+
+let email = document.getElementById("authEmail").value;
+let password = document.getElementById("authPassword").value;
+
+const { error } = await client.auth.signUp({
+email,
+password
+});
+
+if(error){
+document.getElementById("authMsg").innerText = error.message;
+return;
+}
+
+await client.auth.signInWithPassword({
+email,
+password
+});
+
+checkAuth();
+}
+
+async function signIn(){
+
+let email = document.getElementById("authEmail").value;
+let password = document.getElementById("authPassword").value;
+
+const { error } = await client.auth.signInWithPassword({
+email,
+password
+});
+
+if(error){
+document.getElementById("authMsg").innerText = error.message;
+return;
+}
+
+checkAuth();
+}
+
+const modal = document.getElementById("modal");
+const title = document.getElementById("productTitle");
+const continueBtn = document.getElementById("continueBtn");
+const closeBtn = document.getElementById("closeBtn");
+
+document.querySelectorAll(".btn[data-product]").forEach(btn => {
+btn.addEventListener("click", () => {
+selectedProduct = btn.dataset.product;
+title.innerText = selectedProduct;
+modal.style.display = "block";
+});
+});
+
+closeBtn.addEventListener("click", () => {
+modal.style.display = "none";
+});
+
+continueBtn.addEventListener("click", async () => {
+
+let name = document.getElementById("name").value;
+let email = document.getElementById("email").value;
+let cashapp = document.getElementById("cashapp").value;
+let address = document.getElementById("address").value;
+
+if(!name || !email || !cashapp || !address){
+alert("Fill all fields");
+return;
+}
+
+const { data:userData } = await client.auth.getUser();
+
+const { error } = await client.from("orders").insert([{
+product: selectedProduct,
+name: name,
+email: email,
+cashapp: cashapp,
+address: address,
+status: "Pending",
+message: "",
+user_id: userData.user.id
+}]);
+
+if(error){
+console.log(error);
+alert("Order failed — check console");
+return;
+}
+
+window.location.href = "https://cash.app/$RicoAmos10";
+
+});
+
+async function loadOrders(){
+
+const { data:userData } = await client.auth.getUser();
+
+if(!userData.user) return;
+
+const { data } = await client
+.from("orders")
+.select("*")
+.eq("user_id", userData.user.id)
+.order("id", { ascending:false });
+
+let container = document.getElementById("orders");
+container.innerHTML = "";
+
+data.forEach(order => {
+container.innerHTML += `
+<div class="orderCard">
+<h3>${order.product}</h3>
+<p><b>Status:</b> ${order.status}</p>
+<p><b>Message:</b> ${order.message || "No updates yet"}</p>
+<p><b>Name:</b> ${order.name}</p>
+<p><b>Email:</b> ${order.email}</p>
+<p><b>CashApp:</b> ${order.cashapp}</p>
+<p><b>Address:</b> ${order.address}</p>
+</div>
+`;
+});
+}
+</script>
 
 </body>
 </html>
