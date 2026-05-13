@@ -17,13 +17,39 @@ box-sizing:border-box;
 :root{
 --bg:#070707;
 --card:#111111;
---gold:#89CFF0;
+--gold:#ff0000;
 --white:#ffffff;
 --gray:#b8b8b8;
 }
 
+body{
+font-family:Arial,sans-serif;
+background:
+linear-gradient(rgba(0,0,0,.82),rgba(0,0,0,.88)),
+url('background.jpg') no-repeat center center fixed;
+background-size:cover;
+color:var(--white);
+overflow-x:hidden;
+}
+
+nav{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+padding:18px 40px;
+display:flex;
+justify-content:center;
+gap:40px;
+background:rgba(8,8,8,.72);
+backdrop-filter:blur(18px);
+-webkit-backdrop-filter:blur(18px);
+border-bottom:1px solid rgba(255,255,255,.06);
+z-index:9999;
+}
+
 nav a{
-color:#89CFF0;
+color:#ff2b2b;
 text-decoration:none;
 font-size:13px;
 font-weight:bold;
@@ -32,21 +58,129 @@ text-transform:uppercase;
 transition:.25s;
 }
 
+nav a:hover{
+color:var(--gold);
+}
+
+header{
+padding-top:170px;
+padding-bottom:80px;
+text-align:center;
+max-width:900px;
+margin:auto;
+}
+
 header h1{
 font-size:88px;
 font-weight:900;
 letter-spacing:4px;
 margin-bottom:18px;
 text-transform:uppercase;
-color:#89CFF0;
-text-shadow:0 0 25px rgba(137,207,240,.18);
+color:#ff2b2b;
+text-shadow:0 0 25px rgba(255,0,0,.18);
+}
+
+header p{
+font-size:18px;
+color:var(--gray);
+line-height:1.7;
+max-width:650px;
+margin:auto;
+}
+
+.products{
+max-width:1500px;
+margin:auto;
+padding:20px 40px 80px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:32px;
+}
+
+.product{
+background:rgba(15,15,15,.92);
+border-radius:26px;
+padding:18px;
+transition:.35s ease;
+position:relative;
+overflow:hidden;
+border:1px solid rgba(255,255,255,.06);
+box-shadow:0 18px 40px rgba(0,0,0,.35);
+}
+
+.product:hover{
+transform:translateY(-10px);
+box-shadow:0 25px 55px rgba(0,0,0,.48);
+border-color:rgba(255,255,255,.12);
+}
+
+.product img{
+width:100%;
+height:340px;
+object-fit:cover;
+border-radius:20px;
+}
+
+.product h3{
+font-size:24px;
+margin-top:18px;
+font-weight:800;
+letter-spacing:.5px;
 }
 
 .product p{
 font-size:18px;
 margin-top:10px;
-color:#89CFF0;
+color:#ff2b2b;
 font-weight:bold;
+}
+
+.btn{
+width:100%;
+padding:16px;
+margin-top:18px;
+border:none;
+border-radius:16px;
+background:#0a0a0a;
+color:white;
+font-size:15px;
+font-weight:800;
+letter-spacing:.5px;
+cursor:pointer;
+transition:.25s ease;
+}
+
+.btn:hover{
+background:#0a0a0a;
+transform:translateY(-2px);
+box-shadow:0 12px 24px rgba(212,175,55,.18);
+}
+
+#modal{
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.88);
+backdrop-filter:blur(8px);
+z-index:10000;
+}
+
+.modal-content{
+width:92%;
+max-width:450px;
+background:#000000;
+margin:90px auto;
+padding:34px;
+border-radius:28px;
+text-align:center;
+border:1px solid rgba(255,255,255,.06);
+box-shadow:0 28px 65px rgba(0,0,0,.45);
+}
+
+.modal-content h2{
+font-size:32px;
+margin-bottom:20px;
+font-weight:800;
 }
 
 .modal-content input{
@@ -56,7 +190,7 @@ margin:10px 0;
 border:none;
 border-radius:16px;
 background:#050505;
-color:#89CFF0;
+color:#ff2b2b;
 font-size:14px;
 outline:none;
 border:1px solid rgba(255,255,255,.05);
@@ -64,7 +198,70 @@ transition:.25s;
 }
 
 .modal-content input:focus{
-border-color:rgba(137,207,240,.35);
+border-color:rgba(255,0,0,.35);
+}
+
+#ordersSection{
+max-width:1000px;
+margin:auto;
+padding:70px 25px;
+}
+
+#ordersSection h2{
+font-size:44px;
+text-align:center;
+margin-bottom:35px;
+font-weight:900;
+letter-spacing:1px;
+}
+
+.orderCard{
+background:rgba(15,15,15,.96);
+padding:24px;
+border-radius:24px;
+margin-bottom:22px;
+border:1px solid rgba(255,255,255,.06);
+box-shadow:0 14px 30px rgba(0,0,0,.28);
+}
+
+.orderCard h3{
+font-size:26px;
+margin-bottom:14px;
+}
+
+.orderCard p{
+margin:8px 0;
+line-height:1.6;
+color:#d0d0d0;
+}
+
+.authScreen{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.95);
+backdrop-filter:blur(12px);
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:999999;
+}
+
+.authBox{
+width:92%;
+max-width:430px;
+background:#000000;
+padding:42px;
+border-radius:32px;
+text-align:center;
+border:1px solid rgba(255,255,255,.06);
+box-shadow:0 30px 60px rgba(0,0,0,.48);
+}
+
+.authBox h1{
+font-size:54px;
+font-weight:900;
+margin-bottom:22px;
+letter-spacing:2px;
 }
 
 .authBox input{
@@ -74,18 +271,34 @@ margin:10px 0;
 border:none;
 border-radius:16px;
 background:#050505;
-color:#89CFF0;
+color:#ff2b2b;
 font-size:14px;
 outline:none;
 border:1px solid rgba(255,255,255,.05);
 }
 
 .authBox input:focus{
-border-color:rgba(137,207,240,.35);
+border-color:rgba(255,0,0,.35);
+}
+
+#authMsg{
+margin-top:14px;
+font-size:13px;
+color:#bdbdbd;
+}
+
+footer{
+margin-top:30px;
+padding:40px 20px;
+text-align:center;
+font-size:15px;
+background:rgba(0,0,0,.35);
+border-top:1px solid rgba(255,255,255,.05);
+color:#a8a8a8;
 }
 
 footer a{
-color:#89CFF0;
+color:#ff2b2b;
 text-decoration:none;
 font-weight:bold;
 transition:.25s;
