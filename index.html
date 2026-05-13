@@ -8,7 +8,11 @@
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
 
 :root{
 --bg:#070707;
@@ -28,7 +32,6 @@ color:var(--white);
 overflow-x:hidden;
 }
 
-/* NAV */
 nav{
 position:fixed;
 top:0;
@@ -40,6 +43,8 @@ justify-content:center;
 gap:40px;
 background:rgba(8,8,8,.72);
 backdrop-filter:blur(18px);
+-webkit-backdrop-filter:blur(18px);
+border-bottom:1px solid rgba(255,255,255,.06);
 z-index:9999;
 }
 
@@ -48,23 +53,41 @@ color:#89CFF0;
 text-decoration:none;
 font-size:13px;
 font-weight:bold;
+letter-spacing:1px;
 text-transform:uppercase;
+transition:.25s;
 }
 
-/* HEADER */
+nav a:hover{
+color:var(--gold);
+}
+
 header{
 padding-top:170px;
 padding-bottom:80px;
 text-align:center;
+max-width:900px;
+margin:auto;
 }
 
 header h1{
 font-size:88px;
 font-weight:900;
+letter-spacing:4px;
+margin-bottom:18px;
+text-transform:uppercase;
 color:#89CFF0;
+text-shadow:0 0 25px rgba(137,207,240,.18);
 }
 
-/* PRODUCTS */
+header p{
+font-size:18px;
+color:var(--gray);
+line-height:1.7;
+max-width:650px;
+margin:auto;
+}
+
 .products{
 max-width:1500px;
 margin:auto;
@@ -75,10 +98,20 @@ gap:32px;
 }
 
 .product{
-background:#111;
-padding:18px;
+background:rgba(15,15,15,.92);
 border-radius:26px;
+padding:18px;
+transition:.35s ease;
+position:relative;
+overflow:hidden;
 border:1px solid rgba(255,255,255,.06);
+box-shadow:0 18px 40px rgba(0,0,0,.35);
+}
+
+.product:hover{
+transform:translateY(-10px);
+box-shadow:0 25px 55px rgba(0,0,0,.48);
+border-color:rgba(255,255,255,.12);
 }
 
 .product img{
@@ -88,46 +121,128 @@ object-fit:cover;
 border-radius:20px;
 }
 
-.product h3{font-size:24px;margin-top:18px;}
-.product p{color:#89CFF0;font-weight:bold;margin-top:10px;}
+.product h3{
+font-size:24px;
+margin-top:18px;
+font-weight:800;
+letter-spacing:.5px;
+}
 
-/* BUY BUTTON */
+.product p{
+font-size:18px;
+margin-top:10px;
+color:#89CFF0;
+font-weight:bold;
+}
+
 .btn{
 width:100%;
 padding:16px;
 margin-top:18px;
 border:none;
 border-radius:16px;
-background:#fff;
+background:#ffffff;
 color:#89CFF0;
+font-size:15px;
 font-weight:800;
+letter-spacing:.5px;
 cursor:pointer;
+transition:.25s ease;
 }
 
-/* MODAL */
+.btn:hover{
+background:#f2f2f2;
+transform:translateY(-2px);
+box-shadow:0 12px 24px rgba(137,207,240,.18);
+}
+
 #modal{
 display:none;
 position:fixed;
 inset:0;
 background:rgba(0,0,0,.88);
+backdrop-filter:blur(8px);
 z-index:10000;
 }
 
 .modal-content{
 width:92%;
 max-width:450px;
-background:#000;
+background:#000000;
 margin:90px auto;
 padding:34px;
 border-radius:28px;
 text-align:center;
+border:1px solid rgba(255,255,255,.06);
+box-shadow:0 28px 65px rgba(0,0,0,.45);
 }
 
-/* AUTH SCREEN */
+.modal-content h2{
+font-size:32px;
+margin-bottom:20px;
+font-weight:800;
+color:#89CFF0;
+}
+
+.modal-content input{
+width:100%;
+padding:15px;
+margin:10px 0;
+border:none;
+border-radius:16px;
+background:#050505;
+color:#89CFF0;
+font-size:14px;
+outline:none;
+border:1px solid rgba(255,255,255,.05);
+transition:.25s;
+}
+
+.modal-content input:focus{
+border-color:rgba(137,207,240,.35);
+}
+
+#ordersSection{
+max-width:1000px;
+margin:auto;
+padding:70px 25px;
+}
+
+#ordersSection h2{
+font-size:44px;
+text-align:center;
+margin-bottom:35px;
+font-weight:900;
+letter-spacing:1px;
+color:#89CFF0;
+}
+
+.orderCard{
+background:rgba(15,15,15,.96);
+padding:24px;
+border-radius:24px;
+margin-bottom:22px;
+border:1px solid rgba(255,255,255,.06);
+box-shadow:0 14px 30px rgba(0,0,0,.28);
+}
+
+.orderCard h3{
+font-size:26px;
+margin-bottom:14px;
+color:#89CFF0;
+}
+
+.orderCard p{
+margin:8px 0;
+line-height:1.6;
+color:#d0d0d0;
+}
+
 .authScreen{
 position:fixed;
 inset:0;
 background:rgba(0,0,0,.95);
+backdrop-filter:blur(12px);
 display:flex;
 align-items:center;
 justify-content:center;
@@ -137,66 +252,121 @@ z-index:999999;
 .authBox{
 width:92%;
 max-width:430px;
-background:#000;
+background:#000000;
 padding:42px;
 border-radius:32px;
 text-align:center;
+border:1px solid rgba(255,255,255,.06);
+box-shadow:0 30px 60px rgba(0,0,0,.48);
 }
 
-/* CART (HIDDEN UNTIL LOGIN) */
-#cartBtn{
-position:fixed;
-bottom:20px;
-right:20px;
-background:#fff;
-color:#89CFF0;
-padding:14px 18px;
-border-radius:50px;
-font-weight:bold;
-cursor:pointer;
-z-index:999999;
-display:none;
+.authBox h1{
+font-size:54px;
+font-weight:900;
+margin-bottom:22px;
+letter-spacing:2px;
+color:#89CFF0 !important;
 }
 
-#cartPanel{
-position:fixed;
-top:0;
-right:-400px;
-width:320px;
-height:100%;
-background:#000;
-border-left:1px solid rgba(255,255,255,.1);
-z-index:1000000;
-padding:20px;
-transition:.3s;
-overflow-y:auto;
-}
-
-#cartPanel.open{right:0;}
-
-.cartItem{
-padding:10px;
-border-bottom:1px solid rgba(255,255,255,.1);
-color:#89CFF0;
-}
-
-.cartCheckout{
-margin-top:20px;
+.authBox input{
 width:100%;
-padding:12px;
-background:#fff;
-color:#89CFF0;
+padding:15px;
+margin:10px 0;
 border:none;
-border-radius:12px;
+border-radius:16px;
+background:#050505;
+color:#89CFF0;
+font-size:14px;
+outline:none;
+border:1px solid rgba(255,255,255,.05);
+}
+
+.authBox input:focus{
+border-color:rgba(137,207,240,.35);
+}
+
+#authMsg{
+margin-top:14px;
+font-size:13px;
+color:#bdbdbd;
+}
+
+footer{
+margin-top:30px;
+padding:40px 20px;
+text-align:center;
+font-size:15px;
+background:rgba(0,0,0,.35);
+border-top:1px solid rgba(255,255,255,.05);
+color:#a8a8a8;
+}
+
+footer a{
+color:#89CFF0;
+text-decoration:none;
 font-weight:bold;
-cursor:pointer;
+transition:.25s;
+}
+
+footer a:hover{
+color:var(--gold);
+}
+
+@media(max-width:900px){
+
+header h1{
+font-size:58px;
+}
+
+.products{
+grid-template-columns:1fr 1fr;
+padding:20px;
+}
+
+.product img{
+height:280px;
+}
+
+}
+
+@media(max-width:600px){
+
+nav{
+gap:18px;
+padding:16px;
+}
+
+nav a{
+font-size:11px;
+}
+
+.products{
+grid-template-columns:1fr;
+}
+
+header{
+padding-top:140px;
+}
+
+header h1{
+font-size:44px;
+}
+
+header p{
+font-size:15px;
+padding:0 20px;
+}
+
+.product img{
+height:320px;
+}
+
 }
 </style>
 </head>
 
 <body>
 
-<!-- AUTH -->
 <div id="authGate" class="authScreen">
 <div class="authBox">
 <h1 style="color:#89CFF0;">R&J Resells</h1>
@@ -219,37 +389,149 @@ cursor:pointer;
 </nav>
 
 <header>
+<div class="logoWrap">
+
+<img src="logo.png" alt="R&J Resells Logo" style="width:160px;display:block;margin:0 auto 18px;border-radius:14px;">
+
+</div>
+
 <h1>R&J Resells</h1>
 <p>Authentic Designer. Exclusive Drops.</p>
 </header>
 
-<!-- PRODUCTS -->
 <section id="shop" class="products">
 
-<div class="product"><img src="nikeski.jpg"><h3>Nike Ski Mask</h3><p>$30</p><div class="btn" data-product="Nike Ski Mask">Buy</div></div>
-<div class="product"><img src="bape.jpg"><h3>Bape Hoodie</h3><p>$100</p><div class="btn" data-product="Bape Hoodie">Buy</div></div>
-<div class="product"><img src="chromeheartshirt.jpg"><h3>Chrome Hearts T-Shirt</h3><p>$50</p><div class="btn" data-product="Chrome Hearts T-Shirt">Buy</div></div>
-<div class="product"><img src="chromehearts.jpg"><h3>Chrome Hearts Socks</h3><p>$35</p><div class="btn" data-product="Chrome Hearts Socks">Buy</div></div>
+<div class="product">
+<img src="nikeski.jpg">
+<h3>Nike Ski Mask</h3>
+<p>$30</p>
+<div class="btn" data-product="Nike Ski Mask">Buy</div>
+</div>
+
+<div class="product">
+<img src="bape.jpg">
+<h3>Bape Hoodie</h3>
+<p>$100</p>
+<div class="btn" data-product="Bape Hoodie">Buy</div>
+</div>
+
+<div class="product">
+<img src="chromeheartshirt.jpg">
+<h3>Chrome Hearts T-Shirt</h3>
+<p>$50</p>
+<div class="btn" data-product="Chrome Hearts T-Shirt">Buy</div>
+</div>
+
+<div class="product">
+<img src="chromehearts.jpg">
+<h3>Chrome Hearts Socks</h3>
+<p>$35</p>
+<div class="btn" data-product="Chrome Hearts Socks">Buy</div>
+</div>
+
+<div class="product">
+<img src="bapeshirt.jpg">
+<h3>Bape T-Shirt</h3>
+<p>$50</p>
+<div class="btn" data-product="Bape T-Shirt">Buy</div>
+</div>
+
+<div class="product">
+<img src="draco.jpg">
+<h3>Draco Slides</h3>
+<p>$50</p>
+<div class="btn" data-product="Draco Slides">Buy</div>
+</div>
+
+<div class="product">
+<img src="lvbean.jpg">
+<h3>Louis Vuitton Beanie</h3>
+<p>$50</p>
+<div class="btn" data-product="Louis Vuitton Beanie">Buy</div>
+</div>
+
+<div class="product">
+<img src="uggs.jpg">
+<h3>Ugg Slippers</h3>
+<p>$50</p>
+<div class="btn" data-product="Ugg Slippers">Buy</div>
+</div>
+
+<div class="product">
+<img src="yeezy.jpg">
+<h3>Yeezy Slides</h3>
+<p>$40</p>
+<div class="btn" data-product="Yeezy Slides">Buy</div>
+</div>
+
+<div class="product">
+<img src="nikemindslides.jpg">
+<h3>Nike Mind 001</h3>
+<p>$60</p>
+<div class="btn" data-product="Nike Minds Slides">Buy</div>
+</div>
+
+<div class="product">
+<img src="airpods.jpg">
+<h3>AirPods</h3>
+<p>$50</p>
+<div class="btn" data-product="AirPods">Buy</div>
+</div>
+
+<div class="product">
+<img src="balencislides.jpg">
+<h3>Balenciaga Slides</h3>
+<p>$60</p>
+<div class="btn" data-product="AirPods">Buy</div>
+</div>
+
+<div class="product">
+<img src="essentialtee.jpg">
+<h3>Essentials "Fear of God" T-Shirt</h3>
+<p>$50</p>
+<div class="btn" data-product="AirPods">Buy</div>
+</div>
+
+<div class="product">
+<img src="essentialshorts.jpg">
+<h3>Essentials "Fear of God" Shorts</h3>
+<p>$50</p>
+<div class="btn" data-product="AirPods">Buy</div>
+</div>
 
 </section>
 
-<!-- MODAL -->
-<div id="modal"></div>
+<div id="modal">
+<div class="modal-content">
 
-<!-- ORDERS -->
+<h2 id="productTitle"></h2>
+
+<input id="name" placeholder="Full Name">
+<input id="email" placeholder="Email">
+<input id="cashapp" placeholder="CashApp Name">
+<input id="address" placeholder="Address">
+
+<br><br>
+
+<button class="btn" id="continueBtn">Continue to Payment</button>
+
+<br><br>
+
+<button class="btn" id="closeBtn">Close</button>
+
+</div>
+</div>
+
 <section id="ordersSection">
-<h2>Orders</h2>
+<h2 style="text-align:center;">Orders</h2>
 <div id="orders"></div>
 </section>
 
-<!-- CART UI -->
-<div id="cartBtn">Cart</div>
-
-<div id="cartPanel">
-<h2 style="color:#89CFF0;">Cart</h2>
-<div id="cartItems"></div>
-<button class="cartCheckout" onclick="checkoutCart()">Checkout</button>
-</div>
+<footer>
+Contact:
+<a href="https://www.snapchat.com/add/ricoamos22">@ricoamos22</a> |
+<a href="https://www.snapchat.com/add/jeffreylovej">@jeffreylovej</a>
+</footer>
 
 <script>
 const client = window.supabase.createClient(
@@ -258,84 +540,140 @@ const client = window.supabase.createClient(
 );
 
 let selectedProduct = "";
-let cart = [];
 
-/* AUTH */
 async function checkAuth(){
 const { data } = await client.auth.getUser();
 
 if(data.user){
 document.getElementById("authGate").style.display = "none";
-document.getElementById("cartBtn").style.display = "block"; // CART ONLY AFTER LOGIN
 loadOrders();
 }else{
 document.getElementById("authGate").style.display = "flex";
-document.getElementById("cartBtn").style.display = "none";
 }
 }
+
 checkAuth();
 
-/* LOGIN */
 async function signUp(){
+
 let email = document.getElementById("authEmail").value;
 let password = document.getElementById("authPassword").value;
 
-await client.auth.signUp({email,password});
-await client.auth.signInWithPassword({email,password});
+const { error } = await client.auth.signUp({
+email,
+password
+});
+
+if(error){
+document.getElementById("authMsg").innerText = error.message;
+return;
+}
+
+await client.auth.signInWithPassword({
+email,
+password
+});
+
 checkAuth();
 }
 
 async function signIn(){
+
 let email = document.getElementById("authEmail").value;
 let password = document.getElementById("authPassword").value;
 
-await client.auth.signInWithPassword({email,password});
+const { error } = await client.auth.signInWithPassword({
+email,
+password
+});
+
+if(error){
+document.getElementById("authMsg").innerText = error.message;
+return;
+}
+
 checkAuth();
 }
 
-/* CART */
-document.getElementById("cartBtn").onclick = () => {
-document.getElementById("cartPanel").classList.toggle("open");
-};
+const modal = document.getElementById("modal");
+const title = document.getElementById("productTitle");
+const continueBtn = document.getElementById("continueBtn");
+const closeBtn = document.getElementById("closeBtn");
 
-document.querySelectorAll(".btn[data-product]").forEach(btn=>{
-btn.addEventListener("click",()=>{
-cart.push(btn.dataset.product);
-renderCart();
+document.querySelectorAll(".btn[data-product]").forEach(btn => {
+btn.addEventListener("click", () => {
+selectedProduct = btn.dataset.product;
+title.innerText = selectedProduct;
+modal.style.display = "block";
 });
 });
 
-function renderCart(){
-let box = document.getElementById("cartItems");
-box.innerHTML="";
-cart.forEach(i=>{
-box.innerHTML += `<div class="cartItem">${i}</div>`;
+closeBtn.addEventListener("click", () => {
+modal.style.display = "none";
 });
+
+continueBtn.addEventListener("click", async () => {
+
+let name = document.getElementById("name").value;
+let email = document.getElementById("email").value;
+let cashapp = document.getElementById("cashapp").value;
+let address = document.getElementById("address").value;
+
+if(!name || !email || !cashapp || !address){
+alert("Fill all fields");
+return;
 }
 
-function checkoutCart(){
-alert("Cart checkout not connected yet");
-}
-
-/* ORDERS (UNCHANGED LOGIC KEPT) */
-async function loadOrders(){
 const { data:userData } = await client.auth.getUser();
+
+const { error } = await client.from("orders").insert([{
+product: selectedProduct,
+name: name,
+email: email,
+cashapp: cashapp,
+address: address,
+status: "Pending",
+message: "",
+user_id: userData.user.id
+}]);
+
+if(error){
+console.log(error);
+alert("Order failed — check console");
+return;
+}
+
+window.location.href = "https://cash.app/$RicoAmos10";
+
+});
+
+async function loadOrders(){
+
+const { data:userData } = await client.auth.getUser();
+
 if(!userData.user) return;
 
-const { data } = await client.from("orders")
+const { data } = await client
+.from("orders")
 .select("*")
 .eq("user_id", userData.user.id)
-.order("id",{ascending:false});
+.order("id", { ascending:false });
 
-let container=document.getElementById("orders");
-container.innerHTML="";
+let container = document.getElementById("orders");
+container.innerHTML = "";
 
-data.forEach(order=>{
-container.innerHTML+=`
-<div>
+data.forEach(order => {
+container.innerHTML += `
+<div class="orderCard">
 <h3>${order.product}</h3>
-<p>${order.status}</p>
-</div>`;
+<p><b>Status:</b> ${order.status}</p>
+<p><b>Message:</b> ${order.message || "No updates yet"}</p>
+<p><b>Name:</b> ${order.name}</p>
+<p><b>Email:</b> ${order.email}</p>
+<p><b>CashApp:</b> ${order.cashapp}</p>
+<p><b>Address:</b> ${order.address}</p>
+</div>
+`;
 });
 }
 </script>
