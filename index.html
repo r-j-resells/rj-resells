@@ -870,8 +870,9 @@ modal.style.display = "block";
 });
 });
 
+
 closeBtn.addEventListener("click", () => {
-modal.classList.remove("active");
+modal.style.display = "active";
 });
 
 continueBtn.addEventListener("click", async () => {
