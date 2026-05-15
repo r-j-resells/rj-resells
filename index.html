@@ -316,6 +316,92 @@ footer a:hover{
 color:var(--gold);
 }
 
+#cartIcon{
+position:fixed;
+top:20px;
+right:20px;
+background:#ffffff;
+color:#89CFF0;
+padding:12px 18px;
+border-radius:14px;
+font-weight:800;
+cursor:pointer;
+z-index:99999;
+box-shadow:0 10px 25px rgba(0,0,0,.25);
+}
+
+#cartPanel{
+position:fixed;
+top:0;
+right:-420px;
+width:400px;
+height:100%;
+background:#0a0a0a;
+padding:25px;
+transition:.35s ease;
+z-index:100000;
+overflow-y:auto;
+border-left:1px solid rgba(255,255,255,.08);
+}
+
+#cartPanel.active{
+right:0;
+}
+
+#cartPanel h2{
+color:#89CFF0;
+margin-bottom:20px;
+font-size:32px;
+}
+
+.cartItem{
+background:#111;
+padding:16px;
+border-radius:16px;
+margin-bottom:14px;
+}
+
+.cartItem h3{
+color:#89CFF0;
+margin-bottom:8px;
+}
+
+.cartTotal{
+font-size:24px;
+font-weight:900;
+margin-top:20px;
+color:#ffffff;
+}
+
+.cartButtons{
+display:flex;
+gap:10px;
+margin-top:20px;
+}
+
+.smallBtn{
+flex:1;
+padding:14px;
+border:none;
+border-radius:14px;
+background:#ffffff;
+color:#89CFF0;
+font-weight:800;
+cursor:pointer;
+}
+
+.addCartBtn{
+width:100%;
+padding:14px;
+margin-top:10px;
+border:none;
+border-radius:16px;
+background:#89CFF0;
+color:#000;
+font-size:14px;
+font-weight:900;
+cursor:pointer;
+}
 @media(max-width:900px){
 
 header h1{
@@ -392,6 +478,10 @@ height:320px;
 <a href="https://www.tiktok.com/@r_j_resells">TikTok</a>
 </nav>
 
+<div id="cartIcon">
+🛒 Cart (<span id="cartCount">0</span>)
+</div>  
+
 <header>
 <div class="logoWrap">
 
@@ -409,116 +499,268 @@ height:320px;
 <img src="nikeski.jpg">
 <h3>Nike Ski Mask</h3>
 <p>$30</p>
+  
 <div class="btn" data-product="Nike Ski Mask">Buy</div>
+  
+<button class="addCartBtn"
+data-name="Nike Ski Mask"
+data-price="30">
+Add To Cart
+</button>
+  
 </div>
 
 <div class="product">
 <img src="bape.jpg">
 <h3>Bape Hoodie</h3>
 <p>$80</p>
+  
 <div class="btn" data-product="Bape Hoodie">Buy</div>
+  
+<button class="addCartBtn"
+data-name="Bape Hoodie"
+data-price="80">
+Add To Cart
+</button>
+  
 </div>
 
 <div class="product">
 <img src="chromeheartshirt.jpg">
 <h3>Chrome Hearts T-Shirt</h3>
 <p>$45</p>
+  
 <div class="btn" data-product="Chrome Hearts T-Shirt">Buy</div>
+  
+<button class="addCartBtn"
+data-name="Chrome Hearts T-Shirt"
+data-price="45">
+Add To Cart
+</button>  
+  
 </div>
 
 <div class="product">
 <img src="chromehearts.jpg">
 <h3>Chrome Hearts Socks</h3>
 <p>$30</p>
+  
 <div class="btn" data-product="Chrome Hearts Socks">Buy</div>
+  
+<button class="addCartBtn"
+data-name="Chrome Hearts Socks"
+data-price="30">
+Add To Cart
+</button>
+  
 </div>
 
 <div class="product">
 <img src="bapeshirt.jpg">
 <h3>Bape T-Shirt</h3>
 <p>$40</p>
+  
 <div class="btn" data-product="Bape T-Shirt">Buy</div>
+  
+<button class="addCartBtn"
+data-name="Bape T-Shirt"
+data-price="40">
+Add To Cart
+</button>  
+  
 </div>
 
 <div class="product">
 <img src="draco.jpg">
 <h3>Draco Slides</h3>
 <p>$50</p>
+  
 <div class="btn" data-product="Draco Slides">Buy</div>
+  
+<button class="addCartBtn"
+data-name="Draco Slides"
+data-price="50">
+Add To Cart
+</button> 
+  
 </div>
 
 <div class="product">
 <img src="lvbean.jpg">
 <h3>Louis Vuitton Beanie</h3>
 <p>$40</p>
+  
 <div class="btn" data-product="Louis Vuitton Beanie">Buy</div>
+  
+<button class="addCartBtn"
+data-name="Louis Vuitton Beanie"
+data-price="40">
+Add To Cart
+</button> 
+  
 </div>
 
 <div class="product">
 <img src="uggs.jpg">
 <h3>Ugg Slippers</h3>
 <p>$50</p>
+  
 <div class="btn" data-product="Ugg Slippers">Buy</div>
+  
+<button class="addCartBtn"
+data-name="Ugg Slippers"
+data-price="50">
+Add To Cart
+</button>  
+  
 </div>
 
 <div class="product">
 <img src="yeezy.jpg">
 <h3>Yeezy Slides</h3>
 <p>$40</p>
+  
 <div class="btn" data-product="Yeezy Slides">Buy</div>
+  
+<button class="addCartBtn"
+data-name="Yeezy Slides"
+data-price="40">
+Add To Cart
+</button>
+  
 </div>
 
 <div class="product">
 <img src="nikemindslides.jpg">
 <h3>Nike Minds 001</h3>
 <p>$60</p>
+  
 <div class="btn" data-product="Nike Minds 001">Buy</div>
+  
+<button class="addCartBtn"
+data-name="Nike Minds 001"
+data-price="60">
+Add To Cart
+</button>
+  
 </div>
 
 <div class="product">
 <img src="airpods.jpg">
 <h3>AirPods</h3>
 <p>$50</p>
+  
 <div class="btn" data-product="AirPods">Buy</div>
+  
+<button class="addCartBtn"
+data-name="AirPods"
+data-price="50">
+Add To Cart
+</button>  
+  
 </div>
 
 <div class="product">
 <img src="balencislides.jpg">
 <h3>Balenciaga Slides</h3>
 <p>$60</p>
+  
 <div class="btn" data-product="Balenciaga Slides">Buy</div>
+  
+<button class="addCartBtn"
+data-name="Balenciaga Slides"
+data-price="60">
+Add To Cart
+</button> 
+  
 </div>
 
 <div class="product">
 <img src="essentialtee.jpg">
-<h3>Essentials "Fear of God" T-Shirt</h3>
+<h3>Essentials Fear Of God T-Shirt</h3>
 <p>$50</p>
+  
 <div class="btn" data-product="Essentials "Fear of God" T-Shirt">Buy</div>
+  
+<button class="addCartBtn"
+data-name="Essentials Fear Of God T-Shirt"
+data-price="50">
+Add To Cart
+</button>
+  
 </div>
 
 <div class="product">
 <img src="essentialshorts.jpg">
-<h3>Essentials "Fear of God" Shorts</h3>
+<h3>Essentials Fear Of God Shorts</h3>
 <p>$50</p>
+  
 <div class="btn" data-product="Essentials "Fear of God" Shorts">Buy</div>
+  
+<button class="addCartBtn"
+data-name="Essentials Fear Of God Shorts"
+data-price="50">
+Add To Cart
+</button> 
+  
 </div>
 
 <div class="product">
 <img src="hellstartee.jpg">
 <h3>Hellstar T-Shirt</h3>
 <p>$50</p>
+  
 <div class="btn" data-product="Hellstar T-Shirt">Buy</div>
+  
+<button class="addCartBtn"
+data-name="Hellstar T-Shirt"
+data-price="50">
+Add To Cart
+</button>
+  
 </div>
 
 <div class="product">
 <img src="hellstarshorts.jpg">
 <h3>Hellstar Shorts</h3>
 <p>$50</p>
+  
 <div class="btn" data-product="Hellstar Shorts">Buy</div>
+  
+<button class="addCartBtn"
+data-name="Hellstar Shorts"
+data-price="50">
+Add To Cart
+</button>
+  
 </div>    
 
 </section>
 
+<div id="cartPanel">
+
+<h2>Your Cart</h2>
+
+<div id="cartItems"></div>
+
+<div class="cartTotal">
+Total: $<span id="cartTotal">0</span>
+</div>
+
+<div class="cartButtons">
+
+<button class="smallBtn" id="closeCart">
+Close
+</button>
+
+<button class="smallBtn" id="checkoutCart">
+Checkout
+</button>
+
+</div>
+
+</div>
+  
 <div id="modal">
 <div class="modal-content">
 
@@ -690,6 +932,96 @@ container.innerHTML += `
 `;
 });
 }
+
+let cart = [];
+
+const cartIcon = document.getElementById("cartIcon");
+const cartPanel = document.getElementById("cartPanel");
+const closeCart = document.getElementById("closeCart");
+const cartItems = document.getElementById("cartItems");
+const cartTotal = document.getElementById("cartTotal");
+const cartCount = document.getElementById("cartCount");
+const checkoutCart = document.getElementById("checkoutCart");
+
+cartIcon.addEventListener("click", () => {
+cartPanel.classList.add("active");
+});
+
+closeCart.addEventListener("click", () => {
+cartPanel.classList.remove("active");
+});
+
+document.querySelectorAll(".addCartBtn").forEach(btn => {
+
+btn.addEventListener("click", () => {
+
+const name = btn.dataset.name;
+const price = Number(btn.dataset.price);
+
+cart.push({
+name,
+price
+});
+
+updateCart();
+
+});
+
+});
+
+function updateCart(){
+
+cartItems.innerHTML = "";
+
+let total = 0;
+
+cart.forEach((item,index) => {
+
+total += item.price;
+
+cartItems.innerHTML += `
+<div class="cartItem">
+<h3>${item.name}</h3>
+<p>$${item.price}</p>
+
+<button class="smallBtn" onclick="removeCartItem(${index})">
+Remove
+</button>
+</div>
+`;
+
+});
+
+cartTotal.innerText = total;
+cartCount.innerText = cart.length;
+
+}
+
+function removeCartItem(index){
+
+cart.splice(index,1);
+
+updateCart();
+
+}
+
+checkoutCart.addEventListener("click", () => {
+
+if(cart.length === 0){
+alert("Your cart is empty");
+return;
+}
+
+selectedProduct = cart.map(item => item.name).join(", ");
+
+title.innerText = "Cart Checkout";
+
+cartPanel.classList.remove("active");
+
+modal.style.display = "block";
+
+});
+  
 </script>
 
 </body>
