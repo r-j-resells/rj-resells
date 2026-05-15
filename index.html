@@ -389,7 +389,6 @@ height:320px;
 <a href="#">Home</a>
 <a href="#shop">Shop</a>
 <a href="#ordersSection">Orders</a>
-<a href="#" id="cartBtn">Cart (<span id="cartCount">0</span>)</a>
 <a href="https://www.tiktok.com/@r_j_resells">TikTok</a>
 </nav>
 
@@ -534,38 +533,6 @@ height:320px;
 
 <button class="btn" id="continueBtn">Continue to Payment</button>
 
-<div id="cartModal" style="
-display:none;
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.88);
-backdrop-filter:blur(8px);
-z-index:10001;
-">
-
-<div class="modal-content">
-
-<h2 style="color:#89CFF0;">Your Cart</h2>
-
-<div id="cartItems" style="text-align:left;margin-top:20px;"></div>
-
-<h3 style="margin-top:20px;color:#89CFF0;">
-Total: $<span id="cartTotal">0</span>
-</h3>
-
-<button class="btn" id="checkoutCartBtn">
-Checkout Cart
-</button>
-
-<br><br>
-
-<button class="btn" id="closeCartBtn">
-Close
-</button>
-
-</div>
-</div>
-
 <br><br>
 
 <button class="btn" id="closeBtn">Close</button>
@@ -651,119 +618,12 @@ const title = document.getElementById("productTitle");
 const continueBtn = document.getElementById("continueBtn");
 const closeBtn = document.getElementById("closeBtn");
 
-let cart = [];
-
 document.querySelectorAll(".btn[data-product]").forEach(btn => {
-
 btn.addEventListener("click", () => {
-
-let productCard = btn.parentElement;
-
-let productName =
-productCard.querySelector("h3").innerText;
-
-let productPrice =
-productCard.querySelector("p").innerText.replace("$","");
-
-cart.push({
-name: productName,
-price: Number(productPrice)
+selectedProduct = btn.dataset.product;
+title.innerText = selectedProduct;
+modal.style.display = "block";
 });
-
-updateCart();
-
-});
-
-});
-
-const cartBtn = document.getElementById("cartBtn");
-const cartModal = document.getElementById("cartModal");
-const cartItems = document.getElementById("cartItems");
-const cartTotal = document.getElementById("cartTotal");
-const cartCount = document.getElementById("cartCount");
-const closeCartBtn = document.getElementById("closeCartBtn");
-
-function updateCart(){
-
-cartItems.innerHTML = "";
-
-let total = 0;
-
-cart.forEach((item,index)=>{
-
-total += item.price;
-
-cartItems.innerHTML += `
-<div style="
-display:flex;
-justify-content:space-between;
-margin-bottom:14px;
-padding:12px;
-background:#111;
-border-radius:12px;
-">
-
-<div>
-<p style="color:white;font-weight:bold;">
-${item.name}
-</p>
-
-<p style="color:#89CFF0;">
-$${item.price}
-</p>
-</div>
-
-<button onclick="removeCartItem(${index})"
-style="
-background:red;
-color:white;
-border:none;
-padding:8px 12px;
-border-radius:10px;
-cursor:pointer;
-">
-X
-</button>
-
-</div>
-`;
-
-});
-
-cartTotal.innerText = total;
-cartCount.innerText = cart.length;
-
-}
-
-function removeCartItem(index){
-
-cart.splice(index,1);
-
-updateCart();
-
-}
-
-cartBtn.addEventListener("click", ()=>{
-
-const authGate =
-document.getElementById("authGate");
-
-if(authGate.style.display !== "none"){
-return;
-}
-
-cartModal.style.display = "block";
-
-});
-
-closeCartBtn.addEventListener("click", ()=>{
-
-cartModal.style.display = "none";
-
-});
-
-closeBtn.addEventListener("click", () => {
-modal.style.display = "none";
 });
 
 continueBtn.addEventListener("click", async () => {
@@ -796,9 +656,6 @@ console.log(error);
 alert("Order failed — check console");
 return;
 }
-
-cart = [];
-updateCart();
 
 window.location.href = "https://cash.app/$RicoAmos10";
 
